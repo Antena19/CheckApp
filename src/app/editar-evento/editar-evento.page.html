@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar color="custom-dark">
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>
+      <ion-button>
+        <ion-img src="assets/img/logo-check-app.png" style="width: 30px; height: 30px;"></ion-img>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center white-text">CheckApp</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1 class="main-title">EDITAR EVENTO</h1>
+  <div class="evento-form">
+    <form (ngSubmit)="guardarEvento()">
+      <!-- Nombre Evento -->
+      <div class="form-group">
+        <ion-label>Nombre del Evento</ion-label>
+        <ion-item lines="none" class="input-container">
+          <ion-input [(ngModel)]="nombreEvento" 
+                    name="nombreEvento" 
+                    placeholder="Evento 1"
+                    required>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <!-- Organizador -->
+      <div class="form-group">
+        <ion-label>Nombre del Organizador</ion-label>
+        <ion-item lines="none" class="input-container">
+          <ion-input [(ngModel)]="nombreOrganizador" 
+                    name="nombreOrganizador" 
+                    placeholder="Ingrese nombre del organizador"
+                    required>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <!-- Fecha y Hora -->
+      <div class="form-group">
+        <ion-label>Fecha y Hora</ion-label>
+        <ion-item lines="none" class="input-container">
+          <ion-datetime 
+            [(ngModel)]="horaEvento" 
+            name="horaEvento" 
+            display-format="DD-MM-YYYY HH:mm" 
+            picker-format="DD-MM-YYYY HH:mm"
+            placeholder="Seleccione fecha y hora"
+            required>
+          </ion-datetime>
+        </ion-item>
+      </div>
+
+      <!-- Lugar -->
+      <div class="form-group">
+        <ion-label>Lugar del Evento</ion-label>
+        <ion-item lines="none" class="input-container">
+          <ion-input [(ngModel)]="lugarEvento" 
+                    name="lugarEvento" 
+                    (ionChange)="actualizarMapa()"
+                    placeholder="Ingrese ubicación"
+                    required>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <!-- Mapa -->
+      <div #map id="map" class="map-container"></div>
+      <div id="ubicacion"></div>
+
+      <!-- N° de Participantes -->
+      <div class="form-group">
+        <ion-label>N° de Participantes</ion-label>
+        <ion-item lines="none" class="input-container">
+          <ion-input type="number" 
+                    [(ngModel)]="numeroParticipantes" 
+                    name="numeroParticipantes"
+                    placeholder="0"
+                    required>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <!-- Botones -->
+      <ion-button expand="block" 
+                  type="submit" 
+                  class="guardar-btn">
+        GUARDAR
+      </ion-button>
+      <ion-button expand="block" 
+                  color="medium" 
+                  (click)="cancelar()"
+                  class="cancelar-btn">
+        CANCELAR
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

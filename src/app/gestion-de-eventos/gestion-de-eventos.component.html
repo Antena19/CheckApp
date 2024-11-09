@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="custom-dark">
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>
+      <ion-button>
+        <ion-img src="assets/img/logo-check-app.png" style="width: 30px; height: 30px;"></ion-img>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center white-text">CheckApp</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+  <h1 class="main-title">GESTIÓN DE EVENTOS</h1>
+
+  <ion-button 
+    class="create-event-button" 
+    routerLink="/crear-evento"
+    style="background-color: #272E30; color: white;">
+    Crear Evento
+  </ion-button>
+
+  <div *ngIf="eventos && eventos.length > 0" class="event-container">
+    <h2 class="subtitle white-text">Eventos Creados</h2>
+    <div *ngFor="let evento of eventos; let i = index" class="event-card">
+      <div class="event-title">{{ evento.nombre }}</div>
+      <div class="event-details">
+        <p><strong>Organizador:</strong> {{ evento.organizador }}</p>
+        <p><strong>Número de Participantes:</strong> {{ evento.participantes }}</p>
+        <p><strong>Hora:</strong> {{ evento.hora }}</p>
+        <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
+        <img *ngIf="evento.imagen" [src]="evento.imagen" alt="{{ evento.lugar }}" style="width: 100%; height: auto;">
+      </div>
+      <div class="event-actions">
+        <ion-button color="warning" (click)="editarEvento(i)">Editar</ion-button>
+        <ion-button color="danger" (click)="confirmarEliminarEvento(i)">Eliminar</ion-button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!eventos || eventos.length === 0" class="white-text">
+    <p>No hay eventos creados todavía.</p>
+  </div>
+</ion-content>
+

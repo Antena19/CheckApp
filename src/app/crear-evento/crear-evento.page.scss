@@ -1,0 +1,95 @@
+ion-content {
+  --background: #272E30;
+}
+
+ion-header, ion-footer {
+  ion-toolbar {
+    --background: #1E1E1E;
+    --color: white;
+  }
+}
+
+
+.custom-menu-button {
+  color: white;
+  font-size: 24px;
+}
+
+.white-text {
+  color: white;
+}
+
+.white-icon {
+  color: white;
+}
+.main-title {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.evento-form {
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  margin: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-group {
+  margin-bottom: 16px;
+  
+  ion-label {
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+  }
+}
+
+.input-container {
+  --background: #f5f5f5;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  margin-top: 4px;
+  
+  ion-input, ion-datetime {
+    --placeholder-color: #999;
+    --placeholder-opacity: 1;
+  }
+  
+  ion-icon {
+    color: #666;
+  }
+}
+
+.map-container {
+  height: 200px;
+  width: 100%;
+  margin: 16px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.guardar-btn {
+  --background: #42316c;
+  color: white;
+  --border-radius: 8px;
+  margin-top: 24px;
+  font-weight: bold;
+}
+
+.cancelar-btn {
+  --border-radius: 8px;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+ion-toolbar {
+  --background: #4c4b8c;
+  --color: white;
+}

@@ -1,0 +1,143 @@
+/* gestion-eventos.page.scss */
+ion-content {
+  --background: #272E30;
+  --overflow: scroll;
+  padding-bottom: 100px; /* Ajusta según sea necesario */
+  --overflow: auto; /* Asegúrate de que el contenido sea desplazable */
+  overflow-y: auto; /* O usa scroll si es necesario */
+  height: 100%;
+
+}
+
+ion-header, ion-footer {
+  ion-toolbar {
+    --background: #1E1E1E;
+    --color: white;
+  }
+}
+
+.white-text {
+  color: white;
+}
+
+.white-icon {
+  color: white;
+}
+
+.event-container {
+  background-color: #272E30; /* Fondo oscuro */
+  padding: 16px; /* Espaciado interno */
+  border-radius: 8px; /* Bordes redondeados */
+  overflow-y: auto; /* Permitir desplazamiento dentro del contenedor de eventos */
+  max-height: calc(100vh - 200px); /* Ajusta este valor según la altura deseada */
+  margin-top: 16px; /* Espacio superior para separar del botón de crear evento */
+  position: relative; /* Asegúrate de que la posición sea relativa */
+  z-index: 2; 
+  pointer-events: auto;
+}
+
+
+/* Estilo para las tarjetas de eventos */
+.event-card {
+  background-color: whitesmoke; /* Fondo de la tarjeta */
+  border-radius: 10px;
+  padding: 16px;
+  margin: 20px 30px; /* Márgenes laterales más grandes */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s; /* Efecto al pasar el mouse */
+  margin-bottom: 16px; /* Espacio entre las tarjetas */
+  position: relative; /* Asegúrate de que la tarjeta sea relativa */
+  z-index: 1; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+.event-card:hover {
+  transform: scale(1.05); /* Aumentar el tamaño al pasar el mouse */
+}
+
+.event-title {
+  font-size: 18px;
+  color: #272E30; /* Color del título */
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.event-details {
+  color: black; /* Cambiado a negro para contraste */
+  margin-bottom: 10px;
+}
+
+.event-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Estilo para los botones de acción */
+ion-button {
+  flex: 1; /* Los botones ocuparán el mismo tamaño */
+  margin: 5px; /* Margen entre los botones */
+  box-shadow: none; /* Eliminar sombra extraña */
+}
+
+/* Estilo para el botón de crear evento */
+.create-event-button {
+  --background: #42316c;
+  color: white !important; /* Color del texto */
+  border-radius: 20px !important; /* Bordes redondeados */
+  width: 80% !important; /* Ancho completo del contenedor */
+  max-width: 400px !important; /* Ancho máximo, ajustable */
+  margin: 20px auto !important; /* Margen superior e inferior, centrado horizontalmente */
+  display: block !important; /* Asegura que el botón se comporte como un bloque */
+  text-align: center !important; /* Centrar el texto dentro del botón */
+  margin-top: 24px;
+  font-weight: bold;
+
+  
+
+}
+
+/* Efecto al pasar el mouse en el botón */
+ion-button.create-event-button:hover {
+  background-color: #4A4A4A !important; /* Color al pasar el mouse */
+}
+
+/* Estilo para el mensaje de bienvenida */
+.white-text {
+  color: white !important;
+}
+
+.main-title {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 1px;
+}
+
+ion-footer {
+  ion-toolbar {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+
+    ion-buttons {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    ion-button {
+      --color: white;
+      background-color: #272E30;
+      box-shadow: none; /* Eliminar sombra extraña */
+    }
+  }
+}
