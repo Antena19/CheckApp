@@ -5,7 +5,7 @@ import { AuthGuard } from './services/auth.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'introduccion', // Cambiamos la redirección inicial a la página de introducción
     pathMatch: 'full'
   },
   {
@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: 'editar-evento',
     loadChildren: () => import('./editar-evento/editar-evento.module').then( m => m.EditarEventoPageModule)
+  },
+  {
+    path: 'introduccion', // Página de introducción
+    loadChildren: () => import('./introduccion/introduccion.module').then( m => m.IntroduccionPageModule)
   }
 ];
 

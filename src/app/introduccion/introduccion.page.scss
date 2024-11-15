@@ -1,0 +1,87 @@
+ion-content {
+    --background: #272E30; /* Fondo oscuro */
+  }
+  
+  .intro-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+  }
+  
+  /* Estilos del efecto de animación */
+  @keyframes logo-animation {
+    0% {
+      opacity: 0;
+      transform: scale(0.5); /* Escala inicial */
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1); /* Escala final */
+    }
+  }
+  
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(20px); /* Movimiento hacia arriba */
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0); /* Posición final */
+    }
+  }
+  
+  .intro-logo {
+    width: 300px; /* Ajustar el tamaño del logo */
+    height: auto;
+    margin-bottom: -70px; 
+    animation: logo-animation 1.5s ease-in-out; /* Animación de 1.5 segundos */
+  }
+  
+  /* Animación para el título */
+  .intro-title {
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin: 0;
+    opacity: 0;
+    animation: fade-in 1s ease-in-out 1.7s forwards; /* Aparece después del logo */
+  }
+  
+  /* Animación para el subtítulo */
+  .intro-subtitle {
+    font-size: 1rem;
+    color: #ffffff; 
+    margin: 10px 0 30px 0;
+    opacity: 0;
+    animation: fade-in 1s ease-in-out 2s forwards; /* Aparece después del título */
+  }
+  
+  /* Animación para el botón */
+  .intro-button {
+    --background: #42316c;
+    --color: white;
+    --border-radius: 10px;
+    font-weight: bold;
+    width: 80%; /* Botón más ancho */
+    text-align: center;
+    font-size: 1rem;
+    text-transform: uppercase;
+    opacity: 0; /* Oculto inicialmente */
+    animation: fade-in 1s ease-in-out 2.3s forwards; /* Aparece después del subtítulo */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transición para hover */
+    color: white; /* Texto blanco por defecto */
+  }
+  
+  .intro-button:hover {
+    --background: #554b8c; /* Cambiar color al pasar el mouse */
+    transform: scale(1.05); /* Aumentar ligeramente el tamaño */
+    color: white; /* Asegurar texto blanco al pasar el mouse */
+  }
+  
+  .intro-button span {
+    color: white !important; /* Asegurar que el texto del botón sea blanco */
+  }
+  
