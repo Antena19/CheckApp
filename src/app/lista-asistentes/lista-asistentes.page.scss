@@ -1,0 +1,43 @@
+ion-content {
+    --background: #272E30;
+  }
+  
+  ion-header {
+    ion-toolbar {
+      --background: #1E1E1E;
+      --color: white;
+    }
+  }
+  
+  .main-title {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .header-cell {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    background: #42316c;
+    padding: 8px 0;
+  }
+  
+  ion-row {
+    align-items: center;
+  
+    ion-col {
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+    }
+  }
+  
+  ion-button {
+    --background: #42316c;
+    color: white;
+    margin: 10px 0;
+  }
+  

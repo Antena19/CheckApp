@@ -20,9 +20,12 @@ export class EditarEventoPage implements AfterViewInit {
   horaEvento: string = '';
   lugarEvento: string = '';
   numeroParticipantes: number = 0;
+  listaAsistentes: any[] = []; // Lista de asistentes
   map: any;
   marker: any;
-  eventoIndex: number = -1; // Variable para almacenar el índice del evento
+  eventoIndex: number = -1;
+
+  private maxAsistentes = 500; // Límite de asistentes
 
   constructor(
     private router: Router,
@@ -37,13 +40,13 @@ export class EditarEventoPage implements AfterViewInit {
   async ngAfterViewInit() {
     await this.platform.ready();
     await this.loadMap();
-    this.cargarEvento(); // Cargar evento al inicializar
+    this.cargarEvento();
   }
 
   private async loadMap() {
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    const latLng = { lat: -33.447487, lng: -70.673676 }; 
+    const latLng = { lat: -33.447487, lng: -70.673676 };
     if (this.mapElement && this.mapElement.nativeElement) {
       this.map = new google.maps.Map(this.mapElement.nativeElement, {
         center: latLng,
@@ -69,16 +72,39 @@ export class EditarEventoPage implements AfterViewInit {
   }
 
   cargarEvento() {
-    this.eventoIndex = Number(this.activatedRoute.snapshot.paramMap.get('id')); // Obtener el índice del evento desde la ruta
-    const evento = this.eventoService.obtenerEventos()[this.eventoIndex]; // Obtener el evento correspondiente
+    this.eventoIndex = Number(this.activatedRoute.snapshot.paramMap.get('id'));
+    const evento = this.eventoService.obtenerEventos()[this.eventoIndex];
     if (evento) {
       this.nombreEvento = evento.nombre;
       this.nombreOrganizador = evento.organizador;
       this.horaEvento = evento.hora;
       this.lugarEvento = evento.lugar;
       this.numeroParticipantes = evento.participantes;
-      this.actualizarMapa(); // Actualizar mapa con la ubicación del evento
+      this.listaAsistentes = evento.asistentes || []; // Cargar lista existente o inicializar vacía
+      this.actualizarMapa();
     }
+  }
+
+  generarListaAsistentes() {
+    if (this.numeroParticipantes > this.maxAsistentes) {
+      this.mostrarError(`No puedes tener más de ${this.maxAsistentes} asistentes.`);
+      return;
+    }
+
+    const nuevosAsistentes = Array.from({ length: this.numeroParticipantes }, (_, index) => {
+      return this.listaAsistentes[index] || { rut: '', nombreApellido: '', telefono: '' };
+    });
+
+    this.listaAsistentes = nuevosAsistentes;
+    console.log('Lista de asistentes generada:', this.listaAsistentes);
+  }
+
+  verListaAsistentes() {
+    if (this.numeroParticipantes <= 0) {
+      this.mostrarError('El número de participantes debe ser mayor a 0.');
+      return;
+    }
+    this.router.navigate(['/lista-asistentes'], { state: { listaAsistentes: this.listaAsistentes, eventoId: this.eventoIndex } });
   }
 
   actualizarMapa() {
@@ -127,7 +153,7 @@ export class EditarEventoPage implements AfterViewInit {
       this.mostrarError("Por favor completa todos los campos.");
       return;
     }
-  
+
     const alert = await this.alertController.create({
       header: 'Confirmar',
       message: '¿Estás seguro de que deseas guardar los cambios?',
@@ -135,9 +161,7 @@ export class EditarEventoPage implements AfterViewInit {
         {
           text: 'Cancelar',
           role: 'cancel',
-          handler: () => {
-            // No hacer nada si se cancela
-          }
+          handler: () => {}
         },
         {
           text: 'Aceptar',
@@ -147,19 +171,19 @@ export class EditarEventoPage implements AfterViewInit {
               organizador: this.nombreOrganizador,
               hora: this.horaEvento,
               lugar: this.lugarEvento,
-              participantes: this.numeroParticipantes
+              participantes: this.numeroParticipantes,
+              asistentes: this.listaAsistentes // Guardar lista actualizada
             };
-  
-            this.eventoService.editarEvento(this.eventoIndex, eventoEditado); // Editar evento existente
-            this.router.navigate(['/gestion-de-eventos']); // Navegar a gestión-eventos
+
+            this.eventoService.editarEvento(this.eventoIndex, eventoEditado);
+            this.router.navigate(['/gestion-de-eventos']);
           }
         }
       ]
     });
-  
+
     await alert.present();
   }
-  
 
   async cancelar() {
     const alert = await this.alertController.create({
@@ -169,9 +193,7 @@ export class EditarEventoPage implements AfterViewInit {
         {
           text: 'Cancelar',
           role: 'cancel',
-          handler: () => {
-            // No hacer nada
-          }
+          handler: () => {}
         },
         {
           text: 'Aceptar',
@@ -190,8 +212,7 @@ export class EditarEventoPage implements AfterViewInit {
     this.router.navigate(['/login']);
   }
 
-  // Método para volver a la página anterior
   volver() {
-    this.navCtrl.back(); // Regresa a la página anterior
+    this.navCtrl.back();
   }
 }

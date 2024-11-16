@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="custom-dark">
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Lista de Asistentes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1 class="main-title">Asistentes</h1>
+
+  <!-- Tabla de Asistentes -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4" class="header-cell">RUT</ion-col>
+      <ion-col size="4" class="header-cell">Nombre</ion-col>
+      <ion-col size="4" class="header-cell">Teléfono</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let asistente of listaAsistentes; let i = index">
+      <ion-col size="4">{{ asistente.rut }}</ion-col>
+      <ion-col size="4">{{ asistente.nombreApellido }}</ion-col>
+      <ion-col size="4">{{ asistente.telefono }}</ion-col>
+      <ion-col size="2">
+        <ion-button color="warning" fill="clear" (click)="editarAsistente(i)">
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-button>
+        <ion-button color="danger" fill="clear" (click)="eliminarAsistente(i)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Botones -->
+  <ion-button expand="block" color="primary" (click)="agregarAsistente()">Agregar Asistente</ion-button>
+  <ion-button expand="block" color="tertiary" (click)="verDetalleEvento()">Ver Detalle</ion-button>
+</ion-content>

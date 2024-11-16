@@ -1,75 +1,77 @@
 ion-content {
-    --background: #272E30;
-  }
-  
-  ion-header, ion-footer {
-    ion-toolbar {
-      --background: #1E1E1E;
-      --color: white;
-    }
-  }
-  
-  .white-icon {
-    color: white;
-  }
-  
-  /* Títulos */
-  .main-title {
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .subtitle {
-    color: white;
-    text-align: center;
-    margin-bottom: 20px;
-    margin-top: 10px;
-  }
-  
-  /* Estilo de la tarjeta del evento */
-  .event-card {
-    background-color: whitesmoke;
-    border-radius: 10px;
-    padding: 16px;
-    margin: 20px auto;
-    max-width: 90%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  }
-  
-  .event-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #272E30;
-    margin-bottom: 10px;
-  }
-  
-  .event-details {
-    color: black;
-    margin-bottom: 20px;
-  }
-  
-  .event-actions {
-    text-align: center;
-  }
-  
-  .generate-qr-button {
-    --background: #42316c;
+  --background: #272E30;
+}
+
+ion-header, ion-footer {
+  ion-toolbar {
+    --background: #1E1E1E;
     --color: white;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
-  
-  .generate-qr-button:hover {
-    transform: scale(1.05);
-    transition: transform 0.2s ease;
-    --background: #554b8c;
-  }
-  
+}
+
+.white-icon {
+  color: white;
+}
+
+/* Títulos */
+.main-title {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+/* Estilo de la tarjeta del evento */
+.event-card {
+  background-color: whitesmoke;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 20px auto;
+  max-width: 90%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.event-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #272E30;
+  margin-bottom: 10px;
+}
+
+.event-details {
+  color: black;
+  margin-bottom: 20px;
+}
+
+.event-actions {
+  text-align: center;
+}
+
+.generate-qr-button,
+.generate-report-button {
+  --background: #42316c;
+  --color: white;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.generate-qr-button:hover,
+.generate-report-button:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+  --background: #554b8c;
+}

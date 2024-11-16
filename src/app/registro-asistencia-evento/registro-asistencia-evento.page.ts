@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { EventoService } from '../services/evento.service'; // Servicio de eventos
+import { ActivatedRoute, Router } from '@angular/router';
+import { EventoService } from '../services/evento.service';
 
 @Component({
   selector: 'app-registro-asistencia-evento',
@@ -12,7 +12,8 @@ export class RegistroAsistenciaEventoPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private eventoService: EventoService
+    private eventoService: EventoService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -28,8 +29,12 @@ export class RegistroAsistenciaEventoPage implements OnInit {
     // Aquí puedes implementar la lógica para generar el código QR
   }
 
+  generarInforme() {
+    console.log('Generar informe para el evento:', this.evento);
+    this.router.navigate(['/generar-informe'], { state: { evento: this.evento } });
+  }
+
   volver() {
-    // Navega hacia atrás
     window.history.back();
   }
 }

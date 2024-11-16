@@ -9,7 +9,6 @@ ion-header, ion-footer {
   }
 }
 
-
 .custom-menu-button {
   color: white;
   font-size: 24px;
@@ -22,6 +21,7 @@ ion-header, ion-footer {
 .white-icon {
   color: white;
 }
+
 .main-title {
   color: white;
   font-size: 24px;
@@ -36,12 +36,12 @@ ion-header, ion-footer {
   background: white;
   border-radius: 8px;
   margin: 16px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
   margin-bottom: 16px;
-  
+
   ion-label {
     color: #333;
     font-size: 14px;
@@ -56,12 +56,12 @@ ion-header, ion-footer {
   --padding-start: 16px;
   --padding-end: 16px;
   margin-top: 4px;
-  
+
   ion-input, ion-datetime {
     --placeholder-color: #999;
     --placeholder-opacity: 1;
   }
-  
+
   ion-icon {
     color: #666;
   }
@@ -89,7 +89,10 @@ ion-header, ion-footer {
   font-weight: bold;
 }
 
-ion-toolbar {
+.lista-asistentes-btn {
   --background: #4c4b8c;
-  --color: white;
+  color: white;
+  --border-radius: 8px;
+  margin-top: 16px;
+  font-weight: bold;
 }

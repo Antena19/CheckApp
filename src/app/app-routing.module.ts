@@ -66,6 +66,10 @@ const routes: Routes = [
   {
     path: 'registro-asistencia-evento',
     loadChildren: () => import('./registro-asistencia-evento/registro-asistencia-evento.module').then( m => m.RegistroAsistenciaEventoPageModule)
+  },
+  {
+    path: 'lista-asistentes',
+    loadChildren: () => import('./lista-asistentes/lista-asistentes.module').then( m => m.ListaAsistentesPageModule)
   }
 ];
 

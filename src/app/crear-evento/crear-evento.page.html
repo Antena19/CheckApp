@@ -60,7 +60,6 @@
         </ion-item>
       </div>
 
-
       <!-- Lugar -->
       <div class="form-group">
         <ion-label>Lugar del Evento</ion-label>
@@ -85,11 +84,21 @@
           <ion-input type="number" 
                     [(ngModel)]="numeroParticipantes" 
                     name="numeroParticipantes"
+                    (ionChange)="generarListaAsistentes()"
                     placeholder="0"
                     required>
           </ion-input>
         </ion-item>
       </div>
+
+      <!-- Botón Ver Lista de Asistentes -->
+      <ion-button expand="block" 
+                  color="secondary"
+                  [disabled]="!numeroParticipantes || numeroParticipantes <= 0"
+                  (click)="verListaAsistentes()"
+                  class="lista-asistentes-btn">
+        Ver Lista de Asistentes
+      </ion-button>
 
       <!-- Botones -->
       <ion-button expand="block" 
