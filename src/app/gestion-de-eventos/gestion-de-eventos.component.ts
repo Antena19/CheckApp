@@ -155,4 +155,9 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
    volver() {
     this.navCtrl.back(); // Regresa a la página anterior
   }
+
+  navegarRegistrarAsistencia(eventId: string) {
+    this.router.navigate(['/registro-asistencia-evento'], { queryParams: { id: eventId } });
+  }
+  
 }

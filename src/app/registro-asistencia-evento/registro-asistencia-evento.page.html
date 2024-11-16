@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar color="custom-dark">
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>
+      <ion-button>
+        <ion-img src="assets/img/logo-check-app.png" style="width: 30px; height: 30px;"></ion-img>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center white-text">CheckApp</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="menu-outline" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+  <h1 class="main-title">REGISTRO DE ASISTENCIA</h1>
+  <p class="subtitle">EVENTO</p>
+
+  <div class="event-card">
+    <div class="event-title">{{ evento.nombre }}</div>
+    <div class="event-details">
+      <p><strong>Fecha:</strong> {{ evento.fecha }}</p>
+      <p><strong>Hora:</strong> {{ evento.hora }}</p>
+      <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
+      <p><strong>N° de Asistentes:</strong> {{ evento.numeroAsistentes }}</p>
+    </div>
+    <div class="event-actions">
+      <ion-button color="primary" class="generate-qr-button" (click)="generarQR()">
+        <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+        GENERAR QR
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

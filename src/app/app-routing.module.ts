@@ -62,6 +62,10 @@ const routes: Routes = [
   {
     path: 'registro2',
     loadChildren: () => import('./registro2/registro2.module').then( m => m.Registro2PageModule)
+  },
+  {
+    path: 'registro-asistencia-evento',
+    loadChildren: () => import('./registro-asistencia-evento/registro-asistencia-evento.module').then( m => m.RegistroAsistenciaEventoPageModule)
   }
 ];
 

@@ -42,6 +42,17 @@
         <ion-button color="warning" (click)="editarEvento(i)">Editar</ion-button>
         <ion-button color="danger" (click)="confirmarEliminarEvento(i)">Eliminar</ion-button>
       </div>
+      <div class="register-assistance">
+        <ion-button
+          fill="solid"
+          color="primary"
+          class="register-assistance-button"
+          (click)="navegarRegistrarAsistencia(evento.id)"
+        >
+          <ion-icon name="person-outline" slot="start"></ion-icon>
+          REGISTRAR ASISTENCIA
+        </ion-button>
+      </div>
     </div>
   </div>
 
@@ -49,4 +60,3 @@
     <p>No hay eventos creados todavía.</p>
   </div>
 </ion-content>
-

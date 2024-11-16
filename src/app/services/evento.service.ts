@@ -38,4 +38,9 @@ export class EventoService {
     this.eventos.splice(index, 1);
     localStorage.setItem('eventos', JSON.stringify(this.eventos));
   }
+
+  obtenerEventoPorId(id: string) {
+    return this.eventos.find(evento => evento.id === id);
+  }
+  
 }
