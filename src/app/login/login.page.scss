@@ -23,7 +23,6 @@ ion-header {
   }
 }
 
-
 .custom-menu-button {
   color: white;
   font-size: 24px;
@@ -82,8 +81,8 @@ ion-header {
 
   //ESTILO BOTON INGRESAR LOGIN
   .custom-login-button {
-    --background: #290046 ;
-    --color: white ;
+    --background: #290046;
+    --color: white;
     --background-activated: #290046;
     --background-focused: #290046;
     --background-hover: #5600d1;
@@ -92,7 +91,6 @@ ion-header {
     height: 10px;
     font-size: 16px;
     text-transform: uppercase;   
-   
   }
   
   //TEXTO VISIBLE
@@ -100,6 +98,7 @@ ion-header {
     color: white;
   }
 }
+
 
 .forgot-password {
   text-align: center;
@@ -139,3 +138,27 @@ ion-footer {
     }
   }
 }
+
+/* Checkbox Group */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espacio entre los checkboxes */
+  margin-top: 15px; /* Espacio superior para separar del formulario */
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-option ion-checkbox {
+  margin-right: 10px; /* Espacio entre el círculo y el texto */
+}
+
+.checkbox-option ion-label {
+  color: #333; /* Cambia el color del texto */
+  font-size: 1rem; /* Ajusta el tamaño de la fuente si es necesario */
+  margin: 0;
+}
+

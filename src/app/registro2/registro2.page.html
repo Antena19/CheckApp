@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar color="custom-dark">
+    <ion-title class="ion-text-center white-text">CheckApp</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+  <h1 class="main-title">REGISTRO</h1>
+  <p class="subtitle">Crea tus credenciales</p>
+
+  <ion-card class="registro-card">
+    <ion-card-content>
+      <form #registroForm="ngForm" (ngSubmit)="onRegister()">
+        <!-- Nombre de Usuario -->
+        <ion-label>Nombre de Usuario</ion-label>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="username"
+            type="text"
+            required
+            minlength="3"
+            maxlength="8"
+            placeholder="Usuario"
+            autocomplete="off"
+            name="username"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Contraseña -->
+        <ion-label>Contraseña</ion-label>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="password"
+            type="password"
+            required
+            minlength="4"
+            maxlength="4"
+            placeholder="Contraseña"
+            autocomplete="off"
+            name="password"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Repetir Contraseña -->
+        <ion-label>Repetir Contraseña</ion-label>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="confirmPassword"
+            type="password"
+            required
+            minlength="4"
+            maxlength="4"
+            placeholder="Repetir Contraseña"
+            autocomplete="off"
+            name="confirmPassword"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Botón Crear Cuenta -->
+        <ion-button expand="block" type="submit" class="custom-registro-button" [disabled]="registroForm.invalid">
+          Crear Cuenta
+        </ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

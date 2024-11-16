@@ -9,7 +9,6 @@ import { AutenticacionService } from '../services/autenticacion.service'; // Imp
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-
   nombre: string = '';
   username: string = ''; // Variable para almacenar el nombre de usuario
 
@@ -50,5 +49,15 @@ export class HomePage implements OnInit {
   logout() {
     this.authService.cerrarSesion(); // Llamamos al método de cerrar sesión del servicio
     this.router.navigate(['/login']); // Redirigimos a la página de login
+  }
+
+  // Método para volver a la página anterior
+  goBack() {
+    this.router.navigate(['/login']);
+  }
+
+  // Método para navegar a Gestión de Eventos
+  navigateToGestionDeEventos() {
+    this.router.navigate(['/gestion-de-eventos']);
   }
 }

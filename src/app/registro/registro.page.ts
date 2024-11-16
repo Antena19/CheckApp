@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Storage } from '@ionic/storage-angular'; // Importamos Storage
-
-interface User {
-  username: string;
-  password: string;
-}
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-registro',
@@ -13,69 +8,65 @@ interface User {
   styleUrls: ['./registro.page.scss'],
 })
 export class RegistroPage {
-  username: string = '';
-  password: string = '';
+  nombreApellido: string = '';
+  rut: string = '';
+  telefono: string = '';
+  email: string = '';
 
-  constructor(
-    private router: Router,
-    private storage: Storage // Inyectamos Storage
-  ) {}
+  constructor(private router: Router, private storage: Storage) {}
 
   async ngOnInit() {
-    // Inicializamos el storage
     await this.storage.create();
-    console.log('Storage inicializado'); // Verifica si el almacenamiento se inicializa correctamente
+    console.log('RegistroPage - Storage inicializado');
   }
 
-  // Método llamado al enviar el formulario
-  onRegister() {
-    this.register();
-  }
-
-  // Lógica de registro de usuario
-  async register() {
-    // Limpiar espacios en blanco
-    this.username = this.username.trim();
-    this.password = this.password.trim();
-
-    // Validaciones
-    if (this.username.length < 3 || this.username.length > 8) {
-      alert('El nombre de usuario debe tener entre 3 y 8 caracteres.');
+  async onNext() {
+    if (!this.nombreApellido.trim()) {
+      alert('Por favor, ingresa tu Nombre y Apellido.');
+      return;
+    }
+    if (!this.validarRut(this.rut)) {
+      alert('Por favor, ingresa un RUT válido.');
+      return;
+    }
+    if (!this.validarTelefono(this.telefono)) {
+      alert('Por favor, ingresa un Número de Teléfono válido.');
+      return;
+    }
+    if (!this.validarEmail(this.email)) {
+      alert('Por favor, ingresa un Email válido.');
       return;
     }
 
-    if (this.password.length !== 4 || !/^\d+$/.test(this.password)) {
-      alert('La contraseña debe tener exactamente 4 dígitos numéricos.');
-      return;
-    }
+    await this.storage.set('tempRegistro', {
+      nombreApellido: this.nombreApellido,
+      rut: this.rut,
+      telefono: this.telefono,
+      email: this.email,
+    });
 
-    console.log('Nombre de Usuario:', this.username);
-    console.log('Contraseña:', this.password);
+    console.log('Datos temporales guardados:', {
+      nombreApellido: this.nombreApellido,
+      rut: this.rut,
+      telefono: this.telefono,
+      email: this.email,
+    });
 
-    // Obtener usuarios existentes del storage
-    const storedUsers: User[] = await this.storage.get('users') || [];
-    console.log('Usuarios almacenados antes de agregar:', storedUsers);
-    
-    // Verificar si el nombre de usuario ya existe
-    const userExists = storedUsers.find((user: User) => user.username === this.username);
-
-    if (userExists) {
-      alert('El nombre de usuario ya está en uso. Por favor, elige otro.');
-    } else {
-      // Crear un nuevo usuario y almacenarlo
-      const newUser: User = { username: this.username, password: this.password };
-      storedUsers.push(newUser);
-      
-      // Guardar usuarios actualizados en el storage
-      await this.storage.set('users', storedUsers);
-      console.log('Usuarios almacenados después de agregar:', storedUsers); // Verifica que el nuevo usuario se haya agregado
-      
-      alert(`Cuenta creada exitosamente para ${this.username}.`);
-      this.router.navigate(['/login']); // Redirigir a la página de inicio de sesión
-    }
+    this.router.navigate(['/registro2']);
   }
 
-  goToLogin() {
-    this.router.navigate(['/login']);
+  validarRut(rut: string): boolean {
+    const rutRegex = /^[0-9]+-[0-9kK]$/;
+    return rutRegex.test(rut);
+  }
+
+  validarTelefono(telefono: string): boolean {
+    const telefonoRegex = /^\+?[0-9]+$/;
+    return telefonoRegex.test(telefono);
+  }
+
+  validarEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 }

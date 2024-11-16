@@ -1,15 +1,19 @@
 <ion-header>
   <ion-toolbar color="custom-dark">
     <ion-buttons slot="start">
-      <ion-button>
-        <ion-img src="assets/img/logo-check-app.png" style="width: 30px; height: 30px;"></ion-img>
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back" slot="icon-only" class="white-icon"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title class="ion-text-center white-text">CheckApp</ion-title>
+    <ion-title>
+      <div class="header-content">
+        <ion-img src="assets/img/logo-check-app.png" class="header-logo"></ion-img>
+        <span class="header-title">CheckApp</span>
+      </div>
+    </ion-title>
     <ion-buttons slot="end">
-      <!-- Botón de cerrar sesión -->
-      <ion-button (click)="logout()">
-        <ion-icon name="log-out-outline" slot="icon-only" class="custom-menu-button"></ion-icon>
+      <ion-button>
+        <ion-icon name="menu-outline" slot="icon-only" class="white-icon"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -17,46 +21,27 @@
 
 <ion-content class="ion-padding" [fullscreen]="true">
   <h1 class="main-title">INICIO</h1>
-  <!-- Saludo al usuario -->
-  <ion-label class="welcome-message">Bienvenido {{username}}</ion-label>
-
   <p class="subtitle">¿Qué necesitas hacer hoy?</p>
 
-  <!-- Cuadrícula de botones -->
   <ion-grid class="funcionalidades">
     <!-- FILA 1 -->
     <ion-row>
-      <!-- BOTÓN 1: Registro de Asistencia -->
+      <!-- BOTÓN 1: Gestión de Eventos -->
       <ion-col size="6">
-        <button class="custom-button" routerLink="/registro-asistencia">
-          <ion-icon name="person-add-outline"></ion-icon>
-        </button>
-        <p class="subtitle-button">REGISTRO DE ASISTENCIA</p>
-      </ion-col>
-      <!-- BOTÓN 2: Gestión de Eventos -->
-      <ion-col size="6">
-        <button class="custom-button" routerLink="/gestion-de-eventos">
-          <ion-icon name="calendar-outline"></ion-icon>       
+        <button class="custom-button" (click)="navigateToGestionDeEventos()">
+          <ion-icon name="calendar-outline"></ion-icon>
         </button>
         <p class="subtitle-button">GESTIÓN DE EVENTOS</p>
       </ion-col>
     </ion-row>
-
     <!-- FILA 2 -->
     <ion-row>
-      <!-- BOTÓN 3: Informes -->
+      <!-- BOTÓN 2: Informes -->
       <ion-col size="6">
         <button class="custom-button">
           <ion-icon name="document-text-outline"></ion-icon>
         </button>
         <p class="subtitle-button">INFORMES</p>
-      </ion-col>
-      <!-- BOTÓN 4: Herramientas de Análisis -->
-      <ion-col size="6">
-        <button class="custom-button">
-          <ion-icon name="construct-outline"></ion-icon>
-        </button>
-        <p class="subtitle-button">HERRAMIENTAS DE ANÁLISIS</p>
       </ion-col>
     </ion-row>
   </ion-grid> 

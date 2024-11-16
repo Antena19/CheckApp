@@ -48,8 +48,23 @@
             <ion-icon [name]="passwordIcon"></ion-icon>
           </ion-button>
         </ion-item>
-        
-        <ion-button expand="block" type="submit" [disabled]="!loginForm.valid" class="custom-login-button">
+      
+        <!-- Selección de rol -->
+        <ion-label>Selecciona tu Rol</ion-label>
+        <div class="checkbox-group">
+          <div class="checkbox-option">
+            <ion-checkbox [(ngModel)]="isAdmin" name="isAdmin" (ionChange)="selectRole('admin')"></ion-checkbox>
+            <ion-label>Administrador</ion-label>
+          </div>
+          
+          <div class="checkbox-option">
+            <ion-checkbox [(ngModel)]="isParticipant" name="isParticipant" (ionChange)="selectRole('participant')"></ion-checkbox>
+            <ion-label>Participante</ion-label>
+          </div>
+        </div>
+
+
+        <ion-button expand="block" type="submit" [disabled]="!loginForm.valid || (!isAdmin && !isParticipant)" class="custom-login-button">
           INGRESAR
         </ion-button>
         <ion-text class="forgot-password">

@@ -1,7 +1,9 @@
 ion-content {
   --background: #272E30;
-  
+  padding-bottom: 100px;
+  overflow-y: auto;
 }
+
 ion-header, ion-footer {
   ion-toolbar {
     --background: #1E1E1E;
@@ -9,23 +11,30 @@ ion-header, ion-footer {
   }
 }
 
-
-.welcome-message{
-  background-color: #272E30;
-  color: #dc7de1;
-  margin-left: 125px;
+/* Header */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.header-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
 
-.custom-menu-button {
+.header-title {
+  font-size: 18px;
+  font-weight: bold;
   color: white;
-  font-size: 24px;
 }
 
-.white-text {
-  color: white !important;
+.white-icon {
+  color: white;
 }
 
+/* Bienvenida */
 .main-title {
   color: white;
   font-size: 24px;
@@ -38,64 +47,49 @@ ion-header, ion-footer {
 .subtitle {
   color: white;
   text-align: center;
-  margin-bottom: 20px;
-  margin-top: 1px;
+  margin-bottom: 40px; /* Más espacio entre el subtítulo y los botones */
+  margin-top: 10px;
 }
 
-
-//BOTONES DE OPCIONES
+/* Botones de Opciones */
 .funcionalidades {
   padding: 0 30px;
-
-  .custom-button {
-    width: 100px;
-    height: 100px;
-    background-color:#42316c;
-    border: none;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;   
-    margin-bottom: 5px;
-    margin-left: 35px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-
-    
-
-    ion-icon {
-      font-size: 4rem;
-      color: #ffff;
-    }
-  }
-
-  .subtitle-button {
-    color: white;
-    text-align: center;
-    font-size: small;
-    margin-bottom: 30px;
-    white-space: pre-wrap;
-    margin-left: 25px;
-
-  
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra los botones horizontalmente */
+  gap: 20px; /* Espacio uniforme entre las filas de botones */
 }
 
-ion-footer {
-  ion-toolbar {
-    --padding-start: 0;
-    --padding-end: 0;
-    --padding-top: 0;
-    --padding-bottom: 0;
+.custom-button {
+  width: 120px; /* Ajustado para que ambos botones tengan el mismo tamaño */
+  height: 120px;
+  background-color: #42316c;
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
 
-    ion-buttons {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-    }
+.custom-button:hover {
+  transform: scale(1.05);
+}
 
-    ion-button {
-      --color: white;
-    }
-  }
+ion-icon {
+  font-size: 4rem;
+  color: #fff;
+}
+
+.subtitle-button {
+  color: white;
+  text-align: center;
+  font-size: small;
+  margin-top: 10px; /* Más espacio debajo del botón */
+  line-height: 1.2; /* Ajusta para asegurar que el texto ocupe solo 2 filas */
+  white-space: pre-wrap;
+  word-break: break-word; /* Ajusta para que el texto no se desborde */
+  width: 120px; /* Centrado respecto al botón */
 }

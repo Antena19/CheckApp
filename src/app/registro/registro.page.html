@@ -2,7 +2,7 @@
   <ion-toolbar color="custom-dark">
     <ion-buttons slot="start">
       <ion-button>
-        <ion-img src="assets/img/logo-check-app.png" style="width: 30px; height: 30px;"></ion-img>
+        <ion-img class="logo-img" src="assets/img/logo-check-app.png" style="width: 30px; height: 30px;"></ion-img>
       </ion-button>
     </ion-buttons>
     <ion-title class="ion-text-center white-text">CheckApp</ion-title>
@@ -18,61 +18,64 @@
   <h1 class="main-title">REGISTRO</h1>
   <p class="subtitle">Ingresa tus datos</p>
 
-    <ion-card class="registro-card">
-      <ion-card-content>
-        <form #registroForm="ngForm" (ngSubmit)="onRegister()">
+  <ion-card class="registro-card">
+    <ion-card-content>
+      <form #registroForm="ngForm" (ngSubmit)="onNext()">
 
-          <!-- NOMBRE DE USUARIO -->
-          <ion-label>Nombre de Usuario</ion-label>
-          <ion-item>            
-            <ion-input 
-              [(ngModel)]="username"
-              type="text"
-              maxlength="8" 
-              minlength="3" 
-              required 
-              placeholder="Ingresa nombre de usuario" 
-              autocomplete="off"             
-              name="username">
-            </ion-input>
-          </ion-item>
-        
-          <!-- CONTRASEÑA -->
-          <ion-label>Contraseña</ion-label> 
-          <ion-item>            
-            <ion-input 
-              [(ngModel)]="password"
-              type="password"
-              maxlength="4" 
-              required
-              placeholder="Ingresa contraseña de 4 dígitos"
-              autocomplete="off"
-              name="password">
-            </ion-input>
-          </ion-item>
-        
-          <!-- BOTÓN CREAR CUENTA -->
-          <ion-button expand="block" type="submit" class="custom-registro-button" [disabled]="registroForm.invalid">
-            Crear Cuenta
-          </ion-button>
-        </form>
-        
-         <!-- LINK DE YA TENGO UNA CUENTA -->
-        <ion-text class="yaTengoCuenta">
-          <p class="link-go-login">
-            <a (click)="goToLogin()">Ya tengo una cuenta</a>
-          </p>
-        </ion-text>
-      </ion-card-content>
-    </ion-card>   
-  </ion-content>
+        <!-- NOMBRE Y APELLIDO -->
+        <ion-label>Nombre y Apellido</ion-label>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="nombreApellido"
+            required
+            placeholder="Nombre completo"
+            autocomplete="off"
+            name="nombreApellido">
+          </ion-input>
+        </ion-item>
 
-<ion-footer>
-  <ion-toolbar color="custom-dark">
-    <ion-buttons slot="start">
-      <ion-button>
-        <ion-icon name="home" color="light"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-footer>
+        <!-- N° DE IDENTIFICACIÓN -->
+        <ion-label>N° de Identificación (RUT)</ion-label>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="rut"
+            required
+            placeholder="Ejemplo: 12345678-9"
+            autocomplete="off"
+            name="rut">
+          </ion-input>
+        </ion-item>
+
+        <!-- TELÉFONO -->
+        <ion-label>Teléfono/Celular</ion-label>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="telefono"
+            required
+            placeholder="Número de teléfono"
+            autocomplete="off"
+            name="telefono">
+          </ion-input>
+        </ion-item>
+
+        <!-- EMAIL -->
+        <ion-label>Email</ion-label>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="email"
+            required
+            placeholder="Correo electrónico"
+            type="email"
+            autocomplete="off"
+            name="email">
+          </ion-input>
+        </ion-item>
+
+        <!-- BOTÓN SIGUIENTE -->
+        <ion-button expand="block" type="submit" [disabled]="!registroForm.valid" class="custom-registro-button">
+          Siguiente
+        </ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

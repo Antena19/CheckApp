@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar color="custom-dark">
+    <ion-title class="ion-text-center white-text">CheckApp</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+  <div class="container">
+    <ion-img src="assets/img/logo-check-app.png" class="logo"></ion-img>
+
+    <h1 class="main-title">¿NO TIENES UNA CUENTA EN CHECK APP?</h1>
+
+    <div class="button-group">
+      <ion-button expand="block" color="primary" (click)="goToCreateAccount()">
+        CREAR CUENTA
+      </ion-button>
+      <ion-button expand="block" color="secondary" (click)="goToLogin()">
+        INICIAR SESIÓN
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
