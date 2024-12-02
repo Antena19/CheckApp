@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
+import { DatosEjemploService } from './datos-ejemplo.service';
 
 @Injectable({
   providedIn: 'root',
@@ -7,38 +8,52 @@ import { Storage } from '@ionic/storage-angular';
 export class AutenticacionService {
   private usuarioLogueado: boolean = false;
 
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage, private datosEjemploService: DatosEjemploService) {
     this.init();
   }
 
   // Inicializa el Storage
   async init() {
     await this.storage.create();
-    const username = await this.storage.get('username');
-    this.usuarioLogueado = !!username; // Verifica si hay un usuario logueado
+    const usuarioActual = await this.storage.get('usuarioActual');
+    this.usuarioLogueado = !!usuarioActual; // Verifica si hay un usuario logueado
   }
 
-  // Verifica si el usuario está logueado
-  async estaLogueado(): Promise<boolean> {
-    return this.usuarioLogueado;
+  // Verificar si el usuario está logueado
+  async verificarSesion(): Promise<boolean> {
+    const usuarioActual = await this.storage.get('usuarioActual');
+    return !!usuarioActual;
   }
 
-  // Iniciar sesión con validación de rol
-  async iniciarSesion(username: string, rol: string): Promise<boolean> {
-    await this.storage.set('username', username); // Guarda el nombre de usuario
-    await this.storage.set('userRole', rol); // Guarda el rol del usuario
-    this.usuarioLogueado = true; // Marca como logueado
-    return true;
+  // Verificar si el usuario existe en el storage e iniciar sesión
+  async iniciarSesion(username: string, password: string, rol: string): Promise<boolean> {
+    const usuarios = (await this.storage.get('users')) || [];
+    const usuario = usuarios.find((user: any) => user.username === username && user.password === password);
+
+    if (usuario) {
+      await this.storage.set('usuarioActual', usuario); // Guarda el usuario actual en el Storage
+      await this.storage.set('userRole', rol); // Guarda el rol del usuario
+      this.usuarioLogueado = true; // Marca al usuario como logueado
+
+      // Si es el administrador, creamos el evento de ejemplo.
+      if (username === 'admin') {
+        await this.datosEjemploService.crearEventoEjemploAdmin();
+      }
+
+      return true;
+    } else {
+      return false; // Retornar false si el usuario no es encontrado
+    }
   }
 
   // Cerrar sesión
   async cerrarSesion() {
-    await this.storage.remove('username');
+    await this.storage.remove('usuarioActual');
     await this.storage.remove('userRole');
     this.usuarioLogueado = false;
   }
 
-  // Obtener el rol del usuario
+  // Obtener el rol del usuario actual
   async obtenerRol(): Promise<string | null> {
     return await this.storage.get('userRole');
   }
@@ -54,5 +69,17 @@ export class AutenticacionService {
     const usuarios = (await this.storage.get('users')) || [];
     usuarios.push(usuario);
     await this.storage.set('users', usuarios);
+  }
+
+  // MÉTODO PARA OBTENER EL USUARIO ACTUAL
+  async obtenerUsuarioActual() {
+    const usuario = await this.storage.get('usuarioActual');
+    if (usuario) {
+      console.log('Usuario obtenido del Storage:', usuario);
+      return usuario;
+    } else {
+      console.error('No se encontró un usuario logueado');
+      return null;
+    }
   }
 }

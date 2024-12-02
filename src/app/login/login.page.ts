@@ -3,11 +3,15 @@ import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { AutenticacionService } from '../services/autenticacion.service';
 import { NotificacionService } from '../services/notificacion.service';
+import { DatosEjemploService } from '../services/datos-ejemplo.service';
 
 interface User {
   username: string;
   password: string;
   rut: string;
+  nombreApellido: string;
+  telefono: string;
+  email: string;
 }
 
 @Component({
@@ -29,29 +33,28 @@ export class LoginPage implements OnInit {
     private router: Router,
     private storage: Storage,
     private authService: AutenticacionService,
-    private notificacionService: NotificacionService
+    private notificacionService: NotificacionService,
+    private datosEjemploService: DatosEjemploService
   ) {}
 
+  // INICIALIZAR COMPONENTE Y CARGAR USUARIOS DE EJEMPLO
   async ngOnInit() {
     await this.storage.create();
+    await this.datosEjemploService.cargarDatosEjemplo();
     this.validUsers = await this.storage.get('users') || [];
-
-    if (this.validUsers.length === 0) {
-      this.validUsers = [
-        { username: 'admin', password: '1234', rut: '12345678-9' },
-        { username: 'user', password: '4321', rut: '98765432-1' },
-      ];
-      await this.storage.set('users', this.validUsers);
-    }
+    console.log('Usuarios cargados:', this.validUsers); // Depuración
   }
 
+  // ENVÍO DEL FORMULARIO DE LOGIN
   onSubmit() {
     this.login();
   }
 
+  // MÉTODO PARA INICIAR SESIÓN
   async login() {
     this.username = this.username.trim();
     this.password = this.password.trim();
+    console.log(`Intentando iniciar sesión con: ${this.username} ${this.password}`); // Depuración
 
     const foundUser = this.validUsers.find(
       user => user.username === this.username && user.password === this.password
@@ -60,21 +63,26 @@ export class LoginPage implements OnInit {
     if (foundUser) {
       // Determinar el rol según la selección del usuario
       const rol = this.isAdmin ? 'admin' : 'participant';
-      await this.authService.iniciarSesion(this.username, rol);
+      await this.authService.iniciarSesion(this.username, this.password, rol);
 
       this.notificacionService.mostrarMensaje('Éxito', 'Inicio de sesión exitoso', 'success');
+      console.log(`Inicio de sesión exitoso para ${this.username} con rol: ${rol}`); // Depuración
 
       // Redirigir según el rol seleccionado
       if (rol === 'admin') {
-        this.router.navigate(['/home']);
+        console.log('Redirigiendo a la página de home...');
+        await this.router.navigate(['/home']);
       } else if (rol === 'participant') {
-        this.router.navigate(['/home-participante']);
+        console.log('Redirigiendo a la página de home-participante...');
+        await this.router.navigate(['/home-participante']);
       }
     } else {
       this.notificacionService.mostrarMensaje('Error', 'Usuario o contraseña inválidos', 'error');
+      console.log('Credenciales inválidas'); // Depuración
     }
   }
 
+  // MÉTODO PARA SELECCIONAR ROL (ADMINISTRADOR O PARTICIPANTE)
   selectRole(role: string) {
     if (role === 'admin') {
       this.isAdmin = true;
@@ -85,20 +93,24 @@ export class LoginPage implements OnInit {
     }
   }
 
+  // MÉTODO PARA CAMBIAR LA VISIBILIDAD DE LA CONTRASEÑA
   togglePasswordVisibility() {
     this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
     this.passwordIcon = this.passwordIcon === 'eye-off' ? 'eye' : 'eye-off';
   }
 
+  // MÉTODO PARA LIMPIAR CAMPOS DE ENTRADA
   clearInput(field: string) {
     if (field === 'username') this.username = '';
     if (field === 'password') this.password = '';
   }
 
+  // MÉTODO PARA NAVEGAR A RESETEO DE CONTRASEÑA
   goToResetPassword() {
     this.router.navigate(['/reset-password']);
   }
 
+  // MÉTODO PARA NAVEGAR A LA CREACIÓN DE CUENTA
   goToCreateAccount() {
     this.router.navigate(['/registro']);
   }

@@ -21,7 +21,7 @@
   <h1 class="main-title">NUEVO EVENTO</h1>
   <div class="evento-form">
     <form (ngSubmit)="guardarEvento()">
-      <!-- Nombre Evento -->
+      <!-- NOMBRE DEL EVENTO -->
       <div class="form-group">
         <ion-label>Nombre del Evento</ion-label>
         <ion-item lines="none" class="input-container">
@@ -33,7 +33,7 @@
         </ion-item>
       </div>
 
-      <!-- Organizador -->
+      <!-- ORGANIZADOR -->
       <div class="form-group">
         <ion-label>Nombre del Organizador</ion-label>
         <ion-item lines="none" class="input-container">
@@ -45,22 +45,33 @@
         </ion-item>
       </div>
 
-      <!-- Fecha y Hora -->
+      <!-- FECHA -->
       <div class="form-group">
-        <ion-label>Fecha y Hora</ion-label>
-        <ion-item lines="none" class="input-container">
-          <ion-datetime 
-            [(ngModel)]="fechaEvento"  
-            name="fechaEvento" 
-            display-format="DD-MM-YYYY HH:mm" 
-            picker-format="DD-MM-YYYY HH:mm"
-            placeholder="Seleccione fecha y hora"
-            required>
-          </ion-datetime>
-        </ion-item>
+        <ion-label>Fecha del Evento</ion-label>
+        <mat-form-field appearance="fill">
+          <input matInput [matDatepicker]="picker" placeholder="Seleccione la fecha" [(ngModel)]="fechaEvento" name="fechaEvento" required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
       </div>
 
-      <!-- Lugar -->
+      <!-- HORA INICIO -->
+      <div class="form-group">
+        <ion-label>Hora de Inicio</ion-label>
+        <mat-form-field appearance="fill">
+          <input matInput type="time" placeholder="Seleccione la hora de inicio" [(ngModel)]="horaInicio" name="horaInicio" required>
+        </mat-form-field>
+      </div>
+
+      <!-- HORA TERMINO (OPCIONAL) -->
+      <div class="form-group">
+        <ion-label>Hora de Término (opcional)</ion-label>
+        <mat-form-field appearance="fill">
+          <input matInput type="time" placeholder="Seleccione la hora de término" [(ngModel)]="horaTermino" name="horaTermino">
+        </mat-form-field>
+      </div>
+
+      <!-- LUGAR -->
       <div class="form-group">
         <ion-label>Lugar del Evento</ion-label>
         <ion-item lines="none" class="input-container">
@@ -73,38 +84,16 @@
         </ion-item>
       </div>
 
-      <!-- Mapa -->
+      <!-- MAPA -->
       <div #map id="map" class="map-container"></div>
       <div id="ubicacion"></div>
 
-      <!-- N° de Participantes -->
-      <div class="form-group">
-        <ion-label>N° de Participantes</ion-label>
-        <ion-item lines="none" class="input-container">
-          <ion-input type="number" 
-                    [(ngModel)]="numeroParticipantes" 
-                    name="numeroParticipantes"
-                    (ionChange)="generarListaAsistentes()"
-                    placeholder="0"
-                    required>
-          </ion-input>
-        </ion-item>
-      </div>
-
-      <!-- Botón Ver Lista de Asistentes -->
-      <ion-button expand="block" 
-                  color="secondary"
-                  [disabled]="!numeroParticipantes || numeroParticipantes <= 0"
-                  (click)="verListaAsistentes()"
-                  class="lista-asistentes-btn">
-        Ver Lista de Asistentes
-      </ion-button>
-
-      <!-- Botones -->
+      <!-- BOTONES -->
       <ion-button expand="block" 
                   type="submit" 
+                  [disabled]="!nombreEvento || !nombreOrganizador || !fechaEvento || !horaInicio || !lugarEvento"
                   class="guardar-btn">
-        GUARDAR
+        CREAR
       </ion-button>
       <ion-button expand="block" 
                   color="medium" 

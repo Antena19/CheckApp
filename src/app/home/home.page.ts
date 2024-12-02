@@ -22,7 +22,8 @@ export class HomePage implements OnInit {
     await this.storage.create(); // Inicializamos el storage
     
     // Verificar si el usuario está autenticado
-    if (!this.authService.estaLogueado()) {
+    const logueado = await this.authService.verificarSesion(); // Utilizamos await para obtener el valor de la promesa
+    if (!logueado) {
       this.router.navigate(['/login']); // Redirigir a login si no está logueado
     } else {
       this.username = await this.storage.get('username') || 'Usuario'; // Obtener el nombre de usuario
@@ -46,8 +47,8 @@ export class HomePage implements OnInit {
   }
 
   // Método para cerrar sesión
-  logout() {
-    this.authService.cerrarSesion(); // Llamamos al método de cerrar sesión del servicio
+  async logout() {
+    await this.authService.cerrarSesion(); // Llamamos al método de cerrar sesión del servicio
     this.router.navigate(['/login']); // Redirigimos a la página de login
   }
 

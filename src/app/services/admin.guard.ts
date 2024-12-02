@@ -10,8 +10,11 @@ export class AdminGuard implements CanActivate {
 
   async canActivate(): Promise<boolean> {
     const userRole = await this.authService.obtenerRol();
+    console.log(`Rol del usuario: ${userRole}`); // Añade esto para depurar
+
     if (userRole !== 'admin') {
-      this.router.navigate(['/login']);
+      console.log('El rol del usuario no es administrador, redirigiendo al login...');
+      await this.router.navigate(['/login']);
       return false;
     }
     return true;

@@ -5,8 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class EventoService {
   private eventos: any[] = [];
-  private maxEventos: number = 10; // Límite máximo de eventos
-  private maxAsistentes: number = 500; // Límite máximo de asistentes por evento
 
   constructor() {
     this.cargarEventos();
@@ -28,11 +26,8 @@ export class EventoService {
     return this.eventos;
   }
 
-  // Agregar un nuevo evento y verificar el límite máximo
+  // Agregar un nuevo evento
   agregarEvento(evento: any) {
-    if (this.eventos.length >= this.maxEventos) {
-      throw new Error('Se alcanzó el límite máximo de eventos. No puedes crear más de 10 eventos.');
-    }
     this.eventos.push({ ...evento, asistentes: [] }); // Inicializar lista de asistentes vacía
     this.guardarEventos();
   }
@@ -65,10 +60,6 @@ export class EventoService {
     const evento = this.eventos[eventoIndex];
     if (!evento) {
       throw new Error('Evento no encontrado.');
-    }
-
-    if (evento.asistentes.length >= this.maxAsistentes) {
-      throw new Error('Se alcanzó el límite máximo de asistentes para este evento.');
     }
 
     // Verificar si el asistente ya existe en el evento

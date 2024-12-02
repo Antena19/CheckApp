@@ -40,13 +40,18 @@ ion-header, ion-footer {
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 24px; /* Ajuste para separar más los campos */
 
   ion-label {
     color: #333;
     font-size: 14px;
     margin-bottom: 8px;
     display: block;
+  }
+
+  mat-form-field {
+    width: 100%; /* Hace que el campo ocupe todo el ancho */
+    margin-top: 8px;
   }
 }
 
@@ -95,4 +100,19 @@ ion-header, ion-footer {
   --border-radius: 8px;
   margin-top: 16px;
   font-weight: bold;
+}
+
+mat-label {
+  color: #333;
+}
+
+input[matInput] {
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.mat-datepicker-toggle {
+  margin-right: 8px;
+  color: #666;
 }

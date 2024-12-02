@@ -17,18 +17,17 @@ export class CrearEventoPage implements AfterViewInit {
 
   nombreEvento: string = '';
   nombreOrganizador: string = '';
-  horaEvento: string = '';
+  horaInicio: string = '';
+  horaTermino: string = '';
   lugarEvento: string = '';
-  numeroParticipantes: number = 0;
-  listaAsistentes: any[] = []; // Lista de asistentes
-  map: any;
-  marker: any;
-
   fechaEvento: string = '';
   minDate: string;
   minTime: string;
 
-  private maxAsistentes = 500; // Límite de asistentes
+  private maxEventos: number = 10; // Límite de eventos
+
+  map: any;
+  marker: any;
 
   constructor(
     private router: Router,
@@ -119,53 +118,42 @@ export class CrearEventoPage implements AfterViewInit {
     await alert.present();
   }
 
-  // Generar lista de asistentes basada en el número de participantes
-  generarListaAsistentes() {
-    if (this.numeroParticipantes > this.maxAsistentes) {
-      this.mostrarError(`No puedes tener más de ${this.maxAsistentes} asistentes.`);
-      return;
-    }
-
-    this.listaAsistentes = Array.from({ length: this.numeroParticipantes }, () => ({
-      rut: '',
-      nombreApellido: '',
-      telefono: ''
-    }));
-    console.log('Lista de asistentes generada:', this.listaAsistentes);
-  }
-
-  // Navegar a la página de lista de asistentes
-  verListaAsistentes() {
-    this.router.navigate(['/lista-asistentes'], { state: { listaAsistentes: this.listaAsistentes } });
-  }
-
   async guardarEvento() {
-    if (!this.nombreEvento || !this.nombreOrganizador || !this.fechaEvento || !this.lugarEvento || !this.numeroParticipantes) {
-      this.mostrarError("Por favor completa todos los campos.");
+    if (!this.nombreEvento || !this.nombreOrganizador || !this.fechaEvento || !this.horaInicio || !this.lugarEvento) {
+      this.mostrarError("Por favor completa todos los campos obligatorios.");
       return;
     }
-
-    if (this.eventoService.obtenerEventos().length >= 10) {
-      this.mostrarError("No puedes crear más de 10 eventos.");
-      return;
-    }
-
-    const evento = {
-      nombre: this.nombreEvento,
-      organizador: this.nombreOrganizador,
-      fechaHora: this.fechaEvento,
-      lugar: this.lugarEvento,
-      participantes: this.numeroParticipantes,
-      asistentes: this.listaAsistentes // Almacena la lista generada
-    };
-
+  
     try {
+      // Obtener el usuario actual logueado
+      const usuario = await this.authService.obtenerUsuarioActual();
+  
+      if (!usuario) {
+        throw new Error('No se ha podido obtener el usuario logueado. Por favor, inicia sesión de nuevo.');
+      }
+  
+      // Crear el nuevo evento
+      const evento = {
+        id: Date.now(), // ID único basado en la fecha actual
+        nombre: this.nombreEvento,
+        organizador: this.nombreOrganizador,
+        fecha: this.fechaEvento,
+        horaInicio: this.horaInicio,
+        horaTermino: this.horaTermino,
+        lugar: this.lugarEvento,
+        usuarioId: usuario.rut // Asociar el evento con el RUT del usuario logueado
+      };
+  
+      // Guardar el evento utilizando el servicio de eventos
       this.eventoService.agregarEvento(evento);
+  
+      // Redirigir a la página de gestión de eventos
       this.router.navigate(['/gestion-de-eventos']);
     } catch (error: any) {
       this.mostrarError(error.message);
     }
   }
+  
 
   async cancelar() {
     const alert = await this.alertController.create({
