@@ -17,15 +17,14 @@ export class EditarEventoPage implements AfterViewInit {
 
   nombreEvento: string = '';
   nombreOrganizador: string = '';
-  horaEvento: string = '';
+  horaInicio: string = '';
+  horaTermino: string = '';
   lugarEvento: string = '';
-  numeroParticipantes: number = 0;
-  listaAsistentes: any[] = []; // Lista de asistentes
-  map: any;
-  marker: any;
+  fechaEvento: string = '';
   eventoIndex: number = -1;
 
-  private maxAsistentes = 500; // Límite de asistentes
+  map: any;
+  marker: any;
 
   constructor(
     private router: Router,
@@ -77,34 +76,12 @@ export class EditarEventoPage implements AfterViewInit {
     if (evento) {
       this.nombreEvento = evento.nombre;
       this.nombreOrganizador = evento.organizador;
-      this.horaEvento = evento.hora;
+      this.fechaEvento = evento.fecha;
+      this.horaInicio = evento.horaInicio;
+      this.horaTermino = evento.horaTermino;
       this.lugarEvento = evento.lugar;
-      this.numeroParticipantes = evento.participantes;
-      this.listaAsistentes = evento.asistentes || []; // Cargar lista existente o inicializar vacía
       this.actualizarMapa();
     }
-  }
-
-  generarListaAsistentes() {
-    if (this.numeroParticipantes > this.maxAsistentes) {
-      this.mostrarError(`No puedes tener más de ${this.maxAsistentes} asistentes.`);
-      return;
-    }
-
-    const nuevosAsistentes = Array.from({ length: this.numeroParticipantes }, (_, index) => {
-      return this.listaAsistentes[index] || { rut: '', nombreApellido: '', telefono: '' };
-    });
-
-    this.listaAsistentes = nuevosAsistentes;
-    console.log('Lista de asistentes generada:', this.listaAsistentes);
-  }
-
-  verListaAsistentes() {
-    if (this.numeroParticipantes <= 0) {
-      this.mostrarError('El número de participantes debe ser mayor a 0.');
-      return;
-    }
-    this.router.navigate(['/lista-asistentes'], { state: { listaAsistentes: this.listaAsistentes, eventoId: this.eventoIndex } });
   }
 
   actualizarMapa() {
@@ -137,19 +114,17 @@ export class EditarEventoPage implements AfterViewInit {
     });
   }
 
-  mostrarError(mensaje: string) {
-    const ubicacionDiv = document.getElementById("ubicacion");
-    if (ubicacionDiv) {
-      ubicacionDiv.innerHTML = `
-        <div class="alert alert-danger" role="alert">
-          ${mensaje}
-        </div>
-      `;
-    }
+  async mostrarError(mensaje: string) {
+    const alert = await this.alertController.create({
+      header: 'Error',
+      message: mensaje,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
   async guardarEvento() {
-    if (!this.nombreEvento || !this.nombreOrganizador || !this.horaEvento || !this.lugarEvento || !this.numeroParticipantes) {
+    if (!this.nombreEvento || !this.nombreOrganizador || !this.fechaEvento || !this.horaInicio || !this.lugarEvento) {
       this.mostrarError("Por favor completa todos los campos.");
       return;
     }
@@ -169,10 +144,10 @@ export class EditarEventoPage implements AfterViewInit {
             const eventoEditado = {
               nombre: this.nombreEvento,
               organizador: this.nombreOrganizador,
-              hora: this.horaEvento,
-              lugar: this.lugarEvento,
-              participantes: this.numeroParticipantes,
-              asistentes: this.listaAsistentes // Guardar lista actualizada
+              fecha: this.fechaEvento,
+              horaInicio: this.horaInicio,
+              horaTermino: this.horaTermino,
+              lugar: this.lugarEvento
             };
 
             this.eventoService.editarEvento(this.eventoIndex, eventoEditado);
