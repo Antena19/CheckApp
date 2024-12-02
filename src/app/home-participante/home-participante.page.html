@@ -1,13 +1,65 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>home-participante</ion-title>
+<ion-header>
+  <ion-toolbar color="custom-dark">
+    <ion-title>
+      <div class="header-content">
+        <ion-img src="assets/img/logo-check-app.png" class="header-logo"></ion-img>
+        <span class="header-title">CheckApp</span>
+      </div>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home-participante</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <h1 class="main-title">INICIO</h1>
+
+  <!-- Mensaje de Bienvenida -->
+  <p class="welcome-message">Bienvenido, {{ username }}</p>
+
+  <!-- Campo de Búsqueda por Nombre, Lugar u Organizador -->
+  <ion-item>
+    <ion-label position="floating">Buscar Evento</ion-label>
+    <ion-input [(ngModel)]="busqueda" (ionInput)="filtrarEventos()" placeholder="Ingrese nombre, lugar u organizador"></ion-input>
+  </ion-item>
+
+  <!-- Campo de Filtro por Fecha -->
+  <div class="form-group">
+    <ion-label>Filtrar por Fecha</ion-label>
+    <mat-form-field appearance="fill">
+      <input matInput [matDatepicker]="picker" placeholder="Seleccione la fecha" [(ngModel)]="fechaFiltro" (dateChange)="filtrarEventos()" name="fechaFiltro">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <!-- Mostrar los eventos filtrados -->
+  <div *ngIf="eventosFiltrados.length > 0" class="content-container">
+    <h2 class="subtitle">Eventos Disponibles:</h2>
+    <ion-card *ngFor="let evento of eventosFiltrados" class="event-card">
+      <ion-card-header>
+        <ion-card-title>{{ evento.nombre }}</ion-card-title>
+        <ion-card-subtitle>{{ evento.fecha }} - {{ evento.lugar }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Organizador:</strong> {{ evento.organizador }}</p>
+        <ion-button expand="block" (click)="registrarAsistencia(evento.id)" color="success">
+          Confirmar Asistencia
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Mensaje si no se encuentran eventos -->
+  <div *ngIf="eventosFiltrados.length === 0 && busqueda" class="content-container">
+    <h2 class="subtitle">No se encontraron eventos que coincidan con la búsqueda.</h2>
+  </div>
+
+  <!-- Mostrar mensaje si no hay eventos disponibles -->
+  <div *ngIf="eventosInscrito.length === 0 && eventosFiltrados.length === 0 && !busqueda" class="content-container">
+    <h2 class="subtitle">No estás registrado en ningún evento actualmente.</h2>
+  </div>
 </ion-content>

@@ -3,10 +3,8 @@ ion-content {
   --background: #272E30;
   --overflow: scroll;
   padding-bottom: 100px; /* Ajusta según sea necesario */
-  --overflow: auto; /* Asegúrate de que el contenido sea desplazable */
-  overflow-y: auto; /* O usa scroll si es necesario */
+  overflow-y: auto; /* Permitir desplazamiento dentro del contenido */
   height: 100%;
-
 }
 
 ion-header, ion-footer {
@@ -17,7 +15,7 @@ ion-header, ion-footer {
 }
 
 .white-text {
-  color: white;
+  color: white !important;
 }
 
 .white-icon {
@@ -35,7 +33,6 @@ ion-header, ion-footer {
   z-index: 2; 
   pointer-events: auto;
 }
-
 
 /* Estilo para las tarjetas de eventos */
 .event-card {
@@ -90,21 +87,14 @@ ion-button {
   text-align: center !important; /* Centrar el texto dentro del botón */
   margin-top: 24px;
   font-weight: bold;
-
-  
-
 }
 
-/* Efecto al pasar el mouse en el botón */
+/* Efecto al pasar el mouse en el botón de crear evento */
 ion-button.create-event-button:hover {
   background-color: #4A4A4A !important; /* Color al pasar el mouse */
 }
 
 /* Estilo para el mensaje de bienvenida */
-.white-text {
-  color: white !important;
-}
-
 .main-title {
   color: white;
   font-size: 24px;
@@ -121,27 +111,7 @@ ion-button.create-event-button:hover {
   margin-top: 1px;
 }
 
-ion-footer {
-  ion-toolbar {
-    --padding-start: 0;
-    --padding-end: 0;
-    --padding-top: 0;
-    --padding-bottom: 0;
-
-    ion-buttons {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-    }
-
-    ion-button {
-      --color: white;
-      background-color: #272E30;
-      box-shadow: none; /* Eliminar sombra extraña */
-    }
-  }
-}
-
+/* Estilo para el contenedor del botón de registrar asistencia */
 .register-assistance {
   margin-top: 10px;
   text-align: center;
@@ -170,3 +140,23 @@ ion-footer {
   }
 }
 
+ion-footer {
+  ion-toolbar {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+
+    ion-buttons {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    ion-button {
+      --color: white;
+      background-color: #272E30;
+      box-shadow: none; /* Eliminar sombra extraña */
+    }
+  }
+}

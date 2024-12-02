@@ -34,7 +34,7 @@ ion-header, ion-footer {
   color: white;
 }
 
-/* Bienvenida */
+/* Mensaje de Bienvenida y Pregunta al Usuario */
 .main-title {
   color: white;
   font-size: 24px;
@@ -44,11 +44,12 @@ ion-header, ion-footer {
   margin-bottom: 10px;
 }
 
-.subtitle {
+.welcome-message,
+.question-message {
   color: white;
+  font-size: 18px;
   text-align: center;
-  margin-bottom: 40px; /* Más espacio entre el subtítulo y los botones */
-  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 /* Botones de Opciones */

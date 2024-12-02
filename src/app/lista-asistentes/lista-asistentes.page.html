@@ -15,14 +15,21 @@
   <!-- Tabla de Asistentes -->
   <ion-grid>
     <ion-row>
-      <ion-col size="4" class="header-cell">RUT</ion-col>
-      <ion-col size="4" class="header-cell">Nombre</ion-col>
-      <ion-col size="4" class="header-cell">Teléfono</ion-col>
+      <ion-col size="3" class="header-cell">RUT</ion-col>
+      <ion-col size="3" class="header-cell">Nombre</ion-col>
+      <ion-col size="3" class="header-cell">Hora de Registro</ion-col>
+      <ion-col size="3" class="header-cell">Estado</ion-col>
     </ion-row>
     <ion-row *ngFor="let asistente of listaAsistentes; let i = index">
-      <ion-col size="4">{{ asistente.rut }}</ion-col>
-      <ion-col size="4">{{ asistente.nombreApellido }}</ion-col>
-      <ion-col size="4">{{ asistente.telefono }}</ion-col>
+      <ion-col size="3">{{ asistente.rut }}</ion-col>
+      <ion-col size="3">{{ asistente.nombreApellido }}</ion-col>
+      <ion-col size="3">{{ asistente.horaRegistro || 'N/A' }}</ion-col>
+      <ion-col size="3">
+        <ion-icon
+          [name]="asistente.estado === 'presente' ? 'checkmark-circle' : 'close-circle'"
+          [style.color]="asistente.estado === 'presente' ? 'green' : 'red'">
+        </ion-icon>
+      </ion-col>
       <ion-col size="2">
         <ion-button color="warning" fill="clear" (click)="editarAsistente(i)">
           <ion-icon name="create-outline"></ion-icon>
@@ -35,6 +42,6 @@
   </ion-grid>
 
   <!-- Botones -->
-  <ion-button expand="block" color="primary" (click)="agregarAsistente()">Agregar Asistente</ion-button>
-  <ion-button expand="block" color="tertiary" (click)="verDetalleEvento()">Ver Detalle</ion-button>
+  <ion-button expand="block" color="primary" (click)="agregarAsistente()">Agregar Asistente Manualmente</ion-button>
+  <ion-button expand="block" color="tertiary" (click)="generarInformes()">Generar Informes</ion-button>
 </ion-content>

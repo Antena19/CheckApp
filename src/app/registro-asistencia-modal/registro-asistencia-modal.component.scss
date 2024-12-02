@@ -1,0 +1,119 @@
+/**** CSS PARA MODAL DE REGISTRO DE ASISTENCIA ****/
+
+ion-header, ion-toolbar {
+    --background: #1E1E1E;
+    --color: white;
+  
+    ion-title {
+      text-align: center;
+      font-size: 1.2em;
+      color: white;
+      font-weight: bold;
+    }
+  
+    ion-buttons {
+      ion-button {
+        ion-icon {
+          color: white; /* Asegurarse de que la 'X' para cerrar el modal sea de color blanco */
+        }
+      }
+    }
+  }
+  
+  ion-content {
+    --background: #272E30;
+    color: white;
+    padding: 16px;
+  
+    h2 {
+      font-size: 1.5em;
+      color: white;
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+  
+    p {
+      font-size: 1em;
+      color: white;
+      margin-bottom: 10px;
+      text-align: center;
+  
+      strong {
+        color: #f0e68c; /* Color resaltado para etiquetas como "Organizador", "Hora", etc. */
+      }
+    }
+  
+    ion-button {
+      --background: #42316c;
+      color: white;
+      --border-radius: 8px;
+      margin-top: 24px;
+      font-weight: bold;
+      display: block;
+      width: 80%;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      transition: transform 0.2s ease;
+  
+      &:hover {
+        transform: scale(1.05);
+      }
+  
+      ion-icon {
+        margin-right: 8px;
+      }
+    }
+  
+    /* Estilo del contenedor del código QR */
+    .qr-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+  
+    /* Botón para "Mostrar Código QR" */
+    .mostrar-qr-btn {
+      margin-top: 16px;
+    }
+  
+    /* Botón para "Compartir Código QR" */
+    .compartir-qr-btn {
+      margin-top: 16px;
+      --background: #6A4B8C; /* Morado para compartir */
+    }
+  
+    /* Botón para "Ir a la Lista de Asistentes" */
+    .ver-lista-asistentes-btn {
+      --background: #6A4B8C; /* Morado para lista de asistentes */
+      color: white;
+      --border-radius: 8px;
+      margin-top: 16px;
+      font-weight: bold;
+      display: block;
+      width: 80%;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      transition: transform 0.2s ease;
+  
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  
+    /* Estilo para mensajes de error */
+    .alert {
+      background-color: #ff5555;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      margin-top: 20px;
+    }
+  }
+  

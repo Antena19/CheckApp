@@ -1,43 +1,90 @@
 ion-content {
-    --background: #272E30;
+  --background: #272E30;
+}
+
+ion-header {
+  ion-toolbar {
+    --background: #1E1E1E;
+    --color: white;
   }
-  
-  ion-header {
-    ion-toolbar {
-      --background: #1E1E1E;
-      --color: white;
+}
+
+.main-title {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.header-cell {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  background: #42316c;
+  padding: 8px 0;
+  border-radius: 8px;
+}
+
+ion-row {
+  align-items: center;
+  border-bottom: 1px solid #3e3e3e; /* Añadir borde para separar las filas */
+
+  ion-col {
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+
+    /* Icono de estado */
+    .estado-icon {
+      font-size: 1.5rem;
+      display: inline-block;
+      vertical-align: middle;
     }
   }
-  
-  .main-title {
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    margin: 20px 0;
-  }
-  
-  .header-cell {
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    background: #42316c;
-    padding: 8px 0;
-  }
-  
-  ion-row {
-    align-items: center;
-  
-    ion-col {
-      color: white;
-      text-align: center;
-      padding: 10px 0;
-    }
-  }
-  
-  ion-button {
-    --background: #42316c;
-    color: white;
-    margin: 10px 0;
-  }
-  
+}
+
+/* Botón para agregar un asistente manualmente */
+.agregar-asistente-btn {
+  --background: #4c8bf5; /* Color azul para destacar el botón */
+  color: white;
+  font-weight: bold;
+  --border-radius: 8px;
+  width: 80%;
+  max-width: 400px;
+  margin: 20px auto;
+  display: block;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.agregar-asistente-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Botón para generar informes */
+.generar-informes-btn {
+  --background: #6b52ae; /* Color púrpura consistente con la app */
+  color: white;
+  font-weight: bold;
+  --border-radius: 8px;
+  width: 80%;
+  max-width: 400px;
+  margin: 20px auto;
+  display: block;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.generar-informes-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Estado de los asistentes */
+.presente {
+  color: green;
+}
+
+.ausente {
+  color: red;
+}

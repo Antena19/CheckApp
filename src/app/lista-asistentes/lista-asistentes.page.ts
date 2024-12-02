@@ -27,6 +27,7 @@ export class ListaAsistentesPage implements OnInit {
     }
   }
 
+  // MÉTODO PARA AGREGAR UN NUEVO ASISTENTE
   async agregarAsistente() {
     const alert = await this.alertController.create({
       header: 'Agregar Asistente',
@@ -41,8 +42,17 @@ export class ListaAsistentesPage implements OnInit {
           text: 'Agregar',
           handler: (data) => {
             if (data.rut && data.nombreApellido && data.telefono) {
-              this.listaAsistentes.push(data);
-              this.guardarCambios();
+              // Verificar si el asistente ya existe en la lista
+              const asistenteExistente = this.listaAsistentes.find(asistente => asistente.rut === data.rut);
+              if (asistenteExistente) {
+                this.mostrarAlerta('Error', 'El asistente ya está registrado.');
+              } else {
+                data.estado = 'ausente'; // Estado inicial "ausente"
+                this.listaAsistentes.push(data);
+                this.guardarCambios();
+              }
+            } else {
+              this.mostrarAlerta('Error', 'Todos los campos son obligatorios.');
             }
           },
         },
@@ -51,6 +61,7 @@ export class ListaAsistentesPage implements OnInit {
     await alert.present();
   }
 
+  // MÉTODO PARA EDITAR UN ASISTENTE EXISTENTE
   async editarAsistente(index: number) {
     const asistente = this.listaAsistentes[index];
     const alert = await this.alertController.create({
@@ -66,8 +77,14 @@ export class ListaAsistentesPage implements OnInit {
           text: 'Guardar',
           handler: (data) => {
             if (data.rut && data.nombreApellido && data.telefono) {
-              this.listaAsistentes[index] = data;
+              // Actualizar la información del asistente
+              this.listaAsistentes[index] = {
+                ...data,
+                estado: asistente.estado, // Mantener el estado actual del asistente
+              };
               this.guardarCambios();
+            } else {
+              this.mostrarAlerta('Error', 'Todos los campos son obligatorios.');
             }
           },
         },
@@ -76,24 +93,43 @@ export class ListaAsistentesPage implements OnInit {
     await alert.present();
   }
 
+  // MÉTODO PARA ELIMINAR UN ASISTENTE
   eliminarAsistente(index: number) {
     this.listaAsistentes.splice(index, 1);
     this.guardarCambios();
   }
 
+  // MÉTODO PARA GUARDAR LOS CAMBIOS EN LA LISTA DE ASISTENTES
   guardarCambios() {
     const eventos = this.eventoService.obtenerEventos();
     if (this.eventoIndex >= 0) {
       eventos[this.eventoIndex].asistentes = this.listaAsistentes;
-      localStorage.setItem('eventos', JSON.stringify(eventos));
+      this.eventoService.guardarEventos();
     }
   }
 
+  // MÉTODO PARA VER DETALLE DEL EVENTO
   verDetalleEvento() {
     this.router.navigate(['/registro-asistencia-evento', { id: this.eventoIndex }]);
   }
 
+  // MÉTODO PARA VOLVER A LA GESTIÓN DE EVENTOS
   volver() {
     this.router.navigate(['/gestion-de-eventos']);
+  }
+
+  // MÉTODO PARA MOSTRAR ALERTAS
+  async mostrarAlerta(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
+  // MÉTODO PARA GENERAR INFORMES
+  generarInformes() {
+    this.router.navigate(['/generar-informes', { id: this.eventoIndex }]);
   }
 }

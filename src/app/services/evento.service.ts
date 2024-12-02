@@ -17,7 +17,7 @@ export class EventoService {
   }
 
   // Guardar eventos en el almacenamiento local
-  private guardarEventos() {
+  public guardarEventos() {
     localStorage.setItem('eventos', JSON.stringify(this.eventos));
   }
 
@@ -55,6 +55,20 @@ export class EventoService {
     return this.eventos.find(evento => evento.id === id);
   }
 
+  // Obtener eventos donde el participante está presente
+  obtenerEventosConParticipantePresente(rutParticipante: string) {
+    return this.eventos.filter(evento =>
+      evento.asistentes && evento.asistentes.some((asistente: any) => asistente.rut === rutParticipante && asistente.estado === 'presente')
+    );
+  }
+
+  // Obtener eventos donde el participante está inscrito
+  obtenerEventosConParticipanteInscrito(rutParticipante: string) {
+    return this.eventos.filter(evento =>
+      evento.asistentes && evento.asistentes.some((asistente: any) => asistente.rut === rutParticipante)
+    );
+  }
+
   // Agregar un asistente a un evento
   agregarAsistente(eventoIndex: number, asistente: any) {
     const evento = this.eventos[eventoIndex];
@@ -68,7 +82,52 @@ export class EventoService {
       throw new Error('El asistente ya está registrado en este evento.');
     }
 
+    asistente.estado = 'presente'; // Registrar al asistente como presente
     evento.asistentes.push(asistente);
+    this.guardarEventos();
+  }
+
+  // Invitar a un asistente a un evento (estado "ausente")
+  invitarAsistente(eventoIndex: number, asistente: any) {
+    const evento = this.eventos[eventoIndex];
+    if (!evento) {
+      throw new Error('Evento no encontrado.');
+    }
+
+    // Verificar si el asistente ya existe en el evento
+    const asistenteExistente = evento.asistentes.find((a: any) => a.rut === asistente.rut);
+    if (asistenteExistente) {
+      throw new Error('El asistente ya está registrado en este evento.');
+    }
+
+    asistente.estado = 'ausente'; // Registrar al asistente como ausente inicialmente
+    evento.asistentes.push(asistente);
+    this.guardarEventos();
+  }
+
+  // Registrar la asistencia de un participante mediante el ID del evento
+  registrarAsistenciaPorId(eventoId: string, rutParticipante: string, nombre: string) {
+    const evento = this.obtenerEventoPorId(eventoId);
+    if (!evento) {
+      throw new Error('Evento no encontrado.');
+    }
+
+    const asistenteExistente = evento.asistentes.find((a: any) => a.rut === rutParticipante);
+    if (asistenteExistente) {
+      // Actualizar el estado del asistente existente a "presente"
+      asistenteExistente.estado = 'presente';
+      asistenteExistente.horaRegistro = new Date().toLocaleTimeString();
+    } else {
+      // Si el asistente no está registrado, agregarlo con estado "presente"
+      const nuevoAsistente = {
+        rut: rutParticipante,
+        nombre,
+        estado: 'presente',
+        horaRegistro: new Date().toLocaleTimeString(),
+      };
+      evento.asistentes.push(nuevoAsistente);
+    }
+
     this.guardarEventos();
   }
 
@@ -101,4 +160,3 @@ export class EventoService {
     return evento.asistentes;
   }
 }
-

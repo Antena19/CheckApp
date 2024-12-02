@@ -1,9 +1,10 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { AutenticacionService } from '../services/autenticacion.service';
 import { Router } from '@angular/router';
-import { EventoService } from '../services/evento.service'; //service de eventos
+import { EventoService } from '../services/evento.service'; // SERVICE DE EVENTOS
 import { NotificacionService } from '../services/notificacion.service';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController } from '@ionic/angular'; // Importamos ModalController
+import { RegistroAsistenciaModalComponent } from '../registro-asistencia-modal/registro-asistencia-modal.component'; // Importa el componente del modal de registro de asistencia
 
 declare var google: any;
 
@@ -26,15 +27,18 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
   constructor(
     private authService: AutenticacionService,
     private router: Router,
-    private eventoService: EventoService, //evento service
+    private eventoService: EventoService, // SERVICE DE EVENTOS
     private notificacionService: NotificacionService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private modalController: ModalController // CONTROLADOR DEL MODAL
   ) {}
 
+  // MÉTODO QUE SE EJECUTA AL INICIAR EL COMPONENTE
   ngOnInit() {
     this.cargarEventos();
   }
 
+  // MÉTODO PARA INICIALIZAR EL MAPA DESPUÉS DE QUE EL COMPONENTE HAYA CARGADO LA VISTA
   ngAfterViewInit() {
     const latLng = { lat: -33.447487, lng: -70.673676 };
     this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
@@ -53,18 +57,22 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
     });
   }
 
+  // CARGAR TODOS LOS EVENTOS EXISTENTES DESDE EL SERVICIO
   cargarEventos() {
     this.eventos = this.eventoService.obtenerEventos();
   }
 
+  // ABRIR EL PICKER DE FECHA Y HORA
   abrirFechaHoraPicker() {
     this.mostrarFechaHoraPicker = true;
   }
 
+  // CERRAR EL PICKER DE FECHA Y HORA
   cerrarFechaHoraPicker() {
     this.mostrarFechaHoraPicker = false;
   }
 
+  // MOSTRAR RESUMEN DEL EVENTO CREADO Y GUARDARLO
   mostrarResumen() {
     const evento = {
       nombre: this.nombreEvento,
@@ -78,6 +86,7 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
     this.limpiarFormulario();
   }
 
+  // ACTUALIZAR EL MAPA SEGÚN LA DIRECCIÓN INGRESADA
   actualizarMapa() {
     if (!this.lugarEvento.trim()) {
       this.mostrarError("Por favor ingresa un lugar.");
@@ -97,6 +106,7 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
     });
   }
 
+  // CONVERTIR COORDENADAS LATITUDE/LONGITUDE A DIRECCIÓN
   geocodeLatLng(latLng: any) {
     const geocoder = new google.maps.Geocoder();
     geocoder.geocode({ location: latLng }, (results: any[], status: any) => {
@@ -108,6 +118,7 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
     });
   }
 
+  // MOSTRAR MENSAJE DE ERROR EN LA INTERFAZ
   mostrarError(mensaje: string) {
     const ubicacionDiv = document.getElementById("ubicacion");
     if (ubicacionDiv) {
@@ -121,10 +132,12 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
     }
   }
 
+  // MÉTODO PARA EDITAR UN EVENTO ESPECÍFICO
   editarEvento(index: number) {
     this.router.navigate(['/editar-evento', { id: index }]); 
   }
 
+  // CONFIRMAR SI SE DESEA ELIMINAR UN EVENTO
   confirmarEliminarEvento(index: number) {
     const confirmacion = confirm("¿Estás seguro de que deseas eliminar este evento?");
     if (confirmacion) {
@@ -132,12 +145,14 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
     }
   }
 
+  // ELIMINAR UN EVENTO ESPECÍFICO Y ACTUALIZAR LA LISTA
   eliminarEvento(index: number) {
     this.eventoService.eliminarEvento(index);
     this.cargarEventos();
     this.notificacionService.mostrarMensaje('Éxito', 'Evento eliminado correctamente', 'success');
   }
 
+  // LIMPIAR TODOS LOS CAMPOS DEL FORMULARIO
   limpiarFormulario() {
     this.nombreEvento = '';
     this.nombreOrganizador = '';
@@ -146,18 +161,30 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
     this.numeroParticipantes = 0;
   }
 
+  // CERRAR SESIÓN Y REDIRIGIR AL LOGIN
   logout() {
     this.authService.cerrarSesion();
     this.router.navigate(['/login']);
   }
 
-   // Método para volver a la página anterior
-   volver() {
-    this.navCtrl.back(); // Regresa a la página anterior
+  // VOLVER A LA PÁGINA ANTERIOR
+  volver() {
+    this.navCtrl.back(); // REGRESA A LA PÁGINA ANTERIOR
   }
 
+  // NAVEGAR AL REGISTRO DE ASISTENCIA DE UN EVENTO
   navegarRegistrarAsistencia(eventId: string) {
     this.router.navigate(['/registro-asistencia-evento'], { queryParams: { id: eventId } });
   }
-  
+
+  // ABRIR MODAL PARA REGISTRAR ASISTENCIA
+  async abrirModalRegistrarAsistencia(eventId: string) {
+    const modal = await this.modalController.create({
+      component: RegistroAsistenciaModalComponent,
+      componentProps: {
+        idEvento: eventId
+      }
+    });
+    await modal.present();
+  }
 }

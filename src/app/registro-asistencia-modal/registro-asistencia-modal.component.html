@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar color="custom-dark">
+    <ion-title class="ion-text-center">Registro de Asistencia</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarModal()">
+        <ion-icon name="close" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="evento">
+    <h2>{{ evento.nombre }}</h2>
+    <p><strong>Organizador:</strong> {{ evento.organizador }}</p>
+    <p><strong>Hora:</strong> {{ evento.hora }}</p>
+    <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
+
+    <!-- Botón para Mostrar Código QR -->
+    <ion-button expand="block" (click)="mostrarQR()" class="mostrar-qr-btn">
+      <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+      Mostrar Código QR
+    </ion-button>
+
+    <!-- Canvas para mostrar el código QR -->
+    <div class="qr-container" *ngIf="evento">
+      <canvas #qrCanvas></canvas>
+    </div>
+
+    <!-- Botón para Compartir Código QR -->
+    <ion-button expand="block" (click)="compartirQR()" class="compartir-qr-btn">
+      <ion-icon name="share-social-outline" slot="start"></ion-icon>
+      Compartir Código QR
+    </ion-button>
+
+    <!-- Botón para Ver Lista de Asistentes -->
+    <ion-button expand="block" (click)="verListaAsistentes()" class="ver-lista-asistentes-btn">
+      <ion-icon name="list-outline" slot="start"></ion-icon>
+      Ver Lista de Asistentes
+    </ion-button>
+  </div>
+
+  <div *ngIf="!evento">
+    <p>No se pudo cargar la información del evento.</p>
+  </div>
+</ion-content>

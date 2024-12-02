@@ -15,9 +15,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
+
+//MODAL
+import { RegistroAsistenciaModalComponent } from './registro-asistencia-modal/registro-asistencia-modal.component';
+
 @NgModule({
   declarations: [
     AppComponent,
+    RegistroAsistenciaModalComponent,
   ],
   imports: [
     BrowserModule, 
@@ -32,7 +38,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
   ],
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+   
   ],
   bootstrap: [AppComponent] 
 })

@@ -20,13 +20,19 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
     await this.storage.create(); // Inicializamos el storage
-    
+
     // Verificar si el usuario está autenticado
     const logueado = await this.authService.verificarSesion(); // Utilizamos await para obtener el valor de la promesa
     if (!logueado) {
       this.router.navigate(['/login']); // Redirigir a login si no está logueado
     } else {
-      this.username = await this.storage.get('username') || 'Usuario'; // Obtener el nombre de usuario
+      // Obtener el usuario actual desde el servicio de autenticación
+      const usuarioActual = await this.authService.obtenerUsuarioActual();
+      if (usuarioActual) {
+        this.username = usuarioActual.nombreApellido; // Usar el nombre y apellido del usuario para mostrar el mensaje de bienvenida
+      } else {
+        this.username = 'Usuario'; // Valor por defecto si no se encuentra el usuario
+      }
     }
   }
 
