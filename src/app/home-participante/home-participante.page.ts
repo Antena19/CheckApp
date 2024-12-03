@@ -65,27 +65,56 @@ export class HomeParticipantePage implements OnInit {
     if (eventoId) {
       const evento = this.eventoService.obtenerEventoPorId(eventoId);
       if (evento) {
+        // Normalizar el RUT del participante para asegurar la consistencia
+        const rutNormalizado = this.normalizarRut(this.rutParticipante);
+
         // Verificar si el asistente ya está registrado en el evento
-        const asistenteExistente = evento.asistentes.find((asistente: any) => asistente.rut === this.rutParticipante);
+        let asistenteExistente = evento.asistentes.find((asistente: any) => this.normalizarRut(asistente.rut) === rutNormalizado);
         if (asistenteExistente) {
-          this.mostrarAlerta('Error', 'Ya estás registrado en este evento.');
+          // Cambiar el estado del asistente a "presente"
+          asistenteExistente.estado = 'presente';
+          asistenteExistente.horaRegistro = new Date().toLocaleTimeString();
         } else {
+          // Si no está registrado, agregar al asistente con el estado "presente"
           const nuevoAsistente = {
-            rut: this.rutParticipante,
-            nombre: this.username,
+            rut: rutNormalizado,
+            nombreApellido: this.username,
             estado: 'presente',
+            horaRegistro: new Date().toLocaleTimeString(),
           };
-          this.eventoService.registrarAsistenciaPorId(eventoId, nuevoAsistente.rut, nuevoAsistente.nombre);
-          this.mostrarAlerta('Éxito', 'Asistencia registrada exitosamente.');
-          // Actualizar la lista de eventos donde el participante está presente
-          this.eventosPresente = this.eventoService.obtenerEventosConParticipantePresente(this.rutParticipante);
+          evento.asistentes.push(nuevoAsistente);
         }
+
+        // Guardar cambios en el evento
+        this.eventoService.guardarEventos();
+
+        // Mostrar mensaje de éxito
+        this.mostrarAlerta('Éxito', 'Asistencia registrada exitosamente.');
+
+        // Actualizar la lista de eventos donde el participante está presente
+        this.eventosPresente = this.eventoService.obtenerEventosConParticipantePresente(this.rutParticipante);
+
+        // Actualizar el estado del botón de asistencia
+        this.actualizarEstadoBotonAsistencia(eventoId);
       } else {
         this.mostrarAlerta('Error', 'Evento no encontrado.');
       }
     } else {
       this.mostrarAlerta('Error', 'Debe seleccionar un evento.');
     }
+  }
+
+  // MÉTODO PARA ACTUALIZAR EL ESTADO DEL BOTÓN DE ASISTENCIA
+  actualizarEstadoBotonAsistencia(eventoId: string) {
+    const evento = this.eventosFiltrados.find(e => e.id === eventoId);
+    if (evento) {
+      evento.asistenciaConfirmada = true;
+    }
+  }
+
+  // MÉTODO PARA NORMALIZAR EL RUT (Manteniendo el guion y sin cambiar mayúsculas/minúsculas)
+  normalizarRut(rut: string): string {
+    return rut.replace(/\./g, '').trim();
   }
 
   // MÉTODO PARA MOSTRAR ALERTAS

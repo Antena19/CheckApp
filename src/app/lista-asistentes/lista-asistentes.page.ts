@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventoService } from '../services/evento.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, MenuController } from '@ionic/angular';
+import { AutenticacionService } from '../services/autenticacion.service'; // Servicio de autenticación
 
 @Component({
   selector: 'app-lista-asistentes',
@@ -16,7 +17,9 @@ export class ListaAsistentesPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private eventoService: EventoService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private menu: MenuController, // Controlador de menú
+    private authService: AutenticacionService // Servicio de autenticación
   ) {}
 
   ngOnInit() {
@@ -27,12 +30,18 @@ export class ListaAsistentesPage implements OnInit {
     }
   }
 
+  // MÉTODO PARA ABRIR EL MENÚ LATERAL
+  openMenu() {
+    this.menu.enable(true, 'main-menu'); // Habilitamos el menú con el ID 'main-menu'
+    this.menu.open('main-menu'); // Abrimos el menú
+  }
+
   // MÉTODO PARA AGREGAR UN NUEVO ASISTENTE
   async agregarAsistente() {
     const alert = await this.alertController.create({
       header: 'Agregar Asistente',
       inputs: [
-        { name: 'rut', placeholder: 'RUT', type: 'text' },
+        { name: 'rut', placeholder: 'RUT (Formato: 00000000-0)', type: 'text' },
         { name: 'nombreApellido', placeholder: 'Nombre y Apellido', type: 'text' },
         { name: 'telefono', placeholder: 'Teléfono', type: 'tel' },
       ],
@@ -41,18 +50,30 @@ export class ListaAsistentesPage implements OnInit {
         {
           text: 'Agregar',
           handler: (data) => {
-            if (data.rut && data.nombreApellido && data.telefono) {
+            if (data.rut) {
+              const rutNormalizado = this.normalizarRut(data.rut);
+              if (!this.validarRut(rutNormalizado)) {
+                this.mostrarAlerta('Error', 'El RUT ingresado no tiene un formato válido.');
+                return false; // Agregar return false para indicar que no se debe proceder
+              }
+
               // Verificar si el asistente ya existe en la lista
-              const asistenteExistente = this.listaAsistentes.find(asistente => asistente.rut === data.rut);
+              const asistenteExistente = this.listaAsistentes.find(
+                asistente => this.normalizarRut(asistente.rut) === rutNormalizado
+              );
               if (asistenteExistente) {
                 this.mostrarAlerta('Error', 'El asistente ya está registrado.');
+                return false; // Agregar return false para evitar proceder
               } else {
+                data.rut = rutNormalizado;
                 data.estado = 'ausente'; // Estado inicial "ausente"
                 this.listaAsistentes.push(data);
                 this.guardarCambios();
+                return true; // Indicar que se ha completado correctamente
               }
             } else {
-              this.mostrarAlerta('Error', 'Todos los campos son obligatorios.');
+              this.mostrarAlerta('Error', 'El campo RUT es obligatorio.');
+              return false; // Asegurarse de devolver false si el RUT no está presente
             }
           },
         },
@@ -61,13 +82,24 @@ export class ListaAsistentesPage implements OnInit {
     await alert.present();
   }
 
+  // MÉTODO PARA NORMALIZAR EL RUT (Manteniendo el guion y sin cambiar mayúsculas/minúsculas)
+  normalizarRut(rut: string): string {
+    return rut.replace(/\./g, '').trim();
+  }
+
+  // MÉTODO PARA VALIDAR EL FORMATO DEL RUT (Debe seguir el formato 00000000-0)
+  validarRut(rut: string): boolean {
+    const rutRegex = /^\d{7,8}-[0-9Kk]$/;
+    return rutRegex.test(rut);
+  }
+
   // MÉTODO PARA EDITAR UN ASISTENTE EXISTENTE
   async editarAsistente(index: number) {
     const asistente = this.listaAsistentes[index];
     const alert = await this.alertController.create({
       header: 'Editar Asistente',
       inputs: [
-        { name: 'rut', value: asistente.rut, placeholder: 'RUT', type: 'text' },
+        { name: 'rut', value: asistente.rut, placeholder: 'RUT', type: 'text', disabled: true },
         { name: 'nombreApellido', value: asistente.nombreApellido, placeholder: 'Nombre y Apellido', type: 'text' },
         { name: 'telefono', value: asistente.telefono, placeholder: 'Teléfono', type: 'tel' },
       ],
@@ -76,15 +108,16 @@ export class ListaAsistentesPage implements OnInit {
         {
           text: 'Guardar',
           handler: (data) => {
-            if (data.rut && data.nombreApellido && data.telefono) {
+            if (data.nombreApellido && data.telefono) {
               // Actualizar la información del asistente
               this.listaAsistentes[index] = {
-                ...data,
-                estado: asistente.estado, // Mantener el estado actual del asistente
+                ...asistente,
+                nombreApellido: data.nombreApellido,
+                telefono: data.telefono,
               };
               this.guardarCambios();
             } else {
-              this.mostrarAlerta('Error', 'Todos los campos son obligatorios.');
+              this.mostrarAlerta('Error', 'Los campos Nombre y Apellido, y Teléfono son obligatorios.');
             }
           },
         },
@@ -131,5 +164,37 @@ export class ListaAsistentesPage implements OnInit {
   // MÉTODO PARA GENERAR INFORMES
   generarInformes() {
     this.router.navigate(['/generar-informes', { id: this.eventoIndex }]);
+  }
+
+  // MÉTODO PARA CERRAR SESIÓN
+  async logout() {
+    console.log('Cerrando sesión...');
+    await this.authService.cerrarSesion(); // Llamamos al método de cerrar sesión del servicio
+    this.router.navigate(['/login']); // Redirigimos a la página de login
+    console.log('Sesión cerrada. Redirigido al login.');
+  }
+
+  // MÉTODO PARA NAVEGAR A LA PÁGINA DE INICIO
+  navigateToHome() {
+    console.log('Navegando al Home...');
+    this.router.navigate(['/home']);
+  }
+
+  // MÉTODO PARA NAVEGAR A GESTIÓN DE EVENTOS
+  navigateToGestionDeEventos() {
+    console.log('Navegando a Gestión de Eventos...');
+    this.router.navigate(['/gestion-de-eventos']);
+  }
+
+  // MÉTODO PARA NAVEGAR A LA PÁGINA DE INFORMES
+  navigateToInformes() {
+    console.log('Navegando a la página de informes...');
+    this.router.navigate(['/informes']);
+  }
+
+  // MÉTODO PARA NAVEGAR A LA PÁGINA DE MI PERFIL
+  navigateToMiPerfil() {
+    console.log('Navegando a Mi Perfil...');
+    this.router.navigate(['/mi-perfil']);
   }
 }

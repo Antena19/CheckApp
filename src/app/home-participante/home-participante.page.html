@@ -36,22 +36,27 @@
     </mat-form-field>
   </div>
 
-  <!-- Mostrar los eventos filtrados -->
-  <div *ngIf="eventosFiltrados.length > 0" class="content-container">
-    <h2 class="subtitle">Eventos Disponibles:</h2>
-    <ion-card *ngFor="let evento of eventosFiltrados" class="event-card">
-      <ion-card-header>
-        <ion-card-title>{{ evento.nombre }}</ion-card-title>
-        <ion-card-subtitle>{{ evento.fecha }} - {{ evento.lugar }}</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        <p><strong>Organizador:</strong> {{ evento.organizador }}</p>
-        <ion-button expand="block" (click)="registrarAsistencia(evento.id)" color="success">
-          Confirmar Asistencia
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-  </div>
+<!-- Mostrar los eventos filtrados -->
+<div *ngIf="eventosFiltrados.length > 0" class="content-container">
+  <h2 class="subtitle">Eventos Disponibles:</h2>
+  <ion-card *ngFor="let evento of eventosFiltrados" class="event-card">
+    <ion-card-header>
+      <ion-card-title>{{ evento.nombre }}</ion-card-title>
+      <ion-card-subtitle>{{ evento.fecha }} - {{ evento.lugar }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Organizador:</strong> {{ evento.organizador }}</p>
+      <ion-button
+        expand="block"
+        [disabled]="evento.asistenciaConfirmada"
+        [color]="evento.asistenciaConfirmada ? 'medium' : 'success'"
+        (click)="registrarAsistencia(evento.id)">
+        {{ evento.asistenciaConfirmada ? 'Asistencia Ingresada' : 'Confirmar Asistencia' }}
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</div>
+
 
   <!-- Mensaje si no se encuentran eventos -->
   <div *ngIf="eventosFiltrados.length === 0 && busqueda" class="content-container">

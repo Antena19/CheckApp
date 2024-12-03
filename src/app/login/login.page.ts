@@ -41,8 +41,12 @@ export class LoginPage implements OnInit {
   async ngOnInit() {
     await this.storage.create();
     await this.datosEjemploService.cargarDatosEjemplo();
+  }
+
+  // ACTUALIZAR USUARIOS AL ENTRAR A LA PÁGINA DE LOGIN
+  async ionViewWillEnter() {
     this.validUsers = await this.storage.get('users') || [];
-    console.log('Usuarios cargados:', this.validUsers); // Depuración
+    console.log('Usuarios actualizados:', this.validUsers); // Depuración
   }
 
   // ENVÍO DEL FORMULARIO DE LOGIN

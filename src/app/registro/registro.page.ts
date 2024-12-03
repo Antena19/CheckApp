@@ -8,8 +8,8 @@ import { Storage } from '@ionic/storage-angular';
   styleUrls: ['./registro.page.scss'],
 })
 export class RegistroPage {
-  nombreUsuario: string = '';
-  contrasena: string = '';
+  username: string = ''; // Cambiado de nombreUsuario a username
+  password: string = ''; // Cambiado de contrasena a password
   repetirContrasena: string = '';
   nombreApellido: string = '';
   rut: string = '';
@@ -44,15 +44,15 @@ export class RegistroPage {
 
   // CREAR CUENTA
   async onSubmit() {
-    if (!this.nombreUsuario.trim() || this.nombreUsuario.length < 6 || this.nombreUsuario.length > 10 || !/^[a-zA-Z0-9]+$/.test(this.nombreUsuario)) {
+    if (!this.username.trim() || this.username.length < 6 || this.username.length > 10 || !/^[a-zA-Z0-9]+$/.test(this.username)) {
       alert('Por favor, ingresa un Nombre de Usuario válido (6-10 caracteres, solo letras y números).');
       return;
     }
-    if (!this.contrasena.trim() || this.contrasena.length !== 4 || !/^[0-9]{4}$/.test(this.contrasena)) {
+    if (!this.password.trim() || this.password.length !== 4 || !/^[0-9]{4}$/.test(this.password)) {
       alert('Por favor, ingresa una Contraseña válida (4 dígitos numéricos).');
       return;
     }
-    if (this.contrasena !== this.repetirContrasena) {
+    if (this.password !== this.repetirContrasena) {
       alert('Las contraseñas no coinciden.');
       return;
     }
@@ -74,8 +74,8 @@ export class RegistroPage {
     }
 
     const nuevoUsuario = {
-      nombreUsuario: this.nombreUsuario,
-      contrasena: this.contrasena,
+      username: this.username,
+      password: this.password,
       nombreApellido: this.nombreApellido,
       rut: this.rut,
       telefono: this.telefono,

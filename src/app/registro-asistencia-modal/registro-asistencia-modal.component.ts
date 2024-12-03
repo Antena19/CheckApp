@@ -65,9 +65,12 @@ export class RegistroAsistenciaModalComponent {
     }
   }
 
-  // MÉTODO PARA VER LA LISTA DE ASISTENTES
-  verListaAsistentes() {
-    // Navegar a la página de lista de asistentes
+// MÉTODO PARA VER LA LISTA DE ASISTENTES
+verListaAsistentes() {
+  // Primero, cerramos el modal y luego navegamos a la página de lista de asistentes
+  this.modalController.dismiss().then(() => {
     this.router.navigate(['/lista-asistentes'], { queryParams: { id: this.idEvento } });
-  }
+  });
+}
+
 }

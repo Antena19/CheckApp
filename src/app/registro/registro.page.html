@@ -7,7 +7,6 @@
     </ion-buttons>
     <ion-title class="ion-text-center white-text">CheckApp</ion-title>
     <ion-buttons slot="end">
-
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -24,14 +23,14 @@
         <ion-label>Nombre de Usuario</ion-label>
         <ion-item>
           <ion-input
-            [(ngModel)]="nombreUsuario"
+            [(ngModel)]="username"
             required
             minlength="6"
             maxlength="10"
             pattern="^[a-zA-Z0-9]+$"
             placeholder="Nombre de usuario"
             autocomplete="off"
-            name="nombreUsuario">
+            name="username">
           </ion-input>
         </ion-item>
 
@@ -39,7 +38,7 @@
         <ion-label>Contraseña</ion-label>
         <ion-item>
           <ion-input
-            [(ngModel)]="contrasena"
+            [(ngModel)]="password"
             required
             minlength="4"
             maxlength="4"
@@ -47,7 +46,7 @@
             pattern="^[0-9]{4}$"
             placeholder="Contraseña (4 dígitos)"
             autocomplete="off"
-            name="contrasena">
+            name="password">
           </ion-input>
         </ion-item>
 
@@ -117,11 +116,10 @@
         </ion-item>
 
         <!-- BOTÓN CREAR CUENTA -->
-        <ion-button expand="block" type="submit" [disabled]="!registroForm.valid || contrasena !== repetirContrasena" class="custom-registro-button">
+        <ion-button expand="block" type="submit" [disabled]="!registroForm.valid || password !== repetirContrasena" class="custom-registro-button">
           Crear Cuenta
         </ion-button>
       </form>
     </ion-card-content>
   </ion-card>
 </ion-content>
-
