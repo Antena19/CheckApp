@@ -4,6 +4,7 @@ import { EventoService } from '../services/evento.service';
 import QRCode from 'qrcode';
 import { Share } from '@capacitor/share';
 import { Router } from '@angular/router';
+import { AutenticacionService } from '../services/autenticacion.service'; // Servicio de autenticación
 
 @Component({
   selector: 'app-registro-asistencia-modal',
@@ -13,18 +14,35 @@ import { Router } from '@angular/router';
 export class RegistroAsistenciaModalComponent {
   @Input() idEvento: string = ''; // ID del evento pasado al modal
   evento: any;
+  rutUsuario: string = ''; // RUT del usuario autenticado
 
   @ViewChild('qrCanvas', { static: false }) qrCanvas!: ElementRef;
 
   constructor(
     private modalController: ModalController,
     private eventoService: EventoService,
-    private router: Router // Importamos el Router para la navegación
+    private router: Router,
+    private authService: AutenticacionService // Servicio de autenticación
   ) {}
 
   // MÉTODO PARA CARGAR EL EVENTO AL ABRIR EL MODAL
-  ngOnInit() {
-    this.evento = this.eventoService.obtenerEventoPorId(this.idEvento);
+  async ngOnInit() {
+    // Obtener el usuario autenticado
+    const usuarioActual = await this.authService.obtenerUsuarioActual();
+    if (usuarioActual && usuarioActual.rut) {
+      this.rutUsuario = usuarioActual.rut;
+
+      // Obtener el evento asociado al usuario autenticado
+      this.evento = this.eventoService.obtenerEventoPorIdYUsuario(this.idEvento, this.rutUsuario);
+
+      if (!this.evento) {
+        console.error('Evento no encontrado o no tienes permiso para acceder a él.');
+        this.cerrarModal(); // Cerrar el modal si no se encuentra el evento o no hay permiso
+      }
+    } else {
+      console.error('No se ha podido obtener el usuario logueado.');
+      this.cerrarModal(); // Cerrar el modal si no se obtiene el usuario autenticado
+    }
   }
 
   // MÉTODO PARA CERRAR EL MODAL
@@ -65,12 +83,11 @@ export class RegistroAsistenciaModalComponent {
     }
   }
 
-// MÉTODO PARA VER LA LISTA DE ASISTENTES
-verListaAsistentes() {
-  // Primero, cerramos el modal y luego navegamos a la página de lista de asistentes
-  this.modalController.dismiss().then(() => {
-    this.router.navigate(['/lista-asistentes'], { queryParams: { id: this.idEvento } });
-  });
-}
-
+  // MÉTODO PARA VER LA LISTA DE ASISTENTES
+  verListaAsistentes() {
+    // Primero, cerramos el modal y luego navegamos a la página de lista de asistentes
+    this.modalController.dismiss().then(() => {
+      this.router.navigate(['/lista-asistentes'], { queryParams: { id: this.idEvento } });
+    });
+  }
 }

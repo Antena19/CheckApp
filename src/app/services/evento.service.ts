@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventoService {
   private eventos: any[] = [];
+  private eventosSubject = new BehaviorSubject<any[]>([]); // BehaviorSubject para manejar los cambios en los eventos
+  public eventos$ = this.eventosSubject.asObservable(); // Observable para suscribirse a los cambios
 
   constructor() {
     this.cargarEventos();
@@ -14,45 +17,54 @@ export class EventoService {
   cargarEventos() {
     const eventosGuardados = JSON.parse(localStorage.getItem('eventos') || '[]');
     this.eventos = eventosGuardados;
+    this.eventosSubject.next(this.eventos); // Emitir el valor inicial
   }
 
   // Guardar eventos en el almacenamiento local
   public guardarEventos() {
     localStorage.setItem('eventos', JSON.stringify(this.eventos));
+    this.eventosSubject.next(this.eventos); // Emitir los cambios
   }
 
-  // Obtener todos los eventos
-  obtenerEventos() {
-    return this.eventos;
+  // Obtener todos los eventos creados por un usuario específico
+  obtenerEventosPorUsuario(rutUsuario: string) {
+    return this.eventos.filter(evento => evento.usuarioRUT === rutUsuario);
   }
 
-  // Agregar un nuevo evento
-  agregarEvento(evento: any) {
-    this.eventos.push({ ...evento, asistentes: [] }); // Inicializar lista de asistentes vacía
-    this.guardarEventos();
+  // Agregar un nuevo evento asociado a un usuario específico
+  agregarEvento(evento: any, rutUsuario: string) {
+    this.eventos.push({ ...evento, usuarioRUT: rutUsuario, asistentes: [] }); // Asociar evento al usuario y inicializar lista de asistentes vacía
+    this.guardarEventos(); // Guardar y emitir cambios
   }
 
-  // Editar un evento existente
-  editarEvento(index: number, eventoEditado: any) {
-    if (!this.eventos[index]) {
-      throw new Error('Evento no encontrado.');
-    }
-    this.eventos[index] = { ...this.eventos[index], ...eventoEditado };
-    this.guardarEventos();
+// Editar un evento existente por ID (solo si pertenece al usuario actual)
+editarEventoPorId(eventoId: string, eventoEditado: any, rutUsuario: string) {
+  const eventoIndex = this.eventos.findIndex(evento => evento.id === eventoId && evento.usuarioRUT === rutUsuario);
+  if (eventoIndex === -1) {
+    throw new Error('Evento no encontrado o no tienes permiso para editarlo.');
   }
+  this.eventos[eventoIndex] = { ...this.eventos[eventoIndex], ...eventoEditado };
+  this.guardarEventos(); // Guardar y emitir cambios
+}
 
-  // Eliminar un evento
-  eliminarEvento(index: number) {
-    if (!this.eventos[index]) {
-      throw new Error('Evento no encontrado.');
+
+  // Eliminar un evento (solo si pertenece al usuario actual)
+  eliminarEvento(index: number, rutUsuario: string) {
+    if (!this.eventos[index] || this.eventos[index].usuarioRUT !== rutUsuario) {
+      throw new Error('Evento no encontrado o no tienes permiso para eliminarlo.');
     }
     this.eventos.splice(index, 1);
-    this.guardarEventos();
+    this.guardarEventos(); // Guardar y emitir cambios
   }
 
-  // Obtener evento por ID
-  obtenerEventoPorId(id: string) {
-    return this.eventos.find(evento => evento.id === id);
+  // Obtener evento por ID y RUT del usuario
+  obtenerEventoPorIdYUsuario(eventoId: string, rutUsuario: string) {
+    return this.eventos.find(evento => evento.id === eventoId && evento.usuarioRUT === rutUsuario);
+  }
+
+  // Obtener evento por ID (sin importar el usuario, para la lógica de participante)
+  obtenerEventoPorId(eventoId: string) {
+    return this.eventos.find(evento => evento.id === eventoId);
   }
 
   // Obtener eventos donde el participante está presente
@@ -69,11 +81,11 @@ export class EventoService {
     );
   }
 
-  // Agregar un asistente a un evento
-  agregarAsistente(eventoIndex: number, asistente: any) {
+  // Agregar un asistente a un evento (solo si el evento pertenece al usuario actual)
+  agregarAsistente(eventoIndex: number, asistente: any, rutUsuario: string) {
     const evento = this.eventos[eventoIndex];
-    if (!evento) {
-      throw new Error('Evento no encontrado.');
+    if (!evento || evento.usuarioRUT !== rutUsuario) {
+      throw new Error('Evento no encontrado o no tienes permiso para modificarlo.');
     }
 
     // Verificar si el asistente ya existe en el evento
@@ -84,14 +96,14 @@ export class EventoService {
 
     asistente.estado = 'presente'; // Registrar al asistente como presente
     evento.asistentes.push(asistente);
-    this.guardarEventos();
+    this.guardarEventos(); // Guardar y emitir cambios
   }
 
-  // Invitar a un asistente a un evento (estado "ausente")
-  invitarAsistente(eventoIndex: number, asistente: any) {
+  // Invitar a un asistente a un evento (estado "ausente", solo si pertenece al usuario actual)
+  invitarAsistente(eventoIndex: number, asistente: any, rutUsuario: string) {
     const evento = this.eventos[eventoIndex];
-    if (!evento) {
-      throw new Error('Evento no encontrado.');
+    if (!evento || evento.usuarioRUT !== rutUsuario) {
+      throw new Error('Evento no encontrado o no tienes permiso para modificarlo.');
     }
 
     // Verificar si el asistente ya existe en el evento
@@ -102,7 +114,7 @@ export class EventoService {
 
     asistente.estado = 'ausente'; // Registrar al asistente como ausente inicialmente
     evento.asistentes.push(asistente);
-    this.guardarEventos();
+    this.guardarEventos(); // Guardar y emitir cambios
   }
 
   // Registrar la asistencia de un participante mediante el ID del evento
@@ -128,34 +140,34 @@ export class EventoService {
       evento.asistentes.push(nuevoAsistente);
     }
 
-    this.guardarEventos();
+    this.guardarEventos(); // Guardar y emitir cambios
   }
 
-  // Editar un asistente
-  editarAsistente(eventoIndex: number, asistenteIndex: number, asistenteEditado: any) {
+  // Editar un asistente (solo si pertenece al usuario actual)
+  editarAsistente(eventoIndex: number, asistenteIndex: number, asistenteEditado: any, rutUsuario: string) {
     const evento = this.eventos[eventoIndex];
-    if (!evento || !evento.asistentes[asistenteIndex]) {
-      throw new Error('Asistente no encontrado.');
+    if (!evento || !evento.asistentes[asistenteIndex] || evento.usuarioRUT !== rutUsuario) {
+      throw new Error('Asistente no encontrado o no tienes permiso para modificarlo.');
     }
     evento.asistentes[asistenteIndex] = { ...evento.asistentes[asistenteIndex], ...asistenteEditado };
-    this.guardarEventos();
+    this.guardarEventos(); // Guardar y emitir cambios
   }
 
-  // Eliminar un asistente
-  eliminarAsistente(eventoIndex: number, asistenteIndex: number) {
+  // Eliminar un asistente (solo si pertenece al usuario actual)
+  eliminarAsistente(eventoIndex: number, asistenteIndex: number, rutUsuario: string) {
     const evento = this.eventos[eventoIndex];
-    if (!evento || !evento.asistentes[asistenteIndex]) {
-      throw new Error('Asistente no encontrado.');
+    if (!evento || !evento.asistentes[asistenteIndex] || evento.usuarioRUT !== rutUsuario) {
+      throw new Error('Asistente no encontrado o no tienes permiso para eliminarlo.');
     }
     evento.asistentes.splice(asistenteIndex, 1);
-    this.guardarEventos();
+    this.guardarEventos(); // Guardar y emitir cambios
   }
 
-  // Obtener asistentes de un evento
-  obtenerAsistentes(eventoIndex: number) {
+  // Obtener asistentes de un evento (solo si pertenece al usuario actual)
+  obtenerAsistentes(eventoIndex: number, rutUsuario: string) {
     const evento = this.eventos[eventoIndex];
-    if (!evento) {
-      throw new Error('Evento no encontrado.');
+    if (!evento || evento.usuarioRUT !== rutUsuario) {
+      throw new Error('Evento no encontrado o no tienes permiso para verlo.');
     }
     return evento.asistentes;
   }

@@ -1,10 +1,11 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 import { AutenticacionService } from '../services/autenticacion.service';
 import { Router } from '@angular/router';
 import { EventoService } from '../services/evento.service'; // SERVICE DE EVENTOS
 import { NotificacionService } from '../services/notificacion.service';
 import { NavController, ModalController } from '@ionic/angular'; // Importamos ModalController
 import { RegistroAsistenciaModalComponent } from '../registro-asistencia-modal/registro-asistencia-modal.component'; // Importa el componente del modal de registro de asistencia
+import { Subscription } from 'rxjs';
 
 declare var google: any;
 
@@ -13,7 +14,7 @@ declare var google: any;
   templateUrl: './gestion-de-eventos.component.html',
   styleUrls: ['./gestion-de-eventos.component.scss']
 })
-export class GestionDeEventosComponent implements AfterViewInit, OnInit {
+export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestroy {
   nombreEvento: string = '';
   nombreOrganizador: string = '';
   horaEvento: string = '';
@@ -23,6 +24,8 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
   mostrarFechaHoraPicker: boolean = false;
   map: any;
   marker: any;
+
+  private eventosSubscription!: Subscription;
 
   constructor(
     private authService: AutenticacionService,
@@ -34,8 +37,14 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
   ) {}
 
   // MÉTODO QUE SE EJECUTA AL INICIAR EL COMPONENTE
-  ngOnInit() {
-    this.cargarEventos();
+  async ngOnInit() {
+    const usuarioActual = await this.authService.obtenerUsuarioActual();
+    if (usuarioActual && usuarioActual.rut) {
+      // Suscribirse a los eventos y filtrar por el usuario actual
+      this.eventosSubscription = this.eventoService.eventos$.subscribe(eventos => {
+        this.eventos = eventos.filter(evento => evento.usuarioRUT === usuarioActual.rut);
+      });
+    }
   }
 
   // MÉTODO PARA INICIALIZAR EL MAPA DESPUÉS DE QUE EL COMPONENTE HAYA CARGADO LA VISTA
@@ -58,8 +67,11 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
   }
 
   // CARGAR TODOS LOS EVENTOS EXISTENTES DESDE EL SERVICIO
-  cargarEventos() {
-    this.eventos = this.eventoService.obtenerEventos();
+  async cargarEventos() {
+    const usuarioActual = await this.authService.obtenerUsuarioActual();
+    if (usuarioActual && usuarioActual.rut) {
+      this.eventos = this.eventoService.obtenerEventosPorUsuario(usuarioActual.rut);
+    }
   }
 
   // ABRIR EL PICKER DE FECHA Y HORA
@@ -73,7 +85,13 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
   }
 
   // MOSTRAR RESUMEN DEL EVENTO CREADO Y GUARDARLO
-  mostrarResumen() {
+  async mostrarResumen() {
+    const usuarioActual = await this.authService.obtenerUsuarioActual();
+    if (!usuarioActual) {
+      this.mostrarError('No se ha podido obtener el usuario logueado. Por favor, inicia sesión de nuevo.');
+      return;
+    }
+
     const evento = {
       nombre: this.nombreEvento,
       organizador: this.nombreOrganizador,
@@ -81,8 +99,7 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
       lugar: this.lugarEvento,
       participantes: this.numeroParticipantes
     };
-    this.eventoService.agregarEvento(evento);
-    this.cargarEventos();
+    this.eventoService.agregarEvento(evento, usuarioActual.rut);
     this.limpiarFormulario();
   }
 
@@ -134,21 +151,26 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
 
   // MÉTODO PARA EDITAR UN EVENTO ESPECÍFICO
   editarEvento(index: number) {
-    this.router.navigate(['/editar-evento', { id: index }]); 
+    this.router.navigate(['/editar-evento', { id: index }]);
   }
 
   // CONFIRMAR SI SE DESEA ELIMINAR UN EVENTO
-  confirmarEliminarEvento(index: number) {
+  async confirmarEliminarEvento(index: number) {
+    const usuarioActual = await this.authService.obtenerUsuarioActual();
+    if (!usuarioActual) {
+      this.mostrarError('No se ha podido obtener el usuario logueado. Por favor, inicia sesión de nuevo.');
+      return;
+    }
+
     const confirmacion = confirm("¿Estás seguro de que deseas eliminar este evento?");
     if (confirmacion) {
-      this.eliminarEvento(index);
+      this.eliminarEvento(index, usuarioActual.rut);
     }
   }
 
   // ELIMINAR UN EVENTO ESPECÍFICO Y ACTUALIZAR LA LISTA
-  eliminarEvento(index: number) {
-    this.eventoService.eliminarEvento(index);
-    this.cargarEventos();
+  eliminarEvento(index: number, rutUsuario: string) {
+    this.eventoService.eliminarEvento(index, rutUsuario);
     this.notificacionService.mostrarMensaje('Éxito', 'Evento eliminado correctamente', 'success');
   }
 
@@ -186,5 +208,12 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit {
       }
     });
     await modal.present();
+  }
+
+  ngOnDestroy() {
+    // Cancelar la suscripción cuando el componente se destruya
+    if (this.eventosSubscription) {
+      this.eventosSubscription.unsubscribe();
+    }
   }
 }

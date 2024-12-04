@@ -11,7 +11,8 @@ import { AutenticacionService } from '../services/autenticacion.service'; // Ser
 })
 export class ListaAsistentesPage implements OnInit {
   listaAsistentes: any[] = [];
-  eventoIndex: number = -1;
+  eventoId: string = '';
+  rutUsuario: string = ''; // RUT del usuario autenticado
 
   constructor(
     private route: ActivatedRoute,
@@ -22,11 +23,22 @@ export class ListaAsistentesPage implements OnInit {
     private authService: AutenticacionService // Servicio de autenticación
   ) {}
 
-  ngOnInit() {
-    this.eventoIndex = Number(this.route.snapshot.paramMap.get('id'));
-    const evento = this.eventoService.obtenerEventos()[this.eventoIndex];
+  async ngOnInit() {
+    // Obtener el usuario autenticado
+    const usuarioActual = await this.authService.obtenerUsuarioActual();
+    if (usuarioActual && usuarioActual.rut) {
+      this.rutUsuario = usuarioActual.rut;
+    }
+
+    // Obtener el ID del evento desde la URL
+    this.eventoId = this.route.snapshot.paramMap.get('id') || '';
+    const evento = this.eventoService.obtenerEventoPorIdYUsuario(this.eventoId, this.rutUsuario);
+
     if (evento && evento.asistentes) {
       this.listaAsistentes = evento.asistentes;
+    } else {
+      this.mostrarAlerta('Error', 'Evento no encontrado o no tienes permiso para acceder a los asistentes.');
+      this.router.navigate(['/gestion-de-eventos']);
     }
   }
 
@@ -54,7 +66,7 @@ export class ListaAsistentesPage implements OnInit {
               const rutNormalizado = this.normalizarRut(data.rut);
               if (!this.validarRut(rutNormalizado)) {
                 this.mostrarAlerta('Error', 'El RUT ingresado no tiene un formato válido.');
-                return false; // Agregar return false para indicar que no se debe proceder
+                return false;
               }
 
               // Verificar si el asistente ya existe en la lista
@@ -63,17 +75,17 @@ export class ListaAsistentesPage implements OnInit {
               );
               if (asistenteExistente) {
                 this.mostrarAlerta('Error', 'El asistente ya está registrado.');
-                return false; // Agregar return false para evitar proceder
+                return false;
               } else {
                 data.rut = rutNormalizado;
                 data.estado = 'ausente'; // Estado inicial "ausente"
                 this.listaAsistentes.push(data);
                 this.guardarCambios();
-                return true; // Indicar que se ha completado correctamente
+                return true;
               }
             } else {
               this.mostrarAlerta('Error', 'El campo RUT es obligatorio.');
-              return false; // Asegurarse de devolver false si el RUT no está presente
+              return false;
             }
           },
         },
@@ -134,16 +146,19 @@ export class ListaAsistentesPage implements OnInit {
 
   // MÉTODO PARA GUARDAR LOS CAMBIOS EN LA LISTA DE ASISTENTES
   guardarCambios() {
-    const eventos = this.eventoService.obtenerEventos();
-    if (this.eventoIndex >= 0) {
-      eventos[this.eventoIndex].asistentes = this.listaAsistentes;
-      this.eventoService.guardarEventos();
+    if (this.eventoId) {
+      const evento = this.eventoService.obtenerEventoPorIdYUsuario(this.eventoId, this.rutUsuario);
+      if (evento) {
+        this.eventoService.editarEventoPorId(this.eventoId, { asistentes: this.listaAsistentes }, this.rutUsuario);
+      } else {
+        this.mostrarAlerta('Error', 'No se pudo encontrar el evento o no tienes permiso para editarlo.');
+      }
     }
   }
 
   // MÉTODO PARA VER DETALLE DEL EVENTO
   verDetalleEvento() {
-    this.router.navigate(['/registro-asistencia-evento', { id: this.eventoIndex }]);
+    this.router.navigate(['/registro-asistencia-evento', { id: this.eventoId }]);
   }
 
   // MÉTODO PARA VOLVER A LA GESTIÓN DE EVENTOS
@@ -163,7 +178,7 @@ export class ListaAsistentesPage implements OnInit {
 
   // MÉTODO PARA GENERAR INFORMES
   generarInformes() {
-    this.router.navigate(['/generar-informes', { id: this.eventoIndex }]);
+    this.router.navigate(['/generar-informes', { id: this.eventoId }]);
   }
 
   // MÉTODO PARA CERRAR SESIÓN

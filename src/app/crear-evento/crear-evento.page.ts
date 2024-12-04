@@ -140,12 +140,11 @@ export class CrearEventoPage implements AfterViewInit {
         fecha: this.fechaEvento,
         horaInicio: this.horaInicio,
         horaTermino: this.horaTermino,
-        lugar: this.lugarEvento,
-        usuarioId: usuario.rut // Asociar el evento con el RUT del usuario logueado
+        lugar: this.lugarEvento
       };
   
-      // Guardar el evento utilizando el servicio de eventos
-      this.eventoService.agregarEvento(evento);
+      // Guardar el evento utilizando el servicio de eventos y pasar el rut del usuario actual
+      this.eventoService.agregarEvento(evento, usuario.rut);
   
       // Redirigir a la página de gestión de eventos
       this.router.navigate(['/gestion-de-eventos']);
@@ -153,7 +152,6 @@ export class CrearEventoPage implements AfterViewInit {
       this.mostrarError(error.message);
     }
   }
-  
 
   async cancelar() {
     const alert = await this.alertController.create({

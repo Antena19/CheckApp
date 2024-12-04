@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { EventoService } from '../services/evento.service';
 import { Storage } from '@ionic/storage-angular';
 import { AlertController } from '@ionic/angular';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-home-participante',
@@ -35,15 +34,15 @@ export class HomeParticipantePage implements OnInit {
       this.rutParticipante = usuarioActual.rut;
       this.username = usuarioActual.nombreApellido || 'Participante';
 
+      // Obtener todos los eventos disponibles (mostramos todos los eventos, sin importar quién los creó)
+      this.todosLosEventos = this.eventoService.obtenerEventosPorUsuario(this.rutParticipante);
+      this.eventosFiltrados = this.todosLosEventos;
+
       // Obtener eventos donde el participante está inscrito
       this.eventosInscrito = this.eventoService.obtenerEventosConParticipanteInscrito(this.rutParticipante);
 
       // Obtener eventos donde el participante está presente
       this.eventosPresente = this.eventoService.obtenerEventosConParticipantePresente(this.rutParticipante);
-
-      // Obtener todos los eventos disponibles
-      this.todosLosEventos = this.eventoService.obtenerEventos();
-      this.eventosFiltrados = this.todosLosEventos;
     }
   }
 
@@ -63,7 +62,7 @@ export class HomeParticipantePage implements OnInit {
   // MÉTODO PARA REGISTRAR ASISTENCIA A UN EVENTO
   async registrarAsistencia(eventoId?: string) {
     if (eventoId) {
-      const evento = this.eventoService.obtenerEventoPorId(eventoId);
+      const evento = this.eventoService.obtenerEventoPorIdYUsuario(eventoId, this.rutParticipante);
       if (evento) {
         // Normalizar el RUT del participante para asegurar la consistencia
         const rutNormalizado = this.normalizarRut(this.rutParticipante);
@@ -97,7 +96,7 @@ export class HomeParticipantePage implements OnInit {
         // Actualizar el estado del botón de asistencia
         this.actualizarEstadoBotonAsistencia(eventoId);
       } else {
-        this.mostrarAlerta('Error', 'Evento no encontrado.');
+        this.mostrarAlerta('Error', 'Evento no encontrado o no tienes permiso para verlo.');
       }
     } else {
       this.mostrarAlerta('Error', 'Debe seleccionar un evento.');

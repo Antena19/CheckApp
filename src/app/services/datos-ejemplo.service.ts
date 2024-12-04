@@ -59,40 +59,39 @@ export class DatosEjemploService {
     await this.storage.set('users', usuarios);
   }
 
- // MÉTODO PARA CREAR UN EVENTO DE EJEMPLO CUANDO EL ADMIN SE LOGUEA
-async crearEventoEjemploAdmin() {
-  await this.storage.create();
+  // MÉTODO PARA CREAR UN EVENTO DE EJEMPLO CUANDO EL ADMIN SE LOGUEA
+  async crearEventoEjemploAdmin() {
+    await this.storage.create();
 
-  // Obtener el usuario administrador del Storage
-  const usuarios: User[] = await this.storage.get('users') || [];
-  const adminUser = usuarios.find(user => user.username === 'admin');
+    // Obtener el usuario administrador del Storage
+    const usuarios: User[] = await this.storage.get('users') || [];
+    const adminUser = usuarios.find(user => user.username === 'admin');
 
-  if (adminUser) {
-    // Eliminar cualquier evento de ejemplo anterior
-    const eventos = this.eventoService.obtenerEventos();
-    const eventoEjemploExistente = eventos.find(evento => evento.nombre === 'Evento de Ejemplo' && evento.organizador === adminUser.nombreApellido);
+    if (adminUser) {
+      // Eliminar cualquier evento de ejemplo anterior
+      const eventos = this.eventoService.obtenerEventosPorUsuario(adminUser.rut);
+      const eventoEjemploExistente = eventos.find(evento => evento.nombre === 'Evento de Ejemplo' && evento.organizador === adminUser.nombreApellido);
 
-    if (eventoEjemploExistente) {
-      const index = eventos.indexOf(eventoEjemploExistente);
-      this.eventoService.eliminarEvento(index);
+      if (eventoEjemploExistente) {
+        const index = eventos.indexOf(eventoEjemploExistente);
+        this.eventoService.eliminarEvento(index, adminUser.rut);
+      }
+
+      // Crear un nuevo evento de ejemplo
+      const fechaActual = new Date();
+      const eventoEjemplo = {
+        id: Date.now(), // ID único basado en la fecha actual
+        nombre: 'Evento de Ejemplo',
+        organizador: adminUser.nombreApellido,
+        fecha: fechaActual.toISOString().split('T')[0],
+        horaInicio: `${fechaActual.getHours()}:${fechaActual.getMinutes()}`,
+        horaTermino: '',
+        lugar: 'Ubicación por Defecto',
+        usuarioId: adminUser.rut // Asociar el evento con el RUT del administrador
+      };
+
+      this.eventoService.agregarEvento(eventoEjemplo, adminUser.rut);
+      console.log('Evento de ejemplo creado para el administrador:', eventoEjemplo);
     }
-
-    // Crear un nuevo evento de ejemplo
-    const fechaActual = new Date();
-    const eventoEjemplo = {
-      id: Date.now(), // ID único basado en la fecha actual
-      nombre: 'Evento de Ejemplo',
-      organizador: adminUser.nombreApellido,
-      fecha: fechaActual.toISOString().split('T')[0],
-      horaInicio: `${fechaActual.getHours()}:${fechaActual.getMinutes()}`,
-      horaTermino: '',
-      lugar: 'Ubicación por Defecto',
-      usuarioId: adminUser.rut // Asociar el evento con el RUT del administrador
-    };
-
-    this.eventoService.agregarEvento(eventoEjemplo);
-    console.log('Evento de ejemplo creado para el administrador:', eventoEjemplo);
   }
-}
-
 }

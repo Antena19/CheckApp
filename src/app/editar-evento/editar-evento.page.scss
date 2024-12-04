@@ -1,82 +1,82 @@
 ion-content {
-    --background: #272E30;
-  }
-  
-  ion-header, ion-footer {
-    ion-toolbar {
+  --background: #272E30;
+}
+
+ion-header, ion-footer {
+  ion-toolbar {
       --background: #1E1E1E;
       --color: white;
-    }
   }
+}
 
-  .white-text {
-    color: white;
-  }
-  
-  .white-icon {
-    color: white;
-  }
-  .map-container {
-    height: 200px; /* Puedes ajustar esto según tus necesidades */
-    width: 100%;
-    margin: 16px 0;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .input-container {
-    --background: #f5f5f5;
-    --border-radius: 8px;
-    --padding-start: 16px;
-    --padding-end: 16px;
-    margin-bottom: 15px;
-  }
-  
-  .guardar-btn {
-    --background: #42316c;
-    color: white;
-    --border-radius: 8px;
-    margin-top: 24px;
-    font-weight: bold;
-  }
-  
-  .cancelar-btn {
-    --border-radius: 8px;
-    margin-top: 8px;
-    font-weight: bold;
-  }
-  
-  .main-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: white; /* Mantenemos el color blanco para el título */
-  }
-  
-  .evento-form {
-    padding: 16px;
-    background: white;
-    border-radius: 8px;
-    margin: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .form-group {
-    margin-bottom: 16px;
-  
-    ion-label {
+.white-text {
+  color: white;
+}
+
+.white-icon {
+  color: white;
+}
+
+.map-container {
+  height: 200px; /* Puedes ajustar esto según tus necesidades */
+  width: 100%;
+  margin: 16px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.input-container {
+  --background: #f5f5f5;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  margin-bottom: 15px;
+}
+
+.guardar-btn {
+  --background: #42316c;
+  color: white;
+  --border-radius: 8px;
+  margin-top: 24px;
+  font-weight: bold;
+}
+
+.cancelar-btn {
+  --border-radius: 8px;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.main-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: white; /* Mantenemos el color blanco para el título */
+}
+
+.evento-form {
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  margin: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 16px;
+
+  ion-label {
       color: #333;
       font-size: 14px;
       margin-bottom: 8px;
       display: block;
-    }
   }
-  
-  .lista-asistentes-btn {
-    --background: #4c8bf5;
-    --border-radius: 8px;
-    color: white;
-    margin-top: 16px;
-    font-weight: bold;
-  }
-  
+}
+
+.lista-asistentes-btn {
+  --background: #4c8bf5;
+  --border-radius: 8px;
+  color: white;
+  margin-top: 16px;
+  font-weight: bold;
+}
