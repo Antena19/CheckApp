@@ -21,42 +21,41 @@
   <p class="welcome-message">Bienvenido, {{ username }}</p>
 
   <!-- Campo de Búsqueda por Nombre, Lugar u Organizador -->
-  <ion-item>
-    <ion-label position="floating">Buscar Evento</ion-label>
-    <ion-input [(ngModel)]="busqueda" (ionInput)="filtrarEventos()" placeholder="Ingrese nombre, lugar u organizador"></ion-input>
-  </ion-item>
-
-  <!-- Campo de Filtro por Fecha -->
-  <div class="form-group">
-    <ion-label>Filtrar por Fecha</ion-label>
-    <mat-form-field appearance="fill">
-      <input matInput [matDatepicker]="picker" placeholder="Seleccione la fecha" [(ngModel)]="fechaFiltro" (dateChange)="filtrarEventos()" name="fechaFiltro">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+  <div class="search-filter-container">
+    <ion-item lines="none" class="custom-filter-item">
+      <ion-label class="filter-label">Filtrar eventos</ion-label>
+      <!-- Campo para seleccionar la fecha con Angular Material Datepicker -->
+      <mat-form-field appearance="fill" class="custom-date-field">
+        <input matInput [matDatepicker]="picker" placeholder="Seleccione la fecha" [(ngModel)]="fechaFiltro" (dateChange)="filtrarEventos()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </ion-item>
   </div>
 
-<!-- Mostrar los eventos filtrados -->
-<div *ngIf="eventosFiltrados.length > 0" class="content-container">
-  <h2 class="subtitle">Eventos Disponibles:</h2>
-  <ion-card *ngFor="let evento of eventosFiltrados" class="event-card">
-    <ion-card-header>
-      <ion-card-title>{{ evento.nombre }}</ion-card-title>
-      <ion-card-subtitle>{{ evento.fecha }} - {{ evento.lugar }}</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <p><strong>Organizador:</strong> {{ evento.organizador }}</p>
-      <ion-button
-        expand="block"
-        [disabled]="evento.asistenciaConfirmada"
-        [color]="evento.asistenciaConfirmada ? 'medium' : 'success'"
-        (click)="registrarAsistencia(evento.id)">
-        {{ evento.asistenciaConfirmada ? 'Asistencia Ingresada' : 'Confirmar Asistencia' }}
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
-</div>
-
+  <!-- Mostrar los eventos filtrados -->
+  <div *ngIf="eventosFiltrados.length > 0" class="content-container">
+    <h2 class="subtitle">Eventos Disponibles:</h2>
+    <ion-card *ngFor="let evento of eventosFiltrados" [ngClass]="{ 'inscrito-card': evento.estaInscrito }" class="event-card">
+      <ion-card-header>
+        <ion-card-title>{{ evento.nombre }}</ion-card-title>
+        <ion-card-subtitle>{{ evento.fecha }} - {{ evento.lugar }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Organizador:</strong> {{ evento.organizador }}</p>
+        <div *ngIf="evento.estaInscrito" class="inscrito-message">
+          Estás en la lista de este evento.
+        </div>
+        <ion-button
+          expand="block"
+          [disabled]="evento.asistenciaConfirmada"
+          [color]="evento.asistenciaConfirmada ? 'medium' : 'success'"
+          (click)="registrarAsistencia(evento.id)">
+          {{ evento.asistenciaConfirmada ? 'Asistencia Ingresada' : 'Confirmar Asistencia' }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
   <!-- Mensaje si no se encuentran eventos -->
   <div *ngIf="eventosFiltrados.length === 0 && busqueda" class="content-container">
@@ -64,7 +63,7 @@
   </div>
 
   <!-- Mostrar mensaje si no hay eventos disponibles -->
-  <div *ngIf="eventosInscrito.length === 0 && eventosFiltrados.length === 0 && !busqueda" class="content-container">
-    <h2 class="subtitle">No estás registrado en ningún evento actualmente.</h2>
+  <div *ngIf="eventosFiltrados.length === 0 && !busqueda" class="content-container">
+    <h2 class="subtitle">No hay eventos disponibles actualmente.</h2>
   </div>
 </ion-content>

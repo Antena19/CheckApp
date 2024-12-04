@@ -15,11 +15,16 @@ interface User {
   providedIn: 'root',
 })
 export class DatosEjemploService {
-  constructor(private storage: Storage, private eventoService: EventoService) {}
+  constructor(private storage: Storage, private eventoService: EventoService) {
+    this.init();
+  }
+
+  async init() {
+    await this.storage.create();
+  }
 
   // MÉTODO PARA CARGAR DATOS DE EJEMPLO EN EL STORAGE
   async cargarDatosEjemplo() {
-    await this.storage.create();
     let usuarios: User[] = (await this.storage.get('users')) || [];
 
     // AGREGAR ADMINISTRADOR POR DEFECTO SIEMPRE
@@ -61,33 +66,31 @@ export class DatosEjemploService {
 
   // MÉTODO PARA CREAR UN EVENTO DE EJEMPLO CUANDO EL ADMIN SE LOGUEA
   async crearEventoEjemploAdmin() {
-    await this.storage.create();
-
     // Obtener el usuario administrador del Storage
     const usuarios: User[] = await this.storage.get('users') || [];
     const adminUser = usuarios.find(user => user.username === 'admin');
 
     if (adminUser) {
       // Eliminar cualquier evento de ejemplo anterior
-      const eventos = this.eventoService.obtenerEventosPorUsuario(adminUser.rut);
+      const eventos = await this.eventoService.obtenerEventosPorUsuario(adminUser.rut);
       const eventoEjemploExistente = eventos.find(evento => evento.nombre === 'Evento de Ejemplo' && evento.organizador === adminUser.nombreApellido);
 
       if (eventoEjemploExistente) {
-        const index = eventos.indexOf(eventoEjemploExistente);
-        this.eventoService.eliminarEvento(index, adminUser.rut);
+        this.eventoService.eliminarEventoPorId(eventoEjemploExistente.id, adminUser.rut);
       }
 
       // Crear un nuevo evento de ejemplo
       const fechaActual = new Date();
       const eventoEjemplo = {
-        id: Date.now(), // ID único basado en la fecha actual
+        id: Date.now().toString(), // ID único basado en la fecha actual
         nombre: 'Evento de Ejemplo',
         organizador: adminUser.nombreApellido,
         fecha: fechaActual.toISOString().split('T')[0],
         horaInicio: `${fechaActual.getHours()}:${fechaActual.getMinutes()}`,
         horaTermino: '',
         lugar: 'Ubicación por Defecto',
-        usuarioId: adminUser.rut // Asociar el evento con el RUT del administrador
+        rut: adminUser.rut, // Cambiado a 'rut' para ser consistente con el servicio de eventos
+        asistentes: [] // Lista de asistentes vacía por defecto
       };
 
       this.eventoService.agregarEvento(eventoEjemplo, adminUser.rut);

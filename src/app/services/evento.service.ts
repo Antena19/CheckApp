@@ -28,38 +28,44 @@ export class EventoService {
 
   // Obtener todos los eventos creados por un usuario específico
   obtenerEventosPorUsuario(rutUsuario: string) {
-    return this.eventos.filter(evento => evento.usuarioRUT === rutUsuario);
+    return this.eventos.filter(evento => evento.rut === rutUsuario);
   }
 
   // Agregar un nuevo evento asociado a un usuario específico
   agregarEvento(evento: any, rutUsuario: string) {
-    this.eventos.push({ ...evento, usuarioRUT: rutUsuario, asistentes: [] }); // Asociar evento al usuario y inicializar lista de asistentes vacía
+    const eventoConId = {
+      ...evento,
+      id: Date.now().toString(), // Generar un ID único basado en la fecha actual
+      rut: rutUsuario, // Asociar evento al usuario por RUT
+      asistentes: []
+    };
+    this.eventos.push(eventoConId); // Asociar evento al usuario y inicializar lista de asistentes vacía
     this.guardarEventos(); // Guardar y emitir cambios
   }
 
-// Editar un evento existente por ID (solo si pertenece al usuario actual)
-editarEventoPorId(eventoId: string, eventoEditado: any, rutUsuario: string) {
-  const eventoIndex = this.eventos.findIndex(evento => evento.id === eventoId && evento.usuarioRUT === rutUsuario);
-  if (eventoIndex === -1) {
-    throw new Error('Evento no encontrado o no tienes permiso para editarlo.');
+  // Editar un evento existente por ID (solo si pertenece al usuario actual)
+  editarEventoPorId(id: string, eventoEditado: any, rutUsuario: string) {
+    const eventoIndex = this.eventos.findIndex(evento => evento.id === id && evento.rut === rutUsuario);
+    if (eventoIndex === -1) {
+      throw new Error('Evento no encontrado o no tienes permiso para editarlo.');
+    }
+    this.eventos[eventoIndex] = { ...this.eventos[eventoIndex], ...eventoEditado };
+    this.guardarEventos(); // Guardar y emitir cambios
   }
-  this.eventos[eventoIndex] = { ...this.eventos[eventoIndex], ...eventoEditado };
-  this.guardarEventos(); // Guardar y emitir cambios
-}
 
-
-  // Eliminar un evento (solo si pertenece al usuario actual)
-  eliminarEvento(index: number, rutUsuario: string) {
-    if (!this.eventos[index] || this.eventos[index].usuarioRUT !== rutUsuario) {
+  // Eliminar un evento por ID (solo si pertenece al usuario actual)
+  eliminarEventoPorId(id: string, rutUsuario: string) {
+    const eventoIndex = this.eventos.findIndex(evento => evento.id === id && evento.rut === rutUsuario);
+    if (eventoIndex === -1) {
       throw new Error('Evento no encontrado o no tienes permiso para eliminarlo.');
     }
-    this.eventos.splice(index, 1);
+    this.eventos.splice(eventoIndex, 1);
     this.guardarEventos(); // Guardar y emitir cambios
   }
 
   // Obtener evento por ID y RUT del usuario
-  obtenerEventoPorIdYUsuario(eventoId: string, rutUsuario: string) {
-    return this.eventos.find(evento => evento.id === eventoId && evento.usuarioRUT === rutUsuario);
+  obtenerEventoPorIdYUsuario(id: string, rutUsuario: string) {
+    return this.eventos.find(evento => evento.id === id && evento.rut === rutUsuario);
   }
 
   // Obtener evento por ID (sin importar el usuario, para la lógica de participante)
@@ -84,7 +90,7 @@ editarEventoPorId(eventoId: string, eventoEditado: any, rutUsuario: string) {
   // Agregar un asistente a un evento (solo si el evento pertenece al usuario actual)
   agregarAsistente(eventoIndex: number, asistente: any, rutUsuario: string) {
     const evento = this.eventos[eventoIndex];
-    if (!evento || evento.usuarioRUT !== rutUsuario) {
+    if (!evento || evento.rut !== rutUsuario) {
       throw new Error('Evento no encontrado o no tienes permiso para modificarlo.');
     }
 
@@ -102,7 +108,7 @@ editarEventoPorId(eventoId: string, eventoEditado: any, rutUsuario: string) {
   // Invitar a un asistente a un evento (estado "ausente", solo si pertenece al usuario actual)
   invitarAsistente(eventoIndex: number, asistente: any, rutUsuario: string) {
     const evento = this.eventos[eventoIndex];
-    if (!evento || evento.usuarioRUT !== rutUsuario) {
+    if (!evento || evento.rut !== rutUsuario) {
       throw new Error('Evento no encontrado o no tienes permiso para modificarlo.');
     }
 
@@ -146,7 +152,7 @@ editarEventoPorId(eventoId: string, eventoEditado: any, rutUsuario: string) {
   // Editar un asistente (solo si pertenece al usuario actual)
   editarAsistente(eventoIndex: number, asistenteIndex: number, asistenteEditado: any, rutUsuario: string) {
     const evento = this.eventos[eventoIndex];
-    if (!evento || !evento.asistentes[asistenteIndex] || evento.usuarioRUT !== rutUsuario) {
+    if (!evento || !evento.asistentes[asistenteIndex] || evento.rut !== rutUsuario) {
       throw new Error('Asistente no encontrado o no tienes permiso para modificarlo.');
     }
     evento.asistentes[asistenteIndex] = { ...evento.asistentes[asistenteIndex], ...asistenteEditado };
@@ -156,7 +162,7 @@ editarEventoPorId(eventoId: string, eventoEditado: any, rutUsuario: string) {
   // Eliminar un asistente (solo si pertenece al usuario actual)
   eliminarAsistente(eventoIndex: number, asistenteIndex: number, rutUsuario: string) {
     const evento = this.eventos[eventoIndex];
-    if (!evento || !evento.asistentes[asistenteIndex] || evento.usuarioRUT !== rutUsuario) {
+    if (!evento || !evento.asistentes[asistenteIndex] || evento.rut !== rutUsuario) {
       throw new Error('Asistente no encontrado o no tienes permiso para eliminarlo.');
     }
     evento.asistentes.splice(asistenteIndex, 1);
@@ -166,9 +172,14 @@ editarEventoPorId(eventoId: string, eventoEditado: any, rutUsuario: string) {
   // Obtener asistentes de un evento (solo si pertenece al usuario actual)
   obtenerAsistentes(eventoIndex: number, rutUsuario: string) {
     const evento = this.eventos[eventoIndex];
-    if (!evento || evento.usuarioRUT !== rutUsuario) {
+    if (!evento || evento.rut !== rutUsuario) {
       throw new Error('Evento no encontrado o no tienes permiso para verlo.');
     }
     return evento.asistentes;
+  }
+
+  // Obtener todos los eventos (sin importar el usuario)
+  obtenerTodosLosEventos() {
+    return this.eventos;
   }
 }

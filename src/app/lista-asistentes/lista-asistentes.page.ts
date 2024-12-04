@@ -11,7 +11,7 @@ import { AutenticacionService } from '../services/autenticacion.service'; // Ser
 })
 export class ListaAsistentesPage implements OnInit {
   listaAsistentes: any[] = [];
-  eventoId: string = '';
+  id: string = ''; // ID del evento
   rutUsuario: string = ''; // RUT del usuario autenticado
 
   constructor(
@@ -27,12 +27,17 @@ export class ListaAsistentesPage implements OnInit {
     // Obtener el usuario autenticado
     const usuarioActual = await this.authService.obtenerUsuarioActual();
     if (usuarioActual && usuarioActual.rut) {
-      this.rutUsuario = usuarioActual.rut;
+      this.rutUsuario = this.normalizarRut(usuarioActual.rut);
     }
 
     // Obtener el ID del evento desde la URL
-    this.eventoId = this.route.snapshot.paramMap.get('id') || '';
-    const evento = this.eventoService.obtenerEventoPorIdYUsuario(this.eventoId, this.rutUsuario);
+    this.id = this.route.snapshot.queryParamMap.get('id') || '';
+    this.cargarListaAsistentes();
+  }
+
+  // MÉTODO PARA CARGAR LA LISTA DE ASISTENTES
+  cargarListaAsistentes() {
+    const evento = this.eventoService.obtenerEventoPorId(this.id);
 
     if (evento && evento.asistentes) {
       this.listaAsistentes = evento.asistentes;
@@ -42,10 +47,20 @@ export class ListaAsistentesPage implements OnInit {
     }
   }
 
+  // MÉTODO QUE SE EJECUTA AL ENTRAR A LA VISTA
+  ionViewWillEnter() {
+    this.menu.enable(true, 'main-menu'); // Habilitar el menú con el ID 'main-menu' cuando se entre a esta vista
+  }
+
   // MÉTODO PARA ABRIR EL MENÚ LATERAL
   openMenu() {
     this.menu.enable(true, 'main-menu'); // Habilitamos el menú con el ID 'main-menu'
     this.menu.open('main-menu'); // Abrimos el menú
+  }
+
+  // MÉTODO PARA CERRAR EL MENÚ LATERAL
+  closeMenu() {
+    this.menu.close('main-menu'); // Cerramos el menú con el ID 'main-menu'
   }
 
   // MÉTODO PARA AGREGAR UN NUEVO ASISTENTE
@@ -146,24 +161,15 @@ export class ListaAsistentesPage implements OnInit {
 
   // MÉTODO PARA GUARDAR LOS CAMBIOS EN LA LISTA DE ASISTENTES
   guardarCambios() {
-    if (this.eventoId) {
-      const evento = this.eventoService.obtenerEventoPorIdYUsuario(this.eventoId, this.rutUsuario);
+    if (this.id) {
+      const evento = this.eventoService.obtenerEventoPorId(this.id);
       if (evento) {
-        this.eventoService.editarEventoPorId(this.eventoId, { asistentes: this.listaAsistentes }, this.rutUsuario);
+        evento.asistentes = this.listaAsistentes;
+        this.eventoService.guardarEventos(); // Actualiza el evento directamente y guarda los cambios
       } else {
         this.mostrarAlerta('Error', 'No se pudo encontrar el evento o no tienes permiso para editarlo.');
       }
     }
-  }
-
-  // MÉTODO PARA VER DETALLE DEL EVENTO
-  verDetalleEvento() {
-    this.router.navigate(['/registro-asistencia-evento', { id: this.eventoId }]);
-  }
-
-  // MÉTODO PARA VOLVER A LA GESTIÓN DE EVENTOS
-  volver() {
-    this.router.navigate(['/gestion-de-eventos']);
   }
 
   // MÉTODO PARA MOSTRAR ALERTAS
@@ -176,9 +182,19 @@ export class ListaAsistentesPage implements OnInit {
     await alert.present();
   }
 
+  // MÉTODO PARA VER DETALLE DEL EVENTO
+  verDetalleEvento() {
+    this.router.navigate(['/registro-asistencia-evento', { id: this.id }]);
+  }
+
+  // MÉTODO PARA VOLVER A LA GESTIÓN DE EVENTOS
+  volver() {
+    this.router.navigate(['/gestion-de-eventos']);
+  }
+
   // MÉTODO PARA GENERAR INFORMES
   generarInformes() {
-    this.router.navigate(['/generar-informes', { id: this.eventoId }]);
+    this.router.navigate(['/generar-informes', { id: this.id }]);
   }
 
   // MÉTODO PARA CERRAR SESIÓN

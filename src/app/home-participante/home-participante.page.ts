@@ -10,8 +10,6 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./home-participante.page.scss'],
 })
 export class HomeParticipantePage implements OnInit {
-  eventosInscrito: any[] = [];
-  eventosPresente: any[] = [];
   todosLosEventos: any[] = [];
   eventosFiltrados: any[] = [];
   rutParticipante: string = '';
@@ -31,75 +29,97 @@ export class HomeParticipantePage implements OnInit {
     const usuarioActual = await this.storage.get('usuarioActual');
 
     if (usuarioActual && usuarioActual.rut) {
-      this.rutParticipante = usuarioActual.rut;
+      this.rutParticipante = this.normalizarRut(usuarioActual.rut);
       this.username = usuarioActual.nombreApellido || 'Participante';
 
-      // Obtener todos los eventos disponibles (mostramos todos los eventos, sin importar quién los creó)
-      this.todosLosEventos = this.eventoService.obtenerEventosPorUsuario(this.rutParticipante);
-      this.eventosFiltrados = this.todosLosEventos;
-
-      // Obtener eventos donde el participante está inscrito
-      this.eventosInscrito = this.eventoService.obtenerEventosConParticipanteInscrito(this.rutParticipante);
-
-      // Obtener eventos donde el participante está presente
-      this.eventosPresente = this.eventoService.obtenerEventosConParticipantePresente(this.rutParticipante);
+      // Obtener todos los eventos disponibles
+      this.cargarEventos();
     }
+  }
+
+  // MÉTODO PARA CARGAR EVENTOS Y MARCAR INSCRIPCIÓN
+  cargarEventos() {
+    this.todosLosEventos = this.eventoService.obtenerTodosLosEventos();
+
+    // Normalizar RUT del participante antes de realizar las comparaciones
+    const rutParticipanteNormalizado = this.normalizarRut(this.rutParticipante);
+
+    // Marcar los eventos en los que el participante está inscrito
+    this.todosLosEventos.forEach(evento => {
+      evento.estaInscrito = evento.asistentes.some((asistente: any) =>
+        this.normalizarRut(asistente.rut) === rutParticipanteNormalizado
+      );
+    });
+
+    // Inicializar los eventos filtrados con todos los eventos (puede ser actualizado por el filtro de búsqueda)
+    this.eventosFiltrados = this.todosLosEventos;
   }
 
   // MÉTODO PARA FILTRAR EVENTOS POR FECHA O BÚSQUEDA GENERAL
   filtrarEventos() {
     this.eventosFiltrados = this.todosLosEventos.filter(evento => {
-      const coincideFecha = this.fechaFiltro ? new Date(evento.fecha).toDateString() === this.fechaFiltro.toDateString() : true;
-      const coincideBusqueda = this.busqueda ? 
-        evento.nombre.toLowerCase().includes(this.busqueda.toLowerCase()) ||
-        evento.lugar.toLowerCase().includes(this.busqueda.toLowerCase()) ||
-        evento.organizador.toLowerCase().includes(this.busqueda.toLowerCase())
+      const coincideFecha = this.fechaFiltro
+        ? new Date(evento.fecha).toDateString() === this.fechaFiltro.toDateString()
+        : true;
+      const coincideBusqueda = this.busqueda
+        ? evento.nombre.toLowerCase().includes(this.busqueda.toLowerCase()) ||
+          evento.lugar.toLowerCase().includes(this.busqueda.toLowerCase()) ||
+          evento.organizador.toLowerCase().includes(this.busqueda.toLowerCase())
         : true;
       return coincideFecha && coincideBusqueda;
     });
   }
 
   // MÉTODO PARA REGISTRAR ASISTENCIA A UN EVENTO
-  async registrarAsistencia(eventoId?: string) {
-    if (eventoId) {
-      const evento = this.eventoService.obtenerEventoPorIdYUsuario(eventoId, this.rutParticipante);
-      if (evento) {
-        // Normalizar el RUT del participante para asegurar la consistencia
-        const rutNormalizado = this.normalizarRut(this.rutParticipante);
-
-        // Verificar si el asistente ya está registrado en el evento
-        let asistenteExistente = evento.asistentes.find((asistente: any) => this.normalizarRut(asistente.rut) === rutNormalizado);
-        if (asistenteExistente) {
-          // Cambiar el estado del asistente a "presente"
-          asistenteExistente.estado = 'presente';
-          asistenteExistente.horaRegistro = new Date().toLocaleTimeString();
-        } else {
-          // Si no está registrado, agregar al asistente con el estado "presente"
-          const nuevoAsistente = {
-            rut: rutNormalizado,
-            nombreApellido: this.username,
-            estado: 'presente',
-            horaRegistro: new Date().toLocaleTimeString(),
-          };
-          evento.asistentes.push(nuevoAsistente);
-        }
-
-        // Guardar cambios en el evento
-        this.eventoService.guardarEventos();
-
-        // Mostrar mensaje de éxito
-        this.mostrarAlerta('Éxito', 'Asistencia registrada exitosamente.');
-
-        // Actualizar la lista de eventos donde el participante está presente
-        this.eventosPresente = this.eventoService.obtenerEventosConParticipantePresente(this.rutParticipante);
-
-        // Actualizar el estado del botón de asistencia
-        this.actualizarEstadoBotonAsistencia(eventoId);
-      } else {
-        this.mostrarAlerta('Error', 'Evento no encontrado o no tienes permiso para verlo.');
-      }
-    } else {
+  async registrarAsistencia(eventoId: string) {
+    if (!eventoId) {
       this.mostrarAlerta('Error', 'Debe seleccionar un evento.');
+      return;
+    }
+
+    const evento = this.eventoService.obtenerEventoPorId(eventoId);
+    if (!evento) {
+      this.mostrarAlerta('Error', 'Evento no encontrado o no tienes permiso para verlo.');
+      return;
+    }
+
+    this.actualizarAsistenciaEvento(evento);
+
+    // Guardar cambios en el evento
+    this.eventoService.guardarEventos();
+
+    // Mostrar mensaje de éxito
+    this.mostrarAlerta('Éxito', 'Asistencia registrada exitosamente.');
+
+    // Actualizar el estado del botón de asistencia
+    this.actualizarEstadoBotonAsistencia(eventoId);
+
+    // Refrescar la lista de eventos
+    this.cargarEventos();
+  }
+
+  // MÉTODO PARA ACTUALIZAR LA ASISTENCIA DE UN EVENTO
+  actualizarAsistenciaEvento(evento: any) {
+    const rutNormalizado = this.normalizarRut(this.rutParticipante);
+
+    // Verificar si el asistente ya está registrado en el evento
+    let asistenteExistente = evento.asistentes.find(
+      (asistente: any) => this.normalizarRut(asistente.rut) === rutNormalizado
+    );
+
+    if (asistenteExistente) {
+      // Cambiar el estado del asistente a "presente"
+      asistenteExistente.estado = 'presente';
+      asistenteExistente.horaRegistro = new Date().toLocaleTimeString();
+    } else {
+      // Si no está registrado, agregar al asistente con el estado "presente"
+      const nuevoAsistente = {
+        rut: rutNormalizado,
+        nombreApellido: this.username,
+        estado: 'presente',
+        horaRegistro: new Date().toLocaleTimeString(),
+      };
+      evento.asistentes.push(nuevoAsistente);
     }
   }
 

@@ -1,17 +1,20 @@
+/* Fondo y configuración general del contenido */
 ion-content {
   --background: #272E30;
   padding-bottom: 100px;
   overflow-y: auto;
 }
 
-ion-header, ion-footer {
+/* Estilos del header y footer */
+ion-header,
+ion-footer {
   ion-toolbar {
     --background: #1E1E1E;
     --color: white;
   }
 }
 
-/* Header */
+/* Header: Contenido del encabezado, logo y título */
 .header-content {
   display: flex;
   align-items: center;
@@ -34,7 +37,7 @@ ion-header, ion-footer {
   color: white;
 }
 
-/* Bienvenida */
+/* Título principal (Bienvenida) */
 .main-title {
   color: white;
   font-size: 24px;
@@ -51,7 +54,7 @@ ion-header, ion-footer {
   margin-bottom: 20px;
 }
 
-/* Pregunta al Usuario y Contenedor de Contenido */
+/* Títulos secundarios */
 .subtitle {
   color: white;
   font-size: 18px;
@@ -59,10 +62,64 @@ ion-header, ion-footer {
   margin-bottom: 20px;
 }
 
+/* Contenedor de contenido */
 .content-container {
   max-width: 600px; /* Limitar el ancho máximo del contenido */
   margin: 0 auto; /* Centrar horizontalmente */
   padding: 0 16px; /* Añadir un poco de margen interno */
+}
+
+/* Estilo para el contenedor de búsqueda y filtro */
+.search-filter-container {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #272E30;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Estilo del Item para Filtrar Eventos */
+.custom-filter-item {
+  --background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Label del Filtro */
+.filter-label {
+  color: white;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+/* Estilos del Selector de Fecha con Angular Material */
+.custom-date-field {
+  width: auto;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #272E30; /* Mismo fondo que el contenido */
+  border-radius: 8px;
+}
+
+.mat-input-element {
+  color: white; /* Color del texto en el campo */
+}
+
+.mat-datepicker-toggle {
+  color: white; /* Color del ícono del calendario */
+}
+
+/* Placeholder del input de fecha en blanco */
+::ng-deep .mat-form-field-label {
+  color: white !important; /* Cambiar el color del label/placeholder */
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex:hover .mat-form-field-label {
+  color: white !important; /* Mantener el label en blanco al hacer hover */
 }
 
 /* Tarjetas de Eventos */
@@ -73,7 +130,20 @@ ion-header, ion-footer {
   --ion-card-background: #ffffff; /* Color de fondo para la tarjeta */
 }
 
-/* Botón Registrar Asistencia */
+/* Tarjetas de Eventos en los que el usuario está inscrito */
+.inscrito-card {
+  border: 3px solid red; /* Borde rojo para resaltar */
+  background-color: #fff8e1; /* Fondo amarillo claro */
+}
+
+/* Mensaje para indicar que el usuario está inscrito */
+.inscrito-message {
+  color: #d32f2f; /* Color rojo para destacar */
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Botón para Registrar Asistencia */
 .registrar-asistencia-btn {
   --background: #42316c; /* Mismo color que los botones */
   color: white;
@@ -93,22 +163,25 @@ ion-header, ion-footer {
   transform: scale(1.05);
 }
 
-/* Estilos para el Filtro por Fecha */
-mat-form-field {
-  width: 100%;
-  margin-bottom: 16px;
-  color: white; /* Mantener el color blanco del label */
-}
+/* Responsive: Ajustar diseño para pantallas pequeñas */
+@media (max-width: 768px) {
+  .event-card {
+    margin: 8px;
+  }
 
-.mat-form-field-appearance-fill .mat-form-field-flex {
-  background-color: #1E1E1E; /* Fondo oscuro para mantener coherencia */
-}
+  .main-title {
+    font-size: 20px;
+  }
 
-.mat-input-element {
-  color: white; /* Color del texto en el campo de entrada */
-}
+  .welcome-message {
+    font-size: 16px;
+  }
 
-.mat-datepicker-toggle {
-  color: white; /* Color del ícono del calendario */
-}
+  .subtitle {
+    font-size: 16px;
+  }
 
+  .inscrito-card {
+    border: 2px solid red; /* Ajustar tamaño del borde */
+  }
+}

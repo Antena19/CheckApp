@@ -42,7 +42,7 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
     if (usuarioActual && usuarioActual.rut) {
       // Suscribirse a los eventos y filtrar por el usuario actual
       this.eventosSubscription = this.eventoService.eventos$.subscribe(eventos => {
-        this.eventos = eventos.filter(evento => evento.usuarioRUT === usuarioActual.rut);
+        this.eventos = eventos.filter(evento => evento.rut === usuarioActual.rut);
       });
     }
   }
@@ -97,7 +97,8 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
       organizador: this.nombreOrganizador,
       hora: this.horaEvento,
       lugar: this.lugarEvento,
-      participantes: this.numeroParticipantes
+      participantes: this.numeroParticipantes,
+      rut: usuarioActual.rut // Aseguramos de usar `rut` como el identificador correcto
     };
     this.eventoService.agregarEvento(evento, usuarioActual.rut);
     this.limpiarFormulario();
@@ -150,12 +151,12 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
   }
 
   // MÉTODO PARA EDITAR UN EVENTO ESPECÍFICO
-  editarEvento(index: number) {
-    this.router.navigate(['/editar-evento', { id: index }]);
+  editarEvento(id: string) {
+    this.router.navigate(['/editar-evento', { id: id }]);
   }
 
   // CONFIRMAR SI SE DESEA ELIMINAR UN EVENTO
-  async confirmarEliminarEvento(index: number) {
+  async confirmarEliminarEvento(id: string) {
     const usuarioActual = await this.authService.obtenerUsuarioActual();
     if (!usuarioActual) {
       this.mostrarError('No se ha podido obtener el usuario logueado. Por favor, inicia sesión de nuevo.');
@@ -164,14 +165,18 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
 
     const confirmacion = confirm("¿Estás seguro de que deseas eliminar este evento?");
     if (confirmacion) {
-      this.eliminarEvento(index, usuarioActual.rut);
+      this.eliminarEventoPorId(id, usuarioActual.rut);
     }
   }
 
   // ELIMINAR UN EVENTO ESPECÍFICO Y ACTUALIZAR LA LISTA
-  eliminarEvento(index: number, rutUsuario: string) {
-    this.eventoService.eliminarEvento(index, rutUsuario);
-    this.notificacionService.mostrarMensaje('Éxito', 'Evento eliminado correctamente', 'success');
+  eliminarEventoPorId(id: string, rutUsuario: string) {
+    try {
+      this.eventoService.eliminarEventoPorId(id, rutUsuario);
+      this.notificacionService.mostrarMensaje('Éxito', 'Evento eliminado correctamente', 'success');
+    } catch (error: any) {
+      this.mostrarError(error.message);
+    }
   }
 
   // LIMPIAR TODOS LOS CAMPOS DEL FORMULARIO
@@ -196,10 +201,9 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
 
   // NAVEGAR AL REGISTRO DE ASISTENCIA DE UN EVENTO
   navegarRegistrarAsistencia(eventId: string) {
-    this.router.navigate(['/registro-asistencia-evento'], { queryParams: { id: eventId } });
+    this.router.navigate(['/lista-asistentes'], { queryParams: { id: eventId } });
   }
 
-  // ABRIR MODAL PARA REGISTRAR ASISTENCIA
   async abrirModalRegistrarAsistencia(eventId: string) {
     const modal = await this.modalController.create({
       component: RegistroAsistenciaModalComponent,
@@ -207,7 +211,16 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
         idEvento: eventId
       }
     });
+
     await modal.present();
+
+    // Suscribirse a la promesa del modal para saber cuándo se cierra
+    modal.onDidDismiss().then((result) => {
+      // Verificar si el modal fue cerrado con el propósito de navegar
+      if (result.data && result.data.shouldNavigate) {
+        this.router.navigate(['/lista-asistentes'], { queryParams: { id: eventId } });
+      }
+    });
   }
 
   ngOnDestroy() {

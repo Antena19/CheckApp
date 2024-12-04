@@ -24,8 +24,6 @@ export class CrearEventoPage implements AfterViewInit {
   minDate: string;
   minTime: string;
 
-  private maxEventos: number = 10; // Límite de eventos
-
   map: any;
   marker: any;
 
@@ -123,18 +121,18 @@ export class CrearEventoPage implements AfterViewInit {
       this.mostrarError("Por favor completa todos los campos obligatorios.");
       return;
     }
-  
+
     try {
       // Obtener el usuario actual logueado
       const usuario = await this.authService.obtenerUsuarioActual();
-  
+
       if (!usuario) {
         throw new Error('No se ha podido obtener el usuario logueado. Por favor, inicia sesión de nuevo.');
       }
-  
+
       // Crear el nuevo evento
       const evento = {
-        id: Date.now(), // ID único basado en la fecha actual
+        id: Date.now().toString(), // ID único basado en la fecha actual (convertido a string)
         nombre: this.nombreEvento,
         organizador: this.nombreOrganizador,
         fecha: this.fechaEvento,
@@ -142,10 +140,10 @@ export class CrearEventoPage implements AfterViewInit {
         horaTermino: this.horaTermino,
         lugar: this.lugarEvento
       };
-  
+
       // Guardar el evento utilizando el servicio de eventos y pasar el rut del usuario actual
       this.eventoService.agregarEvento(evento, usuario.rut);
-  
+
       // Redirigir a la página de gestión de eventos
       this.router.navigate(['/gestion-de-eventos']);
     } catch (error: any) {

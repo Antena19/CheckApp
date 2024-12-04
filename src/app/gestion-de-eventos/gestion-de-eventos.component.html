@@ -34,13 +34,15 @@
       <div class="event-details">
         <p><strong>Organizador:</strong> {{ evento.organizador }}</p>
         <p><strong>Número de Participantes:</strong> {{ evento.participantes }}</p>
-        <p><strong>Hora:</strong> {{ evento.hora }}</p>
+        <p><strong>Hora de Inicio:</strong> {{ evento.horaInicio }}</p> <!-- Mostrar la hora de inicio -->
+        <p><strong>Hora de Término:</strong> {{ evento.horaTermino }}</p> <!-- Mostrar la hora de término -->
         <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
         <img *ngIf="evento.imagen" [src]="evento.imagen" alt="{{ evento.lugar }}" style="width: 100%; height: auto;">
       </div>
       <div class="event-actions">
-        <ion-button color="warning" (click)="editarEvento(i)">Editar</ion-button>
-        <ion-button color="danger" (click)="confirmarEliminarEvento(i)">Eliminar</ion-button>
+        <!-- Cambiado i a evento.id -->
+        <ion-button color="warning" (click)="editarEvento(evento.id)">Editar</ion-button>
+        <ion-button color="danger" (click)="confirmarEliminarEvento(evento.id)">Eliminar</ion-button>
       </div>
       <div class="register-assistance">
         <ion-button

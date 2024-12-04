@@ -80,17 +80,17 @@ export class EditarEventoPage implements AfterViewInit, OnDestroy {
         this.mostrarError("No se proporcionó un ID de evento válido.");
         return;
       }
-
+  
       // Obtén el usuario actual logueado
       const usuario = await this.authService.obtenerUsuarioActual();
       if (!usuario) {
         this.mostrarError("No se pudo obtener el usuario actual. Por favor, inicia sesión.");
         return;
       }
-
+  
       // Obtén el evento desde el servicio usando el ID y el RUT del usuario
-      const evento = this.eventoService.obtenerEventoPorId(this.eventoId);
-      if (evento && evento.usuarioRUT === usuario.rut) {
+      const evento = this.eventoService.obtenerEventoPorIdYUsuario(this.eventoId, usuario.rut);
+      if (evento) {
         this.nombreEvento = evento.nombre;
         this.nombreOrganizador = evento.organizador;
         this.fechaEvento = evento.fecha;
@@ -106,6 +106,7 @@ export class EditarEventoPage implements AfterViewInit, OnDestroy {
       this.mostrarError("Ha ocurrido un error al cargar el evento.");
     }
   }
+  
 
   actualizarMapa() {
     if (!this.lugarEvento.trim()) {

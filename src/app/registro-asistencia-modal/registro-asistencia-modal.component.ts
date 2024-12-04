@@ -46,8 +46,10 @@ export class RegistroAsistenciaModalComponent {
   }
 
   // MÉTODO PARA CERRAR EL MODAL
-  cerrarModal() {
-    this.modalController.dismiss();
+  cerrarModal(shouldNavigate: boolean = false) {
+    this.modalController.dismiss({
+      shouldNavigate: shouldNavigate
+    });
   }
 
   // MÉTODO PARA MOSTRAR EL QR DEL EVENTO
@@ -83,11 +85,10 @@ export class RegistroAsistenciaModalComponent {
     }
   }
 
-  // MÉTODO PARA VER LA LISTA DE ASISTENTES
-  verListaAsistentes() {
-    // Primero, cerramos el modal y luego navegamos a la página de lista de asistentes
-    this.modalController.dismiss().then(() => {
-      this.router.navigate(['/lista-asistentes'], { queryParams: { id: this.idEvento } });
-    });
-  }
+// Método para ver la lista de asistentes
+verListaAsistentes() {
+  // Primero, cerramos el modal y luego navegamos a la página de lista de asistentes
+  this.modalController.dismiss({ shouldNavigate: true });
+}
+
 }
