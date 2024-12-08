@@ -38,7 +38,7 @@ export class HomeParticipantePage implements OnInit {
   }
 
   // MÉTODO PARA CARGAR EVENTOS Y MARCAR INSCRIPCIÓN
-  cargarEventos() {
+  async cargarEventos() {
     this.todosLosEventos = this.eventoService.obtenerTodosLosEventos();
 
     // Normalizar RUT del participante antes de realizar las comparaciones
@@ -49,17 +49,27 @@ export class HomeParticipantePage implements OnInit {
       evento.estaInscrito = evento.asistentes.some((asistente: any) =>
         this.normalizarRut(asistente.rut) === rutParticipanteNormalizado
       );
+      evento.asistenciaConfirmada = evento.estaInscrito && 
+        evento.asistentes.some(
+          (asistente: any) => 
+            this.normalizarRut(asistente.rut) === rutParticipanteNormalizado && 
+            asistente.estado === 'presente'
+        );
     });
 
     // Inicializar los eventos filtrados con todos los eventos (puede ser actualizado por el filtro de búsqueda)
     this.eventosFiltrados = this.todosLosEventos;
+
+    // Persistir el estado de los botones deshabilitados para los eventos ya confirmados
+    await this.actualizarEstadoBotones();
   }
 
   // MÉTODO PARA FILTRAR EVENTOS POR FECHA O BÚSQUEDA GENERAL
   filtrarEventos() {
     this.eventosFiltrados = this.todosLosEventos.filter(evento => {
       const coincideFecha = this.fechaFiltro
-        ? new Date(evento.fecha).toDateString() === this.fechaFiltro.toDateString()
+        ? new Date(evento.fecha).toISOString().split('T')[0] === 
+          new Date(this.fechaFiltro).toISOString().split('T')[0]
         : true;
       const coincideBusqueda = this.busqueda
         ? evento.nombre.toLowerCase().includes(this.busqueda.toLowerCase()) ||
@@ -144,6 +154,19 @@ export class HomeParticipantePage implements OnInit {
       buttons: ['OK']
     });
     await alert.present();
+  }
+
+  // MÉTODO PARA ACTUALIZAR EL ESTADO DE LOS BOTONES EN CARGA
+  async actualizarEstadoBotones() {
+    const rutParticipanteNormalizado = this.normalizarRut(this.rutParticipante);
+
+    this.eventosFiltrados.forEach(evento => {
+      evento.asistenciaConfirmada = evento.asistentes.some(
+        (asistente: any) =>
+          this.normalizarRut(asistente.rut) === rutParticipanteNormalizado &&
+          asistente.estado === 'presente'
+      );
+    });
   }
 
   // MÉTODO PARA CERRAR SESIÓN
