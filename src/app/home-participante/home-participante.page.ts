@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { EventoService } from '../services/evento.service';
 import { Storage } from '@ionic/storage-angular';
 import { AlertController } from '@ionic/angular';
+import { ScannerService } from '../services/scanner.service';
 
 @Component({
   selector: 'app-home-participante',
@@ -21,7 +22,8 @@ export class HomeParticipantePage implements OnInit {
     private router: Router,
     private eventoService: EventoService,
     private storage: Storage,
-    private alertController: AlertController
+    private alertController: AlertController,
+    public scanner: ScannerService
   ) {}
 
   async ngOnInit() {
@@ -150,5 +152,10 @@ export class HomeParticipantePage implements OnInit {
   async logout() {
     await this.storage.remove('usuarioActual');
     this.router.navigate(['/login']);
+  }
+
+  //METODO PARA SCANEAR
+  Scaneo() {
+    this.scanner.StartScan()
   }
 }

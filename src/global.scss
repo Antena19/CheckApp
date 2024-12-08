@@ -149,3 +149,9 @@ h1, h2, h3, h4, h5, h6, p, a, button, .card-content h3 {
     --color: #dc3545;
   }
   
+//SCANNER QR
+body.scanner-active {
+    --background: transparent;
+    background: transparent;
+    --ion-background-color: transparent;
+}

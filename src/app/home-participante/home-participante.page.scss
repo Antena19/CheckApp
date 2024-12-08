@@ -54,6 +54,26 @@ ion-footer {
   margin-bottom: 20px;
 }
 
+/* Botón para Escanear QR */
+.scan-qr-button {
+  --background: #6a1b9a; /* Morado oscuro */
+  color: white;
+  font-weight: bold;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.scan-qr-button:hover {
+  transform: scale(1.05);
+}
+
 /* Títulos secundarios */
 .subtitle {
   color: white;
