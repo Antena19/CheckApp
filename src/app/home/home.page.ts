@@ -97,10 +97,9 @@ export class HomePage implements OnInit {
     this.router.navigate(['/informes']);
   }
 
-  // Método para navegar a la página de Mi Perfil
-  navigateToMiPerfil() {
-    console.log('Navegando a Mi Perfil...');
-    this.router.navigate(['/mi-perfil']);
-  }
+  // Método para navegar al perfil de usuario
+    navigateToMiPerfil() {
+      this.router.navigate(['/perfil-usuario']);
+    }
 
 }

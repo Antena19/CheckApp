@@ -1,10 +1,7 @@
-/* gestion-eventos.page.scss */
 ion-content {
   --background: #272E30;
-  --overflow: scroll;
-  padding-bottom: 100px; /* Ajusta según sea necesario */
-  overflow-y: auto; /* Permitir desplazamiento dentro del contenido */
-  height: 100%;
+  padding-bottom: 100px;
+  overflow-y: auto;
 }
 
 ion-header, ion-footer {
@@ -14,12 +11,77 @@ ion-header, ion-footer {
   }
 }
 
-.white-text {
-  color: white !important;
+/* Header */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrar contenido horizontalmente */
+}
+
+.header-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: normal;
+  color: white;
 }
 
 .white-icon {
   color: white;
+}
+
+/* Menú Desplegable */
+ion-menu {
+  --background: #1E1E1E; /* Fondo igual al de la barra */
+  z-index: 1000; /* Asegúrate de que tenga un valor suficientemente alto */
+}
+
+ion-menu-header {
+  --background: #1E1E1E;
+  color: white; /* Cambia el texto del encabezado a blanco */
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+ion-list {
+  background-color: #1E1E1E; /* Fondo igual al de la barra */
+  color: white;
+}
+
+ion-item {
+  --background: none;
+  color: white;
+}
+
+ion-item:hover {
+  background-color: #42316c;
+}
+
+.icono-menu{
+  color: white !important;
+}
+
+/* Iconos del Menú */
+ion-item ion-icon {
+  font-size: 1.5rem; /* Ajusta el tamaño del icono */
+  margin-right: 8px; /* Espaciado entre el icono y el texto */
+}
+
+/* Botón de menú hamburguesa */
+.white-menu-button {
+  color: white; /* Asegura que el icono del menú sea blanco */
+}
+
+
+/* Encabezado del menú */
+ion-title {
+  color: white; /* Encabezado del menú en blanco */
+  text-align: center;
 }
 
 .event-container {
@@ -75,6 +137,16 @@ ion-button {
   box-shadow: none; /* Eliminar sombra extraña */
 }
 
+.boton-editar {
+  --background: #666;
+  color: white;
+}
+
+.boton-eliminar {
+  --background: #272E30;
+  color: white;
+}
+
 /* Estilo para el botón de crear evento */
 .create-event-button {
   --background: #42316c;
@@ -89,12 +161,7 @@ ion-button {
   font-weight: bold;
 }
 
-/* Efecto al pasar el mouse en el botón de crear evento */
-ion-button.create-event-button:hover {
-  background-color: #4A4A4A !important; /* Color al pasar el mouse */
-}
-
-/* Estilo para el mensaje de bienvenida */
+/* Estilo titulo */
 .main-title {
   color: white;
   font-size: 24px;
@@ -118,7 +185,7 @@ ion-button.create-event-button:hover {
 
   .register-assistance-button {
     --background: #42316c;
-    --color: white;
+    color: white;
     border-radius: 8px;
     font-weight: bold;
     font-size: 0.9rem;
@@ -126,11 +193,9 @@ ion-button.create-event-button:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-right: 5%;
 
-    ion-icon {
-      font-size: 1.2rem;
-      margin-right: 8px;
-    }
+
   }
 
   .register-assistance-button:hover {
@@ -140,23 +205,4 @@ ion-button.create-event-button:hover {
   }
 }
 
-ion-footer {
-  ion-toolbar {
-    --padding-start: 0;
-    --padding-end: 0;
-    --padding-top: 0;
-    --padding-bottom: 0;
 
-    ion-buttons {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-    }
-
-    ion-button {
-      --color: white;
-      background-color: #272E30;
-      box-shadow: none; /* Eliminar sombra extraña */
-    }
-  }
-}

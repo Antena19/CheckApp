@@ -91,4 +91,8 @@ verListaAsistentes() {
   this.modalController.dismiss({ shouldNavigate: true });
 }
 
+//METODO PARA CERRAR EL MODAL
+closeModal() {
+  this.modalController.dismiss();
+}
 }

@@ -93,8 +93,18 @@ ion-icon {
   gap: 10px; /* Espacio entre los botones */
 }
 
-/* Botones de acción (Editar y Eliminar) más pequeños */
-.tiny-action-button {
+.boton-editar {
+  --background: #666;
+  color: white;
+  --border-radius: 8px;
+  height: 35px; /* Reducir el tamaño del botón para hacerlo más compacto */
+  font-size: 12px; /* Reducir el tamaño de la fuente */
+  flex: 1; /* Cada botón ocupa el mismo espacio dentro del contenedor */
+}
+
+.boton-eliminar {
+  --background: #272E30;
+  color: white;
   --border-radius: 8px;
   height: 35px; /* Reducir el tamaño del botón para hacerlo más compacto */
   font-size: 12px; /* Reducir el tamaño de la fuente */
@@ -103,7 +113,7 @@ ion-icon {
 
 /* Botón para agregar un asistente manualmente */
 .agregar-asistente-btn {
-  --background: #4c8bf5; /* Color azul para destacar el botón */
+  --background: #6b52ae; 
   color: white;
   font-weight: bold;
   --border-radius: 8px;
@@ -121,7 +131,7 @@ ion-icon {
 
 /* Botón para generar informes */
 .generar-informes-btn {
-  --background: #6b52ae; /* Color púrpura consistente con la app */
+  --background: #42316c; /* Color púrpura consistente con la app */
   color: white;
   font-weight: bold;
   --border-radius: 8px;
@@ -140,6 +150,7 @@ ion-icon {
 /* Menú Desplegable */
 ion-menu {
   --background: #1E1E1E; /* Fondo igual al de la barra */
+  z-index: 1000; /* Asegúrate de que tenga un valor suficientemente alto */
 }
 
 ion-menu-header {

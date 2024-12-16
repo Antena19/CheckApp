@@ -1,30 +1,87 @@
-/**** CSS PARA MODAL DE REGISTRO DE ASISTENCIA ****/
+ion-content {
+  --background: #272E30;
+  padding-bottom: 100px;
+  overflow-y: auto;
+}
 
-ion-header, ion-toolbar {
+ion-header, ion-footer {
+  ion-toolbar {
     --background: #1E1E1E;
     --color: white;
-  
-    ion-title {
-      text-align: center;
-      font-size: 1.2em;
-      color: white;
-      font-weight: bold;
-    }
-  
-    ion-buttons {
-      ion-button {
-        ion-icon {
-          color: white; /* Asegurarse de que la 'X' para cerrar el modal sea de color blanco */
-        }
-      }
-    }
   }
-  
+}
+
+/* Header */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrar contenido horizontalmente */
+}
+
+.header-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: normal;
+  color: white;
+}
+
+.white-icon {
+  color: white;
+}
+
+/* Menú Desplegable */
+ion-menu {
+  --background: #1E1E1E; /* Fondo igual al de la barra */
+  z-index: 1000; /* Asegúrate de que tenga un valor suficientemente alto */
+}
+
+ion-menu-header {
+  --background: #1E1E1E;
+  color: white; /* Cambia el texto del encabezado a blanco */
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+ion-list {
+  background-color: #1E1E1E; /* Fondo igual al de la barra */
+  color: white;
+}
+
+ion-item {
+  --background: none;
+  color: white;
+}
+
+ion-item:hover {
+  background-color: #42316c;
+}
+
+/* Iconos del Menú */
+ion-item ion-icon {
+  font-size: 1.5rem; /* Ajusta el tamaño del icono */
+  margin-right: 8px; /* Espaciado entre el icono y el texto */
+}
+
+/* Botón de menú hamburguesa */
+.white-menu-button {
+  color: white; /* Asegura que el icono del menú sea blanco */
+}
+
+
+/* Encabezado del menú */
+ion-title {
+  color: white; /* Encabezado del menú en blanco */
+  text-align: center;
+}
+
   ion-content {
-    --background: #272E30;
-    color: white;
-    padding: 16px;
-  
+
     h2 {
       font-size: 1.5em;
       color: white;
@@ -64,6 +121,7 @@ ion-header, ion-toolbar {
   
       ion-icon {
         margin-right: 8px;
+        color: white;
       }
     }
   

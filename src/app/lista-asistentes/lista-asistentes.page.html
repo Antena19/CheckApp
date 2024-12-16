@@ -32,11 +32,6 @@
 
 <ion-header>
   <ion-toolbar color="custom-dark">
-    <ion-buttons slot="start">
-      <ion-button (click)="volver()">
-        <ion-icon name="arrow-back" slot="icon-only" class="white-icon"></ion-icon>
-      </ion-button>
-    </ion-buttons>
     <ion-title>
       <div class="header-content">
         <ion-img src="assets/img/logo-check-app.png" class="header-logo"></ion-img>
@@ -74,10 +69,10 @@
 
         <!-- Botones de acciones pequeños y alineados horizontalmente -->
         <div class="small-buttons-container">
-          <ion-button size="small" color="warning" (click)="editarAsistente(i)" class="tiny-action-button">
+          <ion-button size="small" (click)="editarAsistente(i)" class="boton-editar">
             Editar
           </ion-button>
-          <ion-button size="small" color="danger" (click)="eliminarAsistente(i)" class="tiny-action-button">
+          <ion-button size="small" (click)="eliminarAsistente(i)" class="boton-eliminar">
             Eliminar
           </ion-button>
         </div>
@@ -86,8 +81,8 @@
   </div>
 
   <!-- Botones para agregar y generar informes -->
-  <ion-button expand="block" color="primary" (click)="agregarAsistente()" class="agregar-asistente-btn">AGREGAR ASISTENTE MANUALMENTE</ion-button>
-  <ion-button expand="block" color="tertiary" (click)="generarInformes()" class="generar-informes-btn">IR GENERAR INFORMES</ion-button>
+  <ion-button expand="block"  (click)="agregarAsistente()" class="agregar-asistente-btn">AGREGAR ASISTENTE MANUALMENTE</ion-button>
+  <ion-button expand="block"  (click)="generarInformes()" class="generar-informes-btn">IR GENERAR INFORMES</ion-button>
 </ion-content>
 
 

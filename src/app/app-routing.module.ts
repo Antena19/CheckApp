@@ -66,7 +66,13 @@ const routes: Routes = [
   {
     path: 'lista-asistentes',
     loadChildren: () => import('./lista-asistentes/lista-asistentes.module').then(m => m.ListaAsistentesPageModule)
+  },
+  {
+    path: 'perfil-usuario',
+    loadChildren: () => import('./perfil-usuario/perfil-usuario.module').then(m => m.PerfilUsuarioModule),
+    canActivate: [AuthGuard] // Solo usuarios logueados
   }
+ 
 ];
 
 @NgModule({

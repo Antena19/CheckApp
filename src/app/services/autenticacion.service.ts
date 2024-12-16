@@ -2,11 +2,23 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { DatosEjemploService } from './datos-ejemplo.service';
 
+export interface UserData {
+  username: string;
+  nombreApellido: string;
+  rut: string;
+  telefono: string;
+  email: string;
+  fotoPerfil: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AutenticacionService {
   private usuarioLogueado: boolean = false;
+
+  // DATOS DEL USUARIO EN SESIÓN ACTUAL
+  private usuarioActual: any = null;
 
   constructor(private storage: Storage, private datosEjemploService: DatosEjemploService) {
     this.init();
@@ -82,4 +94,30 @@ export class AutenticacionService {
       return null;
     }
   }
+
+// ACTUALIZAR LOS DATOS DEL USUARIO ACTUAL
+async actualizarPerfil(datosActualizados: Partial<UserData>) {
+  const usuarioActual = await this.obtenerUsuarioActual();
+  if (!usuarioActual) {
+    throw new Error('No se encontró un usuario logueado.');
+  }
+
+  // Prevenir cambios de username, rut y password
+  if (datosActualizados.username || datosActualizados.rut || ('password' in datosActualizados)) {
+    throw new Error('No se permite cambiar el nombre de usuario, RUT o contraseña.');
+  }
+
+  // Actualizar datos y guardarlos en el storage
+  const usuarioActualizado = { ...usuarioActual, ...datosActualizados };
+  await this.storage.set('usuarioActual', usuarioActualizado);
+
+  // Actualizar en la lista general de usuarios
+  const usuarios = (await this.storage.get('users')) || [];
+  const index = usuarios.findIndex((u: any) => u.rut === usuarioActual.rut);
+  if (index !== -1) {
+    usuarios[index] = usuarioActualizado;
+    await this.storage.set('users', usuarios);
+  }
+}
+  
 }

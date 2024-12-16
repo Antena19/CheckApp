@@ -6,6 +6,7 @@ import { NotificacionService } from '../services/notificacion.service';
 import { NavController, ModalController } from '@ionic/angular'; // Importamos ModalController
 import { RegistroAsistenciaModalComponent } from '../registro-asistencia-modal/registro-asistencia-modal.component'; // Importa el componente del modal de registro de asistencia
 import { Subscription } from 'rxjs';
+import { MenuController } from '@ionic/angular'; // Importamos MenuController para manejar el menú lateral
 
 declare var google: any;
 
@@ -33,7 +34,8 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
     private eventoService: EventoService, // SERVICE DE EVENTOS
     private notificacionService: NotificacionService,
     private navCtrl: NavController,
-    private modalController: ModalController // CONTROLADOR DEL MODAL
+    private modalController: ModalController, // CONTROLADOR DEL MODAL
+    private menu: MenuController // Inyectamos el controlador de menú
   ) {}
 
   // MÉTODO QUE SE EJECUTA AL INICIAR EL COMPONENTE
@@ -188,17 +190,6 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
     this.numeroParticipantes = 0;
   }
 
-  // CERRAR SESIÓN Y REDIRIGIR AL LOGIN
-  logout() {
-    this.authService.cerrarSesion();
-    this.router.navigate(['/login']);
-  }
-
-  // VOLVER A LA PÁGINA ANTERIOR
-  volver() {
-    this.navCtrl.back(); // REGRESA A LA PÁGINA ANTERIOR
-  }
-
   // NAVEGAR AL REGISTRO DE ASISTENCIA DE UN EVENTO
   navegarRegistrarAsistencia(eventId: string) {
     this.router.navigate(['/lista-asistentes'], { queryParams: { id: eventId } });
@@ -229,4 +220,48 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
       this.eventosSubscription.unsubscribe();
     }
   }
+
+  //METODOS MENÚ
+   // Método para abrir el menú lateral
+   openMenu() {
+    this.menu.enable(true, 'main-menu'); // Habilitamos el menú con el ID 'main-menu'
+    this.menu.open('main-menu'); // Abrimos el menú
+  }
+
+  // Método para cerrar el menú lateral
+  closeMenu() {
+    this.menu.close('main-menu'); // Cierra el menú con el ID 'main-menu'
+  }
+
+    // Método para cerrar sesión
+    async logout() {
+      console.log('Cerrando sesión...');
+      await this.authService.cerrarSesion(); // Llamamos al método de cerrar sesión del servicio
+      this.router.navigate(['/login']); // Redirigimos a la página de login
+      console.log('Sesión cerrada. Redirigido al login.');
+    }
+  
+
+    // Método para navegar a Gestión de Eventos
+    navigateToGestionDeEventos() {
+      console.log('Navegando a Gestión de Eventos...');
+      this.router.navigate(['/gestion-de-eventos']);
+    }
+  
+    // Método para navegar al inicio
+    navigateToHome() {
+      console.log('Navegando al Home...');
+      this.router.navigate(['/home']);
+    }
+  
+    // Método para navegar a la página de informes
+    navigateToInformes() {
+      console.log('Navegando a la página de informes...');
+      this.router.navigate(['/informes']);
+    }
+  
+    // Método para navegar al perfil de usuario
+      navigateToMiPerfil() {
+        this.router.navigate(['/perfil-usuario']);
+      }
 }
