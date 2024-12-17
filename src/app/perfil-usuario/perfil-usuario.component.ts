@@ -164,7 +164,7 @@ export class PerfilUsuarioComponent implements OnInit {
     // Método para navegar a la página de informes
     navigateToInformes() {
       console.log('Navegando a la página de informes...');
-      this.router.navigate(['/informes']);
+      this.router.navigate(['/reportes']);
     }
   
     // Método para navegar al perfil de usuario

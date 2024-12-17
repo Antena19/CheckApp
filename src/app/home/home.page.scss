@@ -30,10 +30,6 @@ ion-header, ion-footer {
   color: white;
 }
 
-.white-icon {
-  color: white;
-}
-
 /* Bienvenida */
 .main-title {
   color: white;
@@ -103,6 +99,21 @@ ion-icon {
 }
 
 /* Menú Desplegable */
+
+/* Ajustar tamaño del botón del menú */
+ion-button {
+  --padding-start: 0;
+  --padding-end: 0;
+  --min-width: 40px; /* Ancho mínimo */
+  --min-height: 40px; /* Altura mínima */
+  margin-right: 10px; /* Margen hacia la izquierda */
+
+}
+
+ion-button ion-icon {
+  font-size: 24px; /* Tamaño del icono */
+}
+
 ion-menu {
   --background: #1E1E1E; /* Fondo igual al de la barra */
 }
@@ -134,12 +145,6 @@ ion-item ion-icon {
   font-size: 1.5rem; /* Ajusta el tamaño del icono */
   margin-right: 8px; /* Espaciado entre el icono y el texto */
 }
-
-/* Botón de menú hamburguesa */
-.white-menu-button {
-  --color: white; /* Asegura que el icono del menú sea blanco */
-}
-
 
 /* Encabezado del menú */
 ion-title {

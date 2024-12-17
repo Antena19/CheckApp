@@ -7,11 +7,12 @@
         <span class="header-title">CheckApp</span>
       </div>
     </ion-title>
+        <!-- BOTON MENÚ -->
     <ion-buttons slot="end">
-      <ion-menu-button autoHide="false" style="--color: white;">
-        <ion-icon name="menu-outline" slot="icon-only" class="white-icon"></ion-icon>
-      </ion-menu-button>
-    </ion-buttons>
+      <ion-button (click)="openMenu()" style="--color: white;">
+        <ion-icon name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>    
   </ion-toolbar>
 </ion-header>
 

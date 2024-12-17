@@ -39,15 +39,30 @@ export class EditarEventoPage implements AfterViewInit, OnDestroy {
   ) {}
 
   async ngAfterViewInit() {
-    await this.platform.ready();
-    await this.loadMap();
-    await this.cargarEvento();
+    await this.platform.ready();   // Espera que la plataforma esté lista
+    await this.verifyMapElement(); // Verifica la disponibilidad del mapa
+    await this.loadMap();          // Inicializa el mapa
+    await this.cargarEvento();     // Carga la información del evento
   }
+
+  private async verifyMapElement() {
+    // Verifica que el contenedor del mapa esté disponible
+    let retries = 0;
+    while (!this.mapElement || !this.mapElement.nativeElement) {
+      await new Promise(resolve => setTimeout(resolve, 100)); // Espera brevemente
+      retries++;
+      if (retries > 50) { // Intenta 50 veces antes de rendirse
+        console.error('Error: El contenedor del mapa no está disponible.');
+        return;
+      }
+    }
+  }
+  
 
   private async loadMap() {
     await new Promise(resolve => setTimeout(resolve, 100));
-
-    const latLng = { lat: -33.447487, lng: -70.673676 };
+  
+    const latLng = { lat: -33.447487, lng: -70.673676 }; // Ubicación inicial por defecto
     if (this.mapElement && this.mapElement.nativeElement) {
       this.map = new google.maps.Map(this.mapElement.nativeElement, {
         center: latLng,
@@ -56,22 +71,24 @@ export class EditarEventoPage implements AfterViewInit, OnDestroy {
         streetViewControl: false,
         fullscreenControl: false
       });
-
+  
       this.marker = new google.maps.Marker({
         position: latLng,
         map: this.map,
         draggable: true,
       });
-
+  
+      // Evento de arrastre para obtener nueva ubicación
       google.maps.event.addListener(this.marker, 'dragend', (event: any) => {
         const latLng = this.marker.getPosition();
         this.geocodeLatLng(latLng);
       });
-
+  
       google.maps.event.trigger(this.map, 'resize');
+    } else {
+      console.error('Error: El contenedor del mapa no se encontró.');
     }
   }
-
   async cargarEvento() {
     try {
       // Obtén el ID del evento desde la URL

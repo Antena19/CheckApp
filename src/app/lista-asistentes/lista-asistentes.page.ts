@@ -194,7 +194,7 @@ export class ListaAsistentesPage implements OnInit {
 
   // MÉTODO PARA GENERAR INFORMES
   generarInformes() {
-    this.router.navigate(['/generar-informes', { id: this.id }]);
+    this.router.navigate(['/reportes', { id: this.id }]);
   }
 
   // MÉTODO PARA CERRAR SESIÓN

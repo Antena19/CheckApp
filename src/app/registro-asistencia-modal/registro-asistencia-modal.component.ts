@@ -95,4 +95,5 @@ verListaAsistentes() {
 closeModal() {
   this.modalController.dismiss();
 }
+
 }

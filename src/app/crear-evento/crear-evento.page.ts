@@ -42,14 +42,28 @@ export class CrearEventoPage implements AfterViewInit {
 
   async ngAfterViewInit() {
     await this.platform.ready();
+    await this.verifyMapElement();
     await this.loadMap();
   }
 
-  private async loadMap() {
-    await new Promise(resolve => setTimeout(resolve, 100));
+  private async verifyMapElement() {
+    // Espera y verifica si el mapa se carga
+    let retries = 0;
+    while (!this.mapElement || !this.mapElement.nativeElement) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      retries++;
+      if (retries > 50) {
+        console.error('Error: El contenedor del mapa no está disponible.');
+        return;
+      }
+    }
+  }
+  
 
+  private async loadMap() {
     try {
       const latLng = { lat: -33.447487, lng: -70.673676 };
+  
       if (this.mapElement && this.mapElement.nativeElement) {
         this.map = new google.maps.Map(this.mapElement.nativeElement, {
           center: latLng,
@@ -58,19 +72,22 @@ export class CrearEventoPage implements AfterViewInit {
           streetViewControl: false,
           fullscreenControl: false
         });
-
+  
         this.marker = new google.maps.Marker({
           position: latLng,
           map: this.map,
           draggable: true,
         });
-
+  
         google.maps.event.addListener(this.marker, 'dragend', (event: any) => {
           const latLng = this.marker.getPosition();
           this.geocodeLatLng(latLng);
         });
-
+  
+        // Disparar el evento resize por si hay cambios en el DOM
         google.maps.event.trigger(this.map, 'resize');
+      } else {
+        console.error('Error: El contenedor del mapa no se encontró.');
       }
     } catch (error) {
       console.error('Error al cargar el mapa:', error);

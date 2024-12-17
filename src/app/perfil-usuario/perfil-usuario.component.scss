@@ -51,6 +51,7 @@ ion-avatar:hover {
 /* Menú Desplegable */
 ion-menu {
   --background: #1E1E1E; /* Fondo igual al de la barra */
+  z-index: 1000; /* Asegúrate de que tenga un valor suficientemente alto */
 }
 
 ion-menu-header {

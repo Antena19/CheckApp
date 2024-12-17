@@ -4,7 +4,7 @@ ion-content {
   overflow-y: auto;
 }
 
-ion-header, ion-footer {
+ion-header {
   ion-toolbar {
     --background: #1E1E1E;
     --color: white;
@@ -30,15 +30,34 @@ ion-header, ion-footer {
   color: white;
 }
 
-.white-icon {
-  color: white;
+/* Menú Desplegable */
+/* Forzar color blanco del botón del menú */
+ion-header ion-buttons ion-button {
+  --color: white !important;
 }
 
-/* Menú Desplegable */
+ion-header ion-buttons ion-icon {
+  color: white !important;
+}
+
+
+/* Ajustar tamaño del botón del menú */
+ion-button {
+  --padding-start: 0;
+  --padding-end: 0;
+  --min-width: 40px; /* Ancho mínimo */
+  --min-height: 40px; /* Altura mínima */
+  margin-right: 10px; /* Margen hacia la izquierda */
+
+}
+
+ion-button ion-icon {
+  font-size: 24px; /* Tamaño del icono */
+}
 ion-menu {
   --background: #1E1E1E; /* Fondo igual al de la barra */
-  z-index: 1000; /* Asegúrate de que tenga un valor suficientemente alto */
-}
+  //z-index: 9999 !important;  /* Asegura que esté por encima de otros elementos */
+  }  
 
 ion-menu-header {
   --background: #1E1E1E;
@@ -70,13 +89,19 @@ ion-item:hover {
 ion-item ion-icon {
   font-size: 1.5rem; /* Ajusta el tamaño del icono */
   margin-right: 8px; /* Espaciado entre el icono y el texto */
+  color: white !important;
 }
 
 /* Botón de menú hamburguesa */
-.white-menu-button {
-  color: white; /* Asegura que el icono del menú sea blanco */
+/* Forzar color blanco en el botón del menú */
+ion-menu-button {
+  --color: white !important; /* Aplica color blanco al icono */
+  
 }
 
+ion-menu-button ion-icon {
+  color: white !important; /* Asegura que el icono dentro del botón también sea blanco */
+}
 
 /* Encabezado del menú */
 ion-title {

@@ -15,7 +15,7 @@ declare var google: any;
   templateUrl: './gestion-de-eventos.component.html',
   styleUrls: ['./gestion-de-eventos.component.scss']
 })
-export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestroy {
+export class GestionDeEventosComponent implements OnInit, OnDestroy {
   nombreEvento: string = '';
   nombreOrganizador: string = '';
   horaEvento: string = '';
@@ -36,7 +36,7 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
     private navCtrl: NavController,
     private modalController: ModalController, // CONTROLADOR DEL MODAL
     private menu: MenuController // Inyectamos el controlador de menú
-  ) {}
+  ) {  }
 
   // MÉTODO QUE SE EJECUTA AL INICIAR EL COMPONENTE
   async ngOnInit() {
@@ -49,25 +49,35 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
     }
   }
 
-  // MÉTODO PARA INICIALIZAR EL MAPA DESPUÉS DE QUE EL COMPONENTE HAYA CARGADO LA VISTA
-  ngAfterViewInit() {
-    const latLng = { lat: -33.447487, lng: -70.673676 };
-    this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
-      center: latLng,
-      zoom: 10,
-    });
-    this.marker = new google.maps.Marker({
-      position: latLng,
-      map: this.map,
-      draggable: true,
-    });
+  ionViewDidEnter() {
+    console.log('Vista completamente cargada en Gestión de Eventos...');
+  
+    // Asegurarse de que el menú está habilitado solo después de que la vista se haya cargado
+    this.menu.enable(true, 'main-menu');
+    this.menu.open('main-menu'); // Abre el menú si es necesario
+  
+    // Verifica que el contenido y los eventos hayan sido cargados
+    console.log('Eventos:', this.eventos);
+  
+    // Asociamos el contentId solo una vez, para evitar problemas de recarga
+    const menu = document.querySelector('ion-menu');
+    if (menu) {
+      menu.setAttribute('contentId', 'main-content');
+      console.log('ContentId del menú re-asociado correctamente.');
+    }
+  }
+  
 
-    google.maps.event.addListener(this.marker, 'dragend', (event: any) => {
-      const latLng = this.marker.getPosition();
-      this.geocodeLatLng(latLng);
-    });
+  ionViewWillEnter() {
+    console.log('Entrando en Gestión de Eventos...');
+    // Deshabilitamos el menú para evitar problemas de acceso
+    this.menu.enable(false, 'main-menu');
   }
 
+  ionViewWillLeave() {
+    console.log('Saliendo de Gestión de Eventos...');
+    this.menu.close('main-menu');
+  }
   // CARGAR TODOS LOS EVENTOS EXISTENTES DESDE EL SERVICIO
   async cargarEventos() {
     const usuarioActual = await this.authService.obtenerUsuarioActual();
@@ -104,38 +114,6 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
     };
     this.eventoService.agregarEvento(evento, usuarioActual.rut);
     this.limpiarFormulario();
-  }
-
-  // ACTUALIZAR EL MAPA SEGÚN LA DIRECCIÓN INGRESADA
-  actualizarMapa() {
-    if (!this.lugarEvento.trim()) {
-      this.mostrarError("Por favor ingresa un lugar.");
-      return;
-    }
-
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: this.lugarEvento }, (results: any[], status: any) => {
-      if (status === google.maps.GeocoderStatus.OK && results[0]) {
-        const location = results[0].geometry.location;
-        this.map.setCenter(location);
-        this.marker.setPosition(location);
-        this.lugarEvento = results[0].formatted_address;
-      } else {
-        this.mostrarError("No se pudo encontrar la dirección.");
-      }
-    });
-  }
-
-  // CONVERTIR COORDENADAS LATITUDE/LONGITUDE A DIRECCIÓN
-  geocodeLatLng(latLng: any) {
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ location: latLng }, (results: any[], status: any) => {
-      if (status === google.maps.GeocoderStatus.OK && results[0]) {
-        this.lugarEvento = results[0].formatted_address;
-      } else {
-        this.mostrarError("No se pudo encontrar la dirección.");
-      }
-    });
   }
 
   // MOSTRAR MENSAJE DE ERROR EN LA INTERFAZ
@@ -222,46 +200,66 @@ export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestr
   }
 
   //METODOS MENÚ
-   // Método para abrir el menú lateral
-   openMenu() {
-    this.menu.enable(true, 'main-menu'); // Habilitamos el menú con el ID 'main-menu'
-    this.menu.open('main-menu'); // Abrimos el menú
-  }
+// Método para abrir el menú lateral
+async openMenu() {
+  console.log('Intentando abrir el menú...');
+
+  // Habilitar explícitamente el menú al intentar abrirlo
+  await this.menu.enable(true, 'main-menu').then(() => {
+    console.log('Menú habilitado manualmente antes de abrir.');
+  });
+
+  // Verificar si el menú está habilitado y forzar su apertura
+  this.menu.isEnabled('main-menu').then(async (isEnabled) => {
+    console.log(`¿El menú está habilitado?: ${isEnabled}`);
+    if (isEnabled) {
+      await this.menu.open('main-menu').then(() => {
+        console.log('El menú se abrió correctamente.');
+      }).catch(err => {
+        console.error('Error al abrir el menú:', err);
+      });
+    } else {
+      console.error('El menú no está habilitado y no pudo abrirse.');
+    }
+  });
+}
 
   // Método para cerrar el menú lateral
   closeMenu() {
     this.menu.close('main-menu'); // Cierra el menú con el ID 'main-menu'
   }
 
-    // Método para cerrar sesión
-    async logout() {
-      console.log('Cerrando sesión...');
-      await this.authService.cerrarSesion(); // Llamamos al método de cerrar sesión del servicio
-      this.router.navigate(['/login']); // Redirigimos a la página de login
-      console.log('Sesión cerrada. Redirigido al login.');
-    }
+  // Método para cerrar sesión
+  async logout() {
+    console.log('Cerrando sesión...');
+    await this.authService.cerrarSesion(); // Llamamos al método de cerrar sesión del servicio
+    this.router.navigate(['/login']); // Redirigimos a la página de login
+    console.log('Sesión cerrada. Redirigido al login.');
+  }
+
+  // Método para navegar a Gestión de Eventos
+  async navigateToGestionDeEventos() {
+    await this.menu.close('main-menu');
+    this.router.navigate(['/gestion-de-eventos']);
+  }
+
+  // Método para navegar al inicio
+  async navigateToHome() {
+    await this.menu.close('main-menu'); // Cierra el menú antes de navegar
+    this.router.navigate(['/home']);
+  }
   
 
-    // Método para navegar a Gestión de Eventos
-    navigateToGestionDeEventos() {
-      console.log('Navegando a Gestión de Eventos...');
-      this.router.navigate(['/gestion-de-eventos']);
-    }
-  
-    // Método para navegar al inicio
-    navigateToHome() {
-      console.log('Navegando al Home...');
-      this.router.navigate(['/home']);
-    }
-  
-    // Método para navegar a la página de informes
-    navigateToInformes() {
-      console.log('Navegando a la página de informes...');
-      this.router.navigate(['/informes']);
-    }
-  
-    // Método para navegar al perfil de usuario
-      navigateToMiPerfil() {
-        this.router.navigate(['/perfil-usuario']);
-      }
+  // Método para navegar a la página de informes
+  async navigateToInformes() {
+    await this.menu.close('main-menu');
+    this.router.navigate(['/reportes']);
+  }
+
+  // Método para navegar al perfil de usuario
+  async navigateToMiPerfil() {
+    await this.menu.close('main-menu');
+    this.router.navigate(['/perfil-usuario']);
+  }
+
 }

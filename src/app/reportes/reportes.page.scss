@@ -1,0 +1,232 @@
+ion-content {
+  --background: #272E30;
+  padding-bottom: 100px;
+  overflow-y: auto;
+}
+
+ion-header, ion-footer {
+  ion-toolbar {
+    --background: #1E1E1E;
+    --color: white;
+  }
+}
+
+/* Header */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrar contenido horizontalmente */
+}
+
+.header-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: normal;
+  color: white;
+}
+
+.white-icon {
+  color: white;
+}
+
+/* Menú Desplegable */
+ion-menu {
+  --background: #1E1E1E; /* Fondo igual al de la barra */
+  z-index: 1000; /* Asegúrate de que tenga un valor suficientemente alto */
+}
+
+ion-menu-header {
+  --background: #1E1E1E;
+  color: white; /* Cambia el texto del encabezado a blanco */
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+ion-list {
+  background-color: #1E1E1E; /* Fondo igual al de la barra */
+  color: white;
+}
+
+ion-item {
+  --background: none;
+  color: white;
+}
+
+ion-item:hover {
+  background-color: #42316c;
+}
+
+/* Iconos del Menú */
+ion-item ion-icon {
+  font-size: 1.5rem; /* Ajusta el tamaño del icono */
+  margin-right: 8px; /* Espaciado entre el icono y el texto */
+}
+
+/* Botón de menú hamburguesa */
+.white-menu-button {
+  --color: white; /* Asegura que el icono del menú sea blanco */
+}
+
+
+/* Encabezado del menú */
+ion-title {
+  color: white; /* Encabezado del menú en blanco */
+  text-align: center;
+}
+
+
+
+
+
+
+/* Contenedor general */
+.container {
+    padding: 16px; /* Espacio general alrededor de todo el contenido */
+  }
+  
+
+/* Título Principal */
+.main-title {
+  color: white;
+  text-align: center;
+  font-size: 26px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Tarjetas Generales */
+ion-card {
+  --background: #ffffff;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+
+  ion-card-header {
+    ion-card-title {
+      color: #42316c;
+      font-size: 18px;
+      font-weight: bold;
+      padding-bottom: 5px;
+    }
+  }
+
+  ion-card-content {
+    color: #333333;
+    font-size: 16px;
+    padding: auto;
+  }
+}
+
+/* Información General */
+.info-box p {
+  margin: 8px 0;
+  font-size: 16px;
+  font-weight: normal;
+
+  strong {
+    color: #42316c;
+  }
+}
+
+/* Estadísticas */
+.stat-box {
+  background: #f2f2f2;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  color: #333333;
+  transition: transform 0.2s;
+
+  ion-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #42316c;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 14px;
+    color: #666666;
+  }
+
+  p {
+    margin-top: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333333;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  /* Colores personalizados para estadísticas */
+  &.primary { background: #e0d7f5; }
+  &.success { background: #d9f5e0; }
+  &.danger { background: #f5d9d9; }
+  &.warning { background: #f5e6d9; }
+}
+
+/* Tendencias */
+.trend-box {
+  background: #f2f2f2;
+  padding: 15px;
+  border-radius: 10px;
+
+  h4 {
+    font-size: 14px;
+    color: #42316c;
+  }
+
+  p {
+    font-size: 16px;
+    color: #333333;
+    margin-top: 5px;
+  }
+}
+
+/* Botones de Exportación */
+.export-buttons ion-button {
+    --color: #ffffff !important; /* Texto blanco */
+    --background: #666;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+  }
+  
+  .export-buttons ion-button ion-icon {
+    color: #ffffff !important; /* Ícono blanco */
+    font-size: 20px;
+    margin-right: 5px;
+  }
+
+
+
+/* Ajuste del Icono en la Barra de Navegación */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo {
+  width: 25px;
+  height: 25px;
+  margin-right: 8px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
