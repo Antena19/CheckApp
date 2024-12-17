@@ -67,12 +67,31 @@ export class RegistroAsistenciaModalComponent {
       });
     }
   }
+// MÉTODO PARA COMPARTIR EL CÓDIGO QR
+async compartirQR() {
+  const canvas = this.qrCanvas.nativeElement as HTMLCanvasElement;
 
-  // MÉTODO PARA COMPARTIR EL CÓDIGO QR
-  async compartirQR() {
-    const canvas = this.qrCanvas.nativeElement as HTMLCanvasElement;
-    const imageData = canvas.toDataURL('image/png');
+  // Convertir el canvas a imagen base64
+  const imageData = canvas.toDataURL('image/png'); 
 
+  if (this.isRunningInBrowser()) {
+    // Verificar si la imagen se generó correctamente
+    if (!imageData || !imageData.startsWith('data:image/png;base64,')) {
+      console.error('Error: No se pudo generar la imagen del código QR.');
+      return;
+    }
+
+    // Si estamos en el navegador, creamos un enlace de descarga
+    const link = document.createElement('a');
+    link.href = imageData;
+    link.download = 'codigo-qr.png'; // Nombre del archivo a descargar
+
+    // Añadimos el enlace al DOM, disparamos el clic y luego lo eliminamos
+    document.body.appendChild(link); 
+    link.click(); 
+    document.body.removeChild(link);
+  } else {
+    // Si estamos en un dispositivo, usamos Capacitor Share
     try {
       await Share.share({
         title: 'Asistencia al Evento',
@@ -84,6 +103,14 @@ export class RegistroAsistenciaModalComponent {
       console.error('Error al compartir el código QR:', error);
     }
   }
+}
+
+// MÉTODO PARA DETECTAR SI ESTAMOS EN EL NAVEGADOR O EN UN DISPOSITIVO
+isRunningInBrowser() {
+  return window && window.document && window.document.createElement;
+}
+
+
 
 // Método para ver la lista de asistentes
 verListaAsistentes() {
