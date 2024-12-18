@@ -6,7 +6,6 @@ import { NotificacionService } from '../services/notificacion.service';
 import { NavController, ModalController } from '@ionic/angular'; // Importamos ModalController
 import { RegistroAsistenciaModalComponent } from '../registro-asistencia-modal/registro-asistencia-modal.component'; // Importa el componente del modal de registro de asistencia
 import { Subscription } from 'rxjs';
-import { MenuController } from '@ionic/angular'; // Importamos MenuController para manejar el menú lateral
 
 declare var google: any;
 
@@ -15,7 +14,7 @@ declare var google: any;
   templateUrl: './gestion-de-eventos.component.html',
   styleUrls: ['./gestion-de-eventos.component.scss']
 })
-export class GestionDeEventosComponent implements OnInit, OnDestroy {
+export class GestionDeEventosComponent implements AfterViewInit, OnInit, OnDestroy {
   nombreEvento: string = '';
   nombreOrganizador: string = '';
   horaEvento: string = '';
@@ -34,9 +33,8 @@ export class GestionDeEventosComponent implements OnInit, OnDestroy {
     private eventoService: EventoService, // SERVICE DE EVENTOS
     private notificacionService: NotificacionService,
     private navCtrl: NavController,
-    private modalController: ModalController, // CONTROLADOR DEL MODAL
-    private menu: MenuController // Inyectamos el controlador de menú
-  ) {  }
+    private modalController: ModalController // CONTROLADOR DEL MODAL
+  ) {}
 
   // MÉTODO QUE SE EJECUTA AL INICIAR EL COMPONENTE
   async ngOnInit() {
@@ -49,35 +47,11 @@ export class GestionDeEventosComponent implements OnInit, OnDestroy {
     }
   }
 
-  ionViewDidEnter() {
-    console.log('Vista completamente cargada en Gestión de Eventos...');
-  
-    // Asegurarse de que el menú está habilitado solo después de que la vista se haya cargado
-    this.menu.enable(true, 'main-menu');
-    this.menu.open('main-menu'); // Abre el menú si es necesario
-  
-    // Verifica que el contenido y los eventos hayan sido cargados
-    console.log('Eventos:', this.eventos);
-  
-    // Asociamos el contentId solo una vez, para evitar problemas de recarga
-    const menu = document.querySelector('ion-menu');
-    if (menu) {
-      menu.setAttribute('contentId', 'main-content');
-      console.log('ContentId del menú re-asociado correctamente.');
-    }
-  }
-  
 
-  ionViewWillEnter() {
-    console.log('Entrando en Gestión de Eventos...');
-    // Deshabilitamos el menú para evitar problemas de acceso
-    this.menu.enable(false, 'main-menu');
+  ngAfterViewInit() {
+    // MÉTODO PARA INICIALIZAR EL MAPA DESPUÉS DE QUE EL COMPONENTE HAYA CARGADO LA VISTA
   }
 
-  ionViewWillLeave() {
-    console.log('Saliendo de Gestión de Eventos...');
-    this.menu.close('main-menu');
-  }
   // CARGAR TODOS LOS EVENTOS EXISTENTES DESDE EL SERVICIO
   async cargarEventos() {
     const usuarioActual = await this.authService.obtenerUsuarioActual();
@@ -168,6 +142,12 @@ export class GestionDeEventosComponent implements OnInit, OnDestroy {
     this.numeroParticipantes = 0;
   }
 
+  // CERRAR SESIÓN Y REDIRIGIR AL LOGIN
+  logout() {
+    this.authService.cerrarSesion();
+    this.router.navigate(['/login']);
+  }
+
   // NAVEGAR AL REGISTRO DE ASISTENCIA DE UN EVENTO
   navegarRegistrarAsistencia(eventId: string) {
     this.router.navigate(['/lista-asistentes'], { queryParams: { id: eventId } });
@@ -199,71 +179,7 @@ export class GestionDeEventosComponent implements OnInit, OnDestroy {
     }
   }
 
-  //METODOS MENÚ
-// Método para abrir el menú lateral
-async openMenu() {
-  console.log('Intentando abrir el menú...');
-
-  // Habilitar explícitamente el menú al intentar abrirlo
-  await this.menu.enable(true, 'main-menu').then(() => {
-    console.log('Menú habilitado manualmente antes de abrir.');
-  });
-
-  // Verificar si el menú está habilitado y forzar su apertura
-  this.menu.isEnabled('main-menu').then(async (isEnabled) => {
-    console.log(`¿El menú está habilitado?: ${isEnabled}`);
-    if (isEnabled) {
-      await this.menu.open('main-menu').then(() => {
-        console.log('El menú se abrió correctamente.');
-      }).catch(err => {
-        console.error('Error al abrir el menú:', err);
-      });
-    } else {
-      console.error('El menú no está habilitado y no pudo abrirse.');
-    }
-  });
-}
-
-  // Método para cerrar el menú lateral
-  closeMenu() {
-    this.menu.close('main-menu'); // Cierra el menú con el ID 'main-menu'
-  }
-
-  // Método para cerrar sesión
-  async logout() {
-    console.log('Cerrando sesión...');
-    await this.authService.cerrarSesion(); // Llamamos al método de cerrar sesión del servicio
-    this.router.navigate(['/login']); // Redirigimos a la página de login
-    console.log('Sesión cerrada. Redirigido al login.');
-  }
-
-  // Método para navegar a Gestión de Eventos
-  async navigateToGestionDeEventos() {
-    await this.menu.close('main-menu');
-    this.router.navigate(['/gestion-de-eventos']);
-  }
-
-  // Método para navegar al inicio
-  async navigateToHome() {
-    await this.menu.close('main-menu'); // Cierra el menú antes de navegar
-    this.router.navigate(['/home']);
-  }
-  
-
-  // Método para navegar a la página de informes
-  async navigateToInformes() {
-    await this.menu.close('main-menu');
-    this.router.navigate(['/reportes']);
-  }
-
-  // Método para navegar al perfil de usuario
-  async navigateToMiPerfil() {
-    await this.menu.close('main-menu');
-    this.router.navigate(['/perfil-usuario']);
-  }
-
   volver() {
     this.navCtrl.back();
   }
-
 }

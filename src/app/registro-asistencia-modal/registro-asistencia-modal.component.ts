@@ -5,6 +5,8 @@ import QRCode from 'qrcode';
 import { Share } from '@capacitor/share';
 import { Router } from '@angular/router';
 import { AutenticacionService } from '../services/autenticacion.service'; // Servicio de autenticación
+import { Filesystem, Directory } from '@capacitor/filesystem';
+
 
 @Component({
   selector: 'app-registro-asistencia-modal',
@@ -22,7 +24,9 @@ export class RegistroAsistenciaModalComponent {
     private modalController: ModalController,
     private eventoService: EventoService,
     private router: Router,
-    private authService: AutenticacionService // Servicio de autenticación
+    private authService: AutenticacionService, 
+    
+
   ) {}
 
   // MÉTODO PARA CARGAR EL EVENTO AL ABRIR EL MODAL
@@ -67,12 +71,13 @@ export class RegistroAsistenciaModalComponent {
       });
     }
   }
+
 // MÉTODO PARA COMPARTIR EL CÓDIGO QR
 async compartirQR() {
   const canvas = this.qrCanvas.nativeElement as HTMLCanvasElement;
 
   // Convertir el canvas a imagen base64
-  const imageData = canvas.toDataURL('image/png'); 
+  const imageData = canvas.toDataURL('image/png');
 
   if (this.isRunningInBrowser()) {
     // Verificar si la imagen se generó correctamente
@@ -87,20 +92,32 @@ async compartirQR() {
     link.download = 'codigo-qr.png'; // Nombre del archivo a descargar
 
     // Añadimos el enlace al DOM, disparamos el clic y luego lo eliminamos
-    document.body.appendChild(link); 
-    link.click(); 
+    document.body.appendChild(link);
+    link.click();
     document.body.removeChild(link);
   } else {
-    // Si estamos en un dispositivo, usamos Capacitor Share
+    // Convertir base64 a Blob para guardar como archivo
+    const response = await fetch(imageData);
+    const blob = await response.blob();
+
+    // Guardar el blob como un archivo en el sistema de archivos del dispositivo
     try {
+      const fileName = 'codigo-qr.png';
+      const fileResult = await Filesystem.writeFile({
+        path: fileName,
+        data: blob,
+        directory: Directory.Cache
+      });
+
+      // Compartir el archivo guardado
       await Share.share({
         title: 'Asistencia al Evento',
         text: 'Escanea este código para registrar tu asistencia al evento.',
-        url: imageData,
+        url: `file://${fileResult.uri}`,
         dialogTitle: 'Compartir Código QR'
       });
     } catch (error) {
-      console.error('Error al compartir el código QR:', error);
+      console.error('Error al guardar o compartir el código QR:', error);
     }
   }
 }
