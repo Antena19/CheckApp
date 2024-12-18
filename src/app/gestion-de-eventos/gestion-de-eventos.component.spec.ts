@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { Storage } from '@ionic/storage-angular';
 
 import { GestionDeEventosComponent } from './gestion-de-eventos.component';
 
@@ -9,8 +11,11 @@ describe('GestionDeEventosComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ GestionDeEventosComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [GestionDeEventosComponent],
+      imports: [IonicModule.forRoot(), IonicStorageModule.forRoot()],
+      providers: [
+        { provide: Storage, useValue: new Storage() },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(GestionDeEventosComponent);

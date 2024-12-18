@@ -1,0 +1,198 @@
+/* Fondo y configuración general del contenido */
+ion-content {
+  --background: #272E30;
+  padding-bottom: 100px;
+  overflow-y: auto;
+}
+
+/* Estilos del header */
+ion-header {
+  ion-toolbar {
+    --background: #1E1E1E;
+    --color: white;
+  }
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.white-icon {
+  color: white;
+}
+
+/* Título principal (Bienvenida) */
+.main-title {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.welcome-message {
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Botón para Escanear QR */
+.scan-qr-button {
+  --background: #6a1b9a; /* Morado oscuro */
+  color: white;
+  font-weight: bold;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.scan-qr-button:hover {
+  transform: scale(1.05);
+}
+
+/* Títulos secundarios */
+.subtitle {
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Contenedor de contenido */
+.content-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Estilo para el contenedor de búsqueda y filtro */
+.search-filter-container {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #272E30; /* Oscuro como el fondo */
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.custom-filter-item {
+  --background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-label {
+  color: white;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+/* Selector de Fecha */
+.custom-date-field {
+  width: auto;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #1E1E1E; /* Fondo oscuro */
+  border-radius: 8px;
+}
+
+.mat-input-element {
+  color: white;
+}
+
+.mat-datepicker-toggle {
+  color: white;
+}
+
+::ng-deep .mat-form-field-label {
+  color: white !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex:hover .mat-form-field-label {
+  color: white !important;
+}
+
+/* Tarjetas de Eventos */
+.event-card {
+  background-color: #ffffff;
+  color: #000000;
+  margin-top: 16px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.event-card ion-card-header {
+  border-bottom: 1px solid #eeeeee;
+  margin-bottom: 8px;
+}
+
+.event-card p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+/* Botón para Confirmar Asistencia en las tarjetas de eventos */
+.event-card ion-button {
+  --background: #6a1b9a !important; /* Morado oscuro */
+  --color: white !important; /* Texto blanco */
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 8px;
+}
+
+.event-card ion-button:disabled {
+  --background: #cccccc !important; /* Gris deshabilitado */
+  --color: #666666 !important; /* Texto gris deshabilitado */
+}
+
+.event-card ion-button::part(native) {
+  background-color: var(--background) !important;
+  color: var(--color) !important;
+}
+
+.event-card ion-button:disabled::part(native) {
+  background-color: #cccccc !important; /* Gris deshabilitado */
+  color: #666666 !important; /* Texto gris deshabilitado */
+}
+
+
+
+
+/* Tarjetas de Eventos en los que el usuario está inscrito */
+.inscrito-card {
+  border: 3px solid red; /* Borde rojo */
+  background-color: #fff8e1;
+}
+
+.inscrito-message {
+  color: #d32f2f;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}

@@ -17,18 +17,15 @@ export class CrearEventoPage implements AfterViewInit {
 
   nombreEvento: string = '';
   nombreOrganizador: string = '';
-  horaEvento: string = '';
+  horaInicio: string = '';
+  horaTermino: string = '';
   lugarEvento: string = '';
-  numeroParticipantes: number = 0;
-  listaAsistentes: any[] = []; // Lista de asistentes
-  map: any;
-  marker: any;
-
   fechaEvento: string = '';
   minDate: string;
   minTime: string;
 
-  private maxAsistentes = 500; // Límite de asistentes
+  map: any;
+  marker: any;
 
   constructor(
     private router: Router,
@@ -45,14 +42,28 @@ export class CrearEventoPage implements AfterViewInit {
 
   async ngAfterViewInit() {
     await this.platform.ready();
+    await this.verifyMapElement();
     await this.loadMap();
   }
 
-  private async loadMap() {
-    await new Promise(resolve => setTimeout(resolve, 100));
+  private async verifyMapElement() {
+    // Espera y verifica si el mapa se carga
+    let retries = 0;
+    while (!this.mapElement || !this.mapElement.nativeElement) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      retries++;
+      if (retries > 50) {
+        console.error('Error: El contenedor del mapa no está disponible.');
+        return;
+      }
+    }
+  }
+  
 
+  private async loadMap() {
     try {
       const latLng = { lat: -33.447487, lng: -70.673676 };
+  
       if (this.mapElement && this.mapElement.nativeElement) {
         this.map = new google.maps.Map(this.mapElement.nativeElement, {
           center: latLng,
@@ -61,19 +72,22 @@ export class CrearEventoPage implements AfterViewInit {
           streetViewControl: false,
           fullscreenControl: false
         });
-
+  
         this.marker = new google.maps.Marker({
           position: latLng,
           map: this.map,
           draggable: true,
         });
-
+  
         google.maps.event.addListener(this.marker, 'dragend', (event: any) => {
           const latLng = this.marker.getPosition();
           this.geocodeLatLng(latLng);
         });
-
+  
+        // Disparar el evento resize por si hay cambios en el DOM
         google.maps.event.trigger(this.map, 'resize');
+      } else {
+        console.error('Error: El contenedor del mapa no se encontró.');
       }
     } catch (error) {
       console.error('Error al cargar el mapa:', error);
@@ -119,48 +133,35 @@ export class CrearEventoPage implements AfterViewInit {
     await alert.present();
   }
 
-  // Generar lista de asistentes basada en el número de participantes
-  generarListaAsistentes() {
-    if (this.numeroParticipantes > this.maxAsistentes) {
-      this.mostrarError(`No puedes tener más de ${this.maxAsistentes} asistentes.`);
-      return;
-    }
-
-    this.listaAsistentes = Array.from({ length: this.numeroParticipantes }, () => ({
-      rut: '',
-      nombreApellido: '',
-      telefono: ''
-    }));
-    console.log('Lista de asistentes generada:', this.listaAsistentes);
-  }
-
-  // Navegar a la página de lista de asistentes
-  verListaAsistentes() {
-    this.router.navigate(['/lista-asistentes'], { state: { listaAsistentes: this.listaAsistentes } });
-  }
-
   async guardarEvento() {
-    if (!this.nombreEvento || !this.nombreOrganizador || !this.fechaEvento || !this.lugarEvento || !this.numeroParticipantes) {
-      this.mostrarError("Por favor completa todos los campos.");
+    if (!this.nombreEvento || !this.nombreOrganizador || !this.fechaEvento || !this.horaInicio || !this.lugarEvento) {
+      this.mostrarError("Por favor completa todos los campos obligatorios.");
       return;
     }
-
-    if (this.eventoService.obtenerEventos().length >= 10) {
-      this.mostrarError("No puedes crear más de 10 eventos.");
-      return;
-    }
-
-    const evento = {
-      nombre: this.nombreEvento,
-      organizador: this.nombreOrganizador,
-      fechaHora: this.fechaEvento,
-      lugar: this.lugarEvento,
-      participantes: this.numeroParticipantes,
-      asistentes: this.listaAsistentes // Almacena la lista generada
-    };
 
     try {
-      this.eventoService.agregarEvento(evento);
+      // Obtener el usuario actual logueado
+      const usuario = await this.authService.obtenerUsuarioActual();
+
+      if (!usuario) {
+        throw new Error('No se ha podido obtener el usuario logueado. Por favor, inicia sesión de nuevo.');
+      }
+
+      // Crear el nuevo evento
+      const evento = {
+        id: Date.now().toString(), // ID único basado en la fecha actual (convertido a string)
+        nombre: this.nombreEvento,
+        organizador: this.nombreOrganizador,
+        fecha: this.fechaEvento,
+        horaInicio: this.horaInicio,
+        horaTermino: this.horaTermino,
+        lugar: this.lugarEvento
+      };
+
+      // Guardar el evento utilizando el servicio de eventos y pasar el rut del usuario actual
+      this.eventoService.agregarEvento(evento, usuario.rut);
+
+      // Redirigir a la página de gestión de eventos
       this.router.navigate(['/gestion-de-eventos']);
     } catch (error: any) {
       this.mostrarError(error.message);

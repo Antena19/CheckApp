@@ -7,20 +7,63 @@
     </ion-buttons>
     <ion-title class="ion-text-center white-text">CheckApp</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="menu" slot="icon-only" class="custom-menu-button"></ion-icon>
-      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
-  <h1 class="main-title">REGISTRO</h1>
+  <h1 class="main-title">CREAR CUENTA</h1>
   <p class="subtitle">Ingresa tus datos</p>
 
   <ion-card class="registro-card">
     <ion-card-content>
-      <form #registroForm="ngForm" (ngSubmit)="onNext()">
+      <form #registroForm="ngForm" (ngSubmit)="onSubmit()">
+
+        <!-- NOMBRE DE USUARIO -->
+        <ion-label>Nombre de Usuario</ion-label>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="username"
+            required
+            minlength="6"
+            maxlength="10"
+            pattern="^[a-zA-Z0-9]+$"
+            placeholder="Nombre de usuario"
+            autocomplete="off"
+            name="username">
+          </ion-input>
+        </ion-item>
+
+        <!-- CONTRASEÑA -->
+        <ion-label>Contraseña</ion-label>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="password"
+            required
+            minlength="4"
+            maxlength="4"
+            type="password"
+            pattern="^[0-9]{4}$"
+            placeholder="Contraseña (4 dígitos)"
+            autocomplete="off"
+            name="password">
+          </ion-input>
+        </ion-item>
+
+        <!-- REPETIR CONTRASEÑA -->
+        <ion-label>Repetir Contraseña</ion-label>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="repetirContrasena"
+            required
+            minlength="4"
+            maxlength="4"
+            type="password"
+            placeholder="Repetir contraseña"
+            autocomplete="off"
+            name="repetirContrasena">
+          </ion-input>
+        </ion-item>
 
         <!-- NOMBRE Y APELLIDO -->
         <ion-label>Nombre y Apellido</ion-label>
@@ -34,13 +77,14 @@
           </ion-input>
         </ion-item>
 
-        <!-- N° DE IDENTIFICACIÓN -->
-        <ion-label>N° de Identificación (RUT)</ion-label>
+        <!-- Nº DE IDENTIFICACIÓN (RUT) -->
+        <ion-label>Nº de Identificación (RUT)</ion-label>
         <ion-item>
           <ion-input
             [(ngModel)]="rut"
             required
             placeholder="Ejemplo: 12345678-9"
+            pattern="^[0-9]{7,8}-[0-9kK]$"
             autocomplete="off"
             name="rut">
           </ion-input>
@@ -52,7 +96,8 @@
           <ion-input
             [(ngModel)]="telefono"
             required
-            placeholder="Número de teléfono"
+            placeholder="Ejemplo: +56912345678"
+            pattern="^\+56[0-9]{9}$"
             autocomplete="off"
             name="telefono">
           </ion-input>
@@ -63,7 +108,6 @@
         <ion-item>
           <ion-input
             [(ngModel)]="email"
-            required
             placeholder="Correo electrónico"
             type="email"
             autocomplete="off"
@@ -71,9 +115,12 @@
           </ion-input>
         </ion-item>
 
-        <!-- BOTÓN SIGUIENTE -->
-        <ion-button expand="block" type="submit" [disabled]="!registroForm.valid" class="custom-registro-button">
-          Siguiente
+        <!-- BOTÓN CREAR CUENTA -->
+        <ion-button expand="block" type="submit" [disabled]="!registroForm.valid || password !== repetirContrasena" class="custom-registro-button">
+          Crear Cuenta
+        </ion-button>
+        <ion-button expand="block" class="cancelar-button" (click)="navegarALogin()">
+          CANCELAR
         </ion-button>
       </form>
     </ion-card-content>

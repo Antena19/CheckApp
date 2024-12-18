@@ -1,40 +1,58 @@
+<!-- BARRA DE NAVEGACION -->
 <ion-header>
   <ion-toolbar color="custom-dark">
-    <ion-buttons slot="start">
-      <ion-button (click)="volver()">
-        <ion-icon name="arrow-back" slot="icon-only" class="white-icon"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title class="ion-text-center">Lista de Asistentes</ion-title>
+        <!-- BOTON volver -->
+        <ion-buttons slot="start">
+          <ion-button (click)="volver()">
+            <ion-icon name="arrow-back" slot="icon-only" class="white-icon"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+    <ion-title>
+      <div class="header-content">
+        <ion-img src="assets/img/logo-check-app.png" class="header-logo"></ion-img>
+        <span class="header-title">CheckApp</span>
+      </div>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <h1 class="main-title">Asistentes</h1>
+<ion-content id="main-content" class="ion-padding">
+  <h1 class="main-title">Lista de Asistentes</h1>
 
-  <!-- Tabla de Asistentes -->
-  <ion-grid>
-    <ion-row>
-      <ion-col size="4" class="header-cell">RUT</ion-col>
-      <ion-col size="4" class="header-cell">Nombre</ion-col>
-      <ion-col size="4" class="header-cell">Teléfono</ion-col>
-    </ion-row>
-    <ion-row *ngFor="let asistente of listaAsistentes; let i = index">
-      <ion-col size="4">{{ asistente.rut }}</ion-col>
-      <ion-col size="4">{{ asistente.nombreApellido }}</ion-col>
-      <ion-col size="4">{{ asistente.telefono }}</ion-col>
-      <ion-col size="2">
-        <ion-button color="warning" fill="clear" (click)="editarAsistente(i)">
-          <ion-icon name="create-outline"></ion-icon>
-        </ion-button>
-        <ion-button color="danger" fill="clear" (click)="eliminarAsistente(i)">
-          <ion-icon name="trash-outline"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <!-- Lista de asistentes en formato de tarjetas -->
+  <div class="asistente-cards-container">
+    <ion-card *ngFor="let asistente of listaAsistentes; let i = index" class="asistente-card">
+      <ion-card-header>
+        <ion-card-title>{{ asistente.nombreApellido }}</ion-card-title>
+        <ion-card-subtitle>RUT: {{ asistente.rut }}</ion-card-subtitle>
+      </ion-card-header>
 
-  <!-- Botones -->
-  <ion-button expand="block" color="primary" (click)="agregarAsistente()">Agregar Asistente</ion-button>
-  <ion-button expand="block" color="tertiary" (click)="verDetalleEvento()">Ver Detalle</ion-button>
+      <ion-card-content>
+        <p><strong>Hora de Registro:</strong> {{ asistente.horaRegistro || 'N/A' }}</p>
+        <p>
+          <strong>Estado:</strong>
+          <ion-icon
+            [name]="asistente.estado === 'presente' ? 'checkmark-circle' : 'close-circle'"
+            [style.color]="asistente.estado === 'presente' ? 'green' : 'red'">
+          </ion-icon>
+        </p>
+
+        <!-- Botones de acciones pequeños y alineados horizontalmente -->
+        <div class="small-buttons-container">
+          <ion-button size="small" (click)="editarAsistente(i)" class="boton-editar">
+            Editar
+          </ion-button>
+          <ion-button size="small" (click)="eliminarAsistente(i)" class="boton-eliminar">
+            Eliminar
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Botones para agregar y generar informes -->
+  <ion-button expand="block"  (click)="agregarAsistente()" class="agregar-asistente-btn">AGREGAR ASISTENTE MANUALMENTE</ion-button>
+  <ion-button expand="block"  (click)="generarInformes()" class="generar-informes-btn">IR GENERAR INFORMES</ion-button>
 </ion-content>
+
+

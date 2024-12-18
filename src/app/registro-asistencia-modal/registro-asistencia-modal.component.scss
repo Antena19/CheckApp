@@ -1,0 +1,177 @@
+ion-content {
+  --background: #272E30;
+  padding-bottom: 100px;
+  overflow-y: auto;
+}
+
+ion-header, ion-footer {
+  ion-toolbar {
+    --background: #1E1E1E;
+    --color: white;
+  }
+}
+
+/* Header */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrar contenido horizontalmente */
+}
+
+.header-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: normal;
+  color: white;
+}
+
+.white-icon {
+  color: white;
+}
+
+/* Menú Desplegable */
+ion-menu {
+  --background: #1E1E1E; /* Fondo igual al de la barra */
+  z-index: 1000; /* Asegúrate de que tenga un valor suficientemente alto */
+}
+
+ion-menu-header {
+  --background: #1E1E1E;
+  color: white; /* Cambia el texto del encabezado a blanco */
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+ion-list {
+  background-color: #1E1E1E; /* Fondo igual al de la barra */
+  color: white;
+}
+
+ion-item {
+  --background: none;
+  color: white;
+}
+
+ion-item:hover {
+  background-color: #42316c;
+}
+
+/* Iconos del Menú */
+ion-item ion-icon {
+  font-size: 1.5rem; /* Ajusta el tamaño del icono */
+  margin-right: 8px; /* Espaciado entre el icono y el texto */
+}
+
+/* Botón de menú hamburguesa */
+.white-menu-button {
+  color: white; /* Asegura que el icono del menú sea blanco */
+}
+
+
+/* Encabezado del menú */
+ion-title {
+  color: white; /* Encabezado del menú en blanco */
+  text-align: center;
+}
+
+  ion-content {
+
+    h2 {
+      font-size: 1.5em;
+      color: white;
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+  
+    p {
+      font-size: 1em;
+      color: white;
+      margin-bottom: 10px;
+      text-align: center;
+  
+      strong {
+        color: #f0e68c; /* Color resaltado para etiquetas como "Organizador", "Hora", etc. */
+      }
+    }
+  
+    ion-button {
+      --background: #42316c;
+      color: white;
+      --border-radius: 8px;
+      margin-top: 24px;
+      font-weight: bold;
+      display: block;
+      width: 80%;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      transition: transform 0.2s ease;
+  
+      &:hover {
+        transform: scale(1.05);
+      }
+  
+      ion-icon {
+        margin-right: 8px;
+        color: white;
+      }
+    }
+  
+    /* Estilo del contenedor del código QR */
+    .qr-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+  
+    /* Botón para "Mostrar Código QR" */
+    .mostrar-qr-btn {
+      margin-top: 16px;
+    }
+  
+    /* Botón para "Compartir Código QR" */
+    .compartir-qr-btn {
+      margin-top: 16px;
+      --background: #6A4B8C; /* Morado para compartir */
+    }
+  
+    /* Botón para "Ir a la Lista de Asistentes" */
+    .ver-lista-asistentes-btn {
+      --background: #6A4B8C; /* Morado para lista de asistentes */
+      color: white;
+      --border-radius: 8px;
+      margin-top: 16px;
+      font-weight: bold;
+      display: block;
+      width: 80%;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      transition: transform 0.2s ease;
+  
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  
+    /* Estilo para mensajes de error */
+    .alert {
+      background-color: #ff5555;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      margin-top: 20px;
+    }
+  }
+  

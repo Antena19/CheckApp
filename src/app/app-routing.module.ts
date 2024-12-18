@@ -56,21 +56,27 @@ const routes: Routes = [
     loadChildren: () => import('./sin-login/sin-login.module').then(m => m.SinLoginPageModule)
   },
   {
-    path: 'home-participante',
-    loadChildren: () => import('./home-participante/home-participante.module').then( m => m.HomeParticipantePageModule)
-  },
-  {
     path: 'registro2',
-    loadChildren: () => import('./registro2/registro2.module').then( m => m.Registro2PageModule)
+    loadChildren: () => import('./registro2/registro2.module').then(m => m.Registro2PageModule)
   },
   {
     path: 'registro-asistencia-evento',
-    loadChildren: () => import('./registro-asistencia-evento/registro-asistencia-evento.module').then( m => m.RegistroAsistenciaEventoPageModule)
+    loadChildren: () => import('./registro-asistencia-evento/registro-asistencia-evento.module').then(m => m.RegistroAsistenciaEventoPageModule)
   },
   {
     path: 'lista-asistentes',
-    loadChildren: () => import('./lista-asistentes/lista-asistentes.module').then( m => m.ListaAsistentesPageModule)
-  }
+    loadChildren: () => import('./lista-asistentes/lista-asistentes.module').then(m => m.ListaAsistentesPageModule)
+  },
+  {
+    path: 'perfil-usuario',
+    loadChildren: () => import('./perfil-usuario/perfil-usuario.module').then(m => m.PerfilUsuarioModule),
+    canActivate: [AuthGuard] // Solo usuarios logueados
+  },
+  {
+    path: 'reportes',
+    loadChildren: () => import('./reportes/reportes.module').then( m => m.ReportesPageModule)
+  },
+
 ];
 
 @NgModule({

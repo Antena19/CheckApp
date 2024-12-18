@@ -1,0 +1,56 @@
+<!-- BARRA DE NAVEGACION -->
+<ion-header>
+  <ion-toolbar color="custom-dark">
+    <ion-title>
+      <div class="header-content">
+        <ion-img src="assets/img/logo-check-app.png" class="header-logo"></ion-img>
+        <span class="header-title">CheckApp</span>
+      </div>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="closeModal()" style="--color: white;">
+        <ion-icon name="close-outline" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>      
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content id="main-content" class="ion-padding" [fullscreen]="true">
+  <div *ngIf="evento">
+    <h2>REGISTRO DE ASISTENCIA</h2>
+    <div class="event-details">
+      <p><strong>Evento:</strong> {{ evento.nombre }}</p>
+      <p><strong>Organizador:</strong> {{ evento.organizador }}</p>
+      <p><strong>Hora de Inicio:</strong> {{ evento.horaInicio }}</p>
+      <p><strong>Hora de Término:</strong> {{ evento.horaTermino }}</p>
+      <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
+    </div>
+    
+    <!-- Botón para Mostrar Código QR -->
+    <ion-button expand="block" (click)="mostrarQR()" class="mostrar-qr-btn">
+      GENERAR CÓDIGO QR
+    </ion-button>
+
+    <!-- Canvas para mostrar el código QR -->
+    <div class="qr-container" *ngIf="evento">
+      <canvas #qrCanvas></canvas>
+    </div>
+
+    <!-- Botón para Compartir Código QR -->
+    <ion-button expand="block" (click)="compartirQR()" class="compartir-qr-btn">
+      <ion-icon name="share-social-outline" slot="start"></ion-icon>
+      COMPARTIR CÓDIGO QR
+    </ion-button>
+
+    <!-- Botón para Ver Lista de Asistentes -->
+    <ion-button expand="block" (click)="verListaAsistentes()" class="ver-lista-asistentes-btn">
+      VER LISTA DE ASISTENTES
+    </ion-button>
+  </div>
+
+  <div *ngIf="!evento">
+    <p>No se pudo cargar la información del evento.</p>
+  </div>
+</ion-content>
+

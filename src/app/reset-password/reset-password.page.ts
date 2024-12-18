@@ -1,4 +1,3 @@
-// reset-password.page.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
@@ -48,7 +47,7 @@ export class ResetPasswordPage {
     // Verificar si el usuario existe (compara el nombre de usuario ingresaso con los que ya existen)
     const userIndex = this.validUsers.findIndex(user => user.username === this.username); 
     
-    //Si el nombre ingresado coincide con uno existente, entonces...
+    // Si el nombre ingresado coincide con uno existente, entonces...
     if (userIndex !== -1) {
       // Actualiza la contraseña del usuario
       this.validUsers[userIndex].password = this.newPassword;
@@ -57,7 +56,9 @@ export class ResetPasswordPage {
       await this.storage.set('users', this.validUsers);
 
       alert(`La contraseña de ${this.username} ha sido restablecida exitosamente.`);
-      this.router.navigate(['/login']);
+
+      // Asegurarnos de que el almacenamiento se actualice antes de navegar
+      await this.router.navigate(['/login']);
     } else {
       alert('Nombre de usuario no encontrado.');
     }

@@ -1,0 +1,228 @@
+ion-content {
+  --background: #272E30;
+  padding-bottom: 100px;
+  overflow-y: auto;
+}
+
+ion-header, ion-footer {
+  ion-toolbar {
+    --background: #1E1E1E;
+    --color: white;
+  }
+}
+
+ion-menu {
+  pointer-events: auto !important;
+  z-index: 10 !important;
+}
+
+ion-button {
+  pointer-events: auto !important;
+}
+
+ion-avatar:hover {
+  opacity: 0.8;
+  pointer-events: auto !important;
+}
+
+/* Header */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrar contenido horizontalmente */
+}
+
+.header-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: normal;
+  color: white;
+}
+
+.white-icon {
+  color: white;
+}
+
+/* Menú Desplegable */
+ion-menu {
+  --background: #1E1E1E; /* Fondo igual al de la barra */
+  z-index: 1000; /* Asegúrate de que tenga un valor suficientemente alto */
+}
+
+ion-menu-header {
+  --background: #1E1E1E;
+  color: white; /* Cambia el texto del encabezado a blanco */
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+ion-list {
+  background-color: #1E1E1E; /* Fondo igual al de la barra */
+  color: white;
+}
+
+ion-item {
+  --background: none;
+  color: white;
+}
+
+ion-item:hover {
+  background-color: #42316c;
+}
+
+/* Iconos del Menú */
+ion-item ion-icon {
+  font-size: 1.5rem; /* Ajusta el tamaño del icono */
+  margin-right: 8px; /* Espaciado entre el icono y el texto */
+}
+
+/* Botón de menú hamburguesa */
+.white-menu-button {
+  --color: white; /* Asegura que el icono del menú sea blanco */
+}
+
+
+/* Encabezado del menú */
+ion-title {
+  color: white; /* Encabezado del menú en blanco */
+  text-align: center;
+}
+
+
+.main-title {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+/* ESTILOS CARD */
+.registro-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  max-width: 90%;
+
+  ion-card-content {
+    padding: 20px;
+  }
+
+  ion-label {
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  ion-item {
+    --background: white;
+    --border-color: #d3d3d3;
+    --highlight-color-focused: #6200ee;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #d3d3d3;
+
+    ion-input {
+      color: #333;
+      --padding-start: 10px;
+    }
+  }
+
+  /* ESTILO BOTÓN GUARDAR CAMBIOS */
+  .custom-registro-button {
+    --background: #290046;
+    --color: white;
+    --background-activated: #290046;
+    --background-focused: #290046;
+    --background-hover: #5600d1;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    height: 45px;
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+
+  /* TEXTO VISIBLE */
+  .custom-registro-button::part(native) {
+    color: white;
+  }
+}
+
+/* FOTO DE PERFIL */
+.profile-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+
+  ion-avatar {
+    pointer-events: auto !important;
+    cursor: pointer;
+    border: 3px solid #894e91;
+    padding: 3px;
+    margin-bottom: 10px;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  ion-button {
+    --color: #290046;
+    font-weight: bold;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .main-title {
+    font-size: 20px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  ion-avatar {
+    width: 120px !important;
+    height: 120px !important;
+  }
+}
+
+/* Responsivo: Ajustar diseño para pantallas pequeñas */
+@media (max-width: 768px) {
+  .custom-button {
+    width: 100px;
+    height: 100px;
+    font-size: 3rem;
+  }
+
+  .subtitle-button {
+    font-size: 14px;
+  }
+
+  .main-title {
+    font-size: 20px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+}

@@ -1,13 +1,79 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>home-participante</ion-title>
+<ion-header>
+  <ion-toolbar color="custom-dark">
+    <ion-title>
+      <div class="header-content">
+        <ion-img src="assets/img/logo-check-app.png" class="header-logo"></ion-img>
+        <span class="header-title">CheckApp</span>
+      </div>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only" class="white-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home-participante</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <h1 class="main-title">INICIO</h1>
+
+  <!-- Mensaje de Bienvenida -->
+  <p class="welcome-message">Bienvenido, {{ username }}</p>
+
+  <!-- Botón para Escanear QR -->
+  <ion-button expand="block" class="scan-qr-button" (click)="Scaneo()">
+    Escanear QR
+  </ion-button>
+
+  <!-- Campo de Búsqueda por Nombre, Lugar u Organizador -->
+  <div class="search-filter-container">
+    <ion-item lines="none" class="custom-filter-item">
+      <ion-label class="filter-label">Filtrar eventos</ion-label>
+      <mat-form-field appearance="fill" class="custom-date-field">
+        <input matInput [matDatepicker]="picker" placeholder="Seleccione la fecha" [(ngModel)]="fechaFiltro" (dateChange)="filtrarEventos()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </ion-item>
+  </div>
+
+  <!-- Mostrar los eventos filtrados -->
+  <div *ngIf="eventosFiltrados.length > 0" class="content-container">
+    <h2 class="subtitle">Eventos Disponibles:</h2>
+    <ion-card *ngFor="let evento of eventosFiltrados" [ngClass]="{ 'inscrito-card': evento.estaInscrito }" class="event-card">
+      <ion-card-header>
+        <ion-card-title>{{ evento.nombre }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Organizador:</strong> {{ evento.organizador }}</p>
+        <p><strong>Fecha del Evento:</strong> {{ evento.fecha }}</p>
+        <p><strong>Hora de Inicio:</strong> {{ evento.horaInicio }}</p>
+        <p><strong>Hora de Término:</strong> {{ evento.horaTermino }}</p>
+        <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
+        <div *ngIf="evento.estaInscrito" class="inscrito-message">
+          Estás en la lista de este evento.
+        </div>
+        <ion-button
+        expand="block"
+        [disabled]="evento.asistenciaConfirmada"
+        style="--background: #6a1b9a; --color: white; font-weight: bold; text-transform: uppercase;"
+        (click)="registrarAsistencia(evento.id)">
+        {{ evento.asistenciaConfirmada ? 'Asistencia Ingresada' : 'Confirmar mi Asistencia' }}
+      </ion-button>
+      
+      
+      
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Mensaje si no se encuentran eventos -->
+  <div *ngIf="eventosFiltrados.length === 0 && busqueda" class="content-container">
+    <h2 class="subtitle">No se encontraron eventos que coincidan con la búsqueda.</h2>
+  </div>
+
+  <!-- Mostrar mensaje si no hay eventos disponibles -->
+  <div *ngIf="eventosFiltrados.length === 0 && !busqueda" class="content-container">
+    <h2 class="subtitle">No hay eventos disponibles actualmente.</h2>
+  </div>
 </ion-content>

@@ -15,7 +15,7 @@ ion-header, ion-footer {
 .header-content {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* Centrar contenido horizontalmente */
 }
 
 .header-logo {
@@ -26,11 +26,7 @@ ion-header, ion-footer {
 
 .header-title {
   font-size: 18px;
-  font-weight: bold;
-  color: white;
-}
-
-.white-icon {
+  font-weight: normal;
   color: white;
 }
 
@@ -40,15 +36,22 @@ ion-header, ion-footer {
   font-size: 24px;
   font-weight: bold;
   text-align: center;
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 
 .subtitle {
   color: white;
   text-align: center;
-  margin-bottom: 40px; /* Más espacio entre el subtítulo y los botones */
+  margin-bottom: 20px;
   margin-top: 10px;
+  font-size: 20px; /* Tamaño ajustado */
+}
+
+/* Destacar nombre de usuario en el mensaje de bienvenida */
+.welcome-username {
+  font-weight: bold;
+  color: #894e91; 
 }
 
 /* Botones de Opciones */
@@ -56,12 +59,13 @@ ion-header, ion-footer {
   padding: 0 30px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra los botones horizontalmente */
-  gap: 20px; /* Espacio uniforme entre las filas de botones */
+  align-items: center;
+  gap: 20px;
 }
 
 .custom-button {
-  width: 120px; /* Ajustado para que ambos botones tengan el mismo tamaño */
+  margin-top: 20px;
+  width: 120px;
   height: 120px;
   background-color: #42316c;
   border: none;
@@ -74,10 +78,6 @@ ion-header, ion-footer {
   transition: transform 0.2s ease;
 }
 
-.custom-button:hover {
-  transform: scale(1.05);
-}
-
 ion-icon {
   font-size: 4rem;
   color: #fff;
@@ -87,9 +87,88 @@ ion-icon {
   color: white;
   text-align: center;
   font-size: small;
-  margin-top: 10px; /* Más espacio debajo del botón */
-  line-height: 1.2; /* Ajusta para asegurar que el texto ocupe solo 2 filas */
+  margin-top: 10px;
+  line-height: 1.2;
   white-space: pre-wrap;
-  word-break: break-word; /* Ajusta para que el texto no se desborde */
-  width: 120px; /* Centrado respecto al botón */
+  word-break: break-word;
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  padding-right: 30%;
+  
+}
+
+/* Menú Desplegable */
+
+/* Ajustar tamaño del botón del menú */
+ion-button {
+  --padding-start: 0;
+  --padding-end: 0;
+  --min-width: 40px; /* Ancho mínimo */
+  --min-height: 40px; /* Altura mínima */
+  margin-right: 10px; /* Margen hacia la izquierda */
+
+}
+
+ion-button ion-icon {
+  font-size: 24px; /* Tamaño del icono */
+}
+
+ion-menu {
+  --background: #1E1E1E; /* Fondo igual al de la barra */
+}
+
+ion-menu-header {
+  --background: #1E1E1E;
+  color: white; /* Cambia el texto del encabezado a blanco */
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+ion-list {
+  background-color: #1E1E1E; /* Fondo igual al de la barra */
+  color: white;
+}
+
+ion-item {
+  --background: none;
+  color: white;
+}
+
+ion-item:hover {
+  background-color: #42316c;
+}
+
+/* Iconos del Menú */
+ion-item ion-icon {
+  font-size: 1.5rem; /* Ajusta el tamaño del icono */
+  margin-right: 8px; /* Espaciado entre el icono y el texto */
+}
+
+/* Encabezado del menú */
+ion-title {
+  color: white; /* Encabezado del menú en blanco */
+  text-align: center;
+}
+
+/* Responsivo: Ajustar diseño para pantallas pequeñas */
+@media (max-width: 768px) {
+  .custom-button {
+    width: 100px;
+    height: 100px;
+    font-size: 3rem;
+  }
+
+  .subtitle-button {
+    font-size: 14px;
+  }
+
+  .main-title {
+    font-size: 20px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
 }

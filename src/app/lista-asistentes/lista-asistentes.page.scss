@@ -1,43 +1,223 @@
 ion-content {
-    --background: #272E30;
+  --background: #272E30;
+  padding-bottom: 100px;
+  overflow-y: auto;
+}
+
+ion-header, ion-footer {
+  ion-toolbar {
+    --background: #1E1E1E;
+    --color: white;
   }
-  
-  ion-header {
-    ion-toolbar {
-      --background: #1E1E1E;
-      --color: white;
-    }
+}
+
+/* Header */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrar contenido horizontalmente */
+}
+
+.header-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: normal;
+  color: white;
+}
+
+.white-icon {
+  color: white;
+}
+
+/* Título Principal */
+.main-title {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* Contenedor de tarjetas de asistentes */
+.asistente-cards-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrar las tarjetas horizontalmente */
+  gap: 20px; /* Espacio entre las tarjetas */
+}
+
+/* Estilos de las tarjetas de asistentes */
+.asistente-card {
+  background-color: #ffffff; /* Fondo blanco para las tarjetas */
+  color: black;
+  width: 90%; /* No ocupar todo el ancho de la pantalla */
+  max-width: 500px; /* Limitar el ancho máximo de las tarjetas */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  padding: 15px; /* Añadir relleno interno a la tarjeta */
+  border-radius: 10px; /* Añadir bordes redondeados */
+}
+
+ion-card-title {
+  color: #000000;
+  font-weight: bold;
+}
+
+ion-card-subtitle {
+  color: #6b6b6b;
+}
+
+/* Iconos de estado */
+ion-icon {
+  font-size: 1.5rem;
+  vertical-align: middle;
+}
+
+.presente {
+  color: green;
+}
+
+.ausente {
+  color: red;
+}
+
+/* Contenedor para los botones de acciones */
+.small-buttons-container {
+  display: flex;
+  justify-content: space-around; /* Espacio uniforme alrededor de los botones */
+  margin-top: 10px;
+  gap: 10px; /* Espacio entre los botones */
+}
+
+.boton-editar {
+  --background: #666;
+  color: white;
+  --border-radius: 8px;
+  height: 35px; /* Reducir el tamaño del botón para hacerlo más compacto */
+  font-size: 12px; /* Reducir el tamaño de la fuente */
+  flex: 1; /* Cada botón ocupa el mismo espacio dentro del contenedor */
+}
+
+.boton-eliminar {
+  --background: #272E30;
+  color: white;
+  --border-radius: 8px;
+  height: 35px; /* Reducir el tamaño del botón para hacerlo más compacto */
+  font-size: 12px; /* Reducir el tamaño de la fuente */
+  flex: 1; /* Cada botón ocupa el mismo espacio dentro del contenedor */
+}
+
+/* Botón para agregar un asistente manualmente */
+.agregar-asistente-btn {
+  --background: #6b52ae; 
+  color: white;
+  font-weight: bold;
+  --border-radius: 8px;
+  width: 80%;
+  max-width: 400px;
+  margin: 20px auto;
+  display: block;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.agregar-asistente-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Botón para generar informes */
+.generar-informes-btn {
+  --background: #42316c; /* Color púrpura consistente con la app */
+  color: white;
+  font-weight: bold;
+  --border-radius: 8px;
+  width: 80%;
+  max-width: 400px;
+  margin: 20px auto;
+  display: block;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.generar-informes-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Menú Desplegable */
+ion-menu {
+  --background: #1E1E1E; /* Fondo igual al de la barra */
+  z-index: 1000; /* Asegúrate de que tenga un valor suficientemente alto */
+}
+
+ion-menu-header {
+  --background: #1E1E1E;
+  color: white; /* Cambia el texto del encabezado a blanco */
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+ion-list {
+  background-color: #1E1E1E; /* Fondo igual al de la barra */
+  color: white;
+}
+
+ion-item {
+  --background: none;
+  color: white;
+}
+
+ion-item:hover {
+  background-color: #42316c;
+}
+
+/* Iconos del Menú */
+ion-item ion-icon {
+  font-size: 1.5rem; /* Ajusta el tamaño del icono */
+  margin-right: 8px; /* Espaciado entre el icono y el texto */
+}
+
+/* Botón de menú hamburguesa */
+.white-menu-button {
+  --color: white; /* Icono de hamburguesa en blanco */
+}
+
+/* Encabezado del menú */
+ion-title {
+  color: white; /* Encabezado del menú en blanco */
+}
+
+/* Responsivo: Ajustar diseño para pantallas pequeñas */
+@media (max-width: 768px) {
+  .agregar-asistente-btn,
+  .generar-informes-btn {
+    width: 90%;
+    font-size: 14px;
   }
-  
+
   .main-title {
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    margin: 20px 0;
+    font-size: 20px;
   }
-  
-  .header-cell {
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    background: #42316c;
-    padding: 8px 0;
+
+  ion-card-title {
+    font-size: 18px;
   }
-  
-  ion-row {
-    align-items: center;
-  
-    ion-col {
-      color: white;
-      text-align: center;
-      padding: 10px 0;
-    }
+
+  ion-card-subtitle {
+    font-size: 14px;
   }
-  
-  ion-button {
-    --background: #42316c;
-    color: white;
-    margin: 10px 0;
+
+  .small-buttons-container {
+    flex-direction: row; /* Mantener los botones en una sola fila */
+    gap: 5px;
   }
-  
+
+  .tiny-action-button {
+    width: auto;
+    margin: 0;
+  }
+}

@@ -1,0 +1,117 @@
+<!-- BARRA DE NAVEGACION -->
+<ion-header>
+  <ion-toolbar color="custom-dark">
+        <!-- BOTON volver -->
+        <ion-buttons slot="start">
+          <ion-button (click)="volver()">
+            <ion-icon name="arrow-back" slot="icon-only" class="white-icon"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+    <ion-title>
+      <div class="header-content">
+        <ion-img src="assets/img/logo-check-app.png" class="header-logo"></ion-img>
+        <span class="header-title">CheckApp</span>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="main-content">
+  <!-- Contenedor general con padding -->
+  <div class="container">
+    <h1 class="main-title">Detalles del Evento</h1>
+
+    <!-- Información del Evento -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Información General</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="info-box">
+          <p><strong>Nombre del Evento:</strong> Seminario de Tecnología 2024</p>
+          <p><strong>Fecha:</strong> 15 de Diciembre de 2024</p>
+          <p><strong>Hora:</strong> 10:00 AM</p>
+          <p><strong>Ubicación:</strong> Auditorio Principal</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Estadísticas del Evento -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Estadísticas de Asistencia</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6" sizeMd="3">
+              <div class="stat-box primary">
+                <ion-icon name="people"></ion-icon>
+                <h4>Total Asistentes</h4>
+                <p>150</p>
+              </div>
+            </ion-col>
+            <ion-col size="6" sizeMd="3">
+              <div class="stat-box success">
+                <ion-icon name="checkmark-done-circle"></ion-icon>
+                <h4>Presentes</h4>
+                <p>120</p>
+              </div>
+            </ion-col>
+            <ion-col size="6" sizeMd="3">
+              <div class="stat-box danger">
+                <ion-icon name="close-circle"></ion-icon>
+                <h4>Ausentes</h4>
+                <p>30</p>
+              </div>
+            </ion-col>
+            <ion-col size="6" sizeMd="3">
+              <div class="stat-box warning">
+                <ion-icon name="alert-circle"></ion-icon>
+                <h4>Justificados</h4>
+                <p>10</p>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Tendencias -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Tendencias del Evento</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <div class="trend-box">
+                <h4>Día Más Concurrido</h4>
+                <p>15 de Diciembre</p>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="trend-box">
+                <h4>Hora Más Popular</h4>
+                <p>10:00 AM</p>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botones de Exportación -->
+    <div class="export-buttons">
+      <ion-button expand="block">
+        <ion-icon name="document" slot="start"></ion-icon>
+        Exportar a Excel
+      </ion-button>
+      <ion-button expand="block">
+        <ion-icon name="document-text" slot="start"></ion-icon>
+        Exportar a PDF
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
