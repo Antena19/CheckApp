@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { AlertController, MenuController } from '@ionic/angular';
+import { AlertController, MenuController, NavController } from '@ionic/angular';
 import { AutenticacionService } from '../services/autenticacion.service';
 import { Router } from '@angular/router';
 
@@ -27,7 +27,8 @@ export class PerfilUsuarioComponent implements OnInit {
     private router: Router,
     private authService: AutenticacionService, 
     private alertController: AlertController,
-    private menu: MenuController
+    private menu: MenuController,
+    private navCtrl: NavController,
   ) {}
 
   async ngOnInit() {
@@ -170,5 +171,9 @@ export class PerfilUsuarioComponent implements OnInit {
     // Método para navegar al perfil de usuario
       navigateToMiPerfil() {
         this.router.navigate(['/perfil-usuario']);
+      }
+
+      volver() {
+        this.navCtrl.back();
       }
 }

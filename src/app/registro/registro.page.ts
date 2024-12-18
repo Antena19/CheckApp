@@ -94,4 +94,12 @@ export class RegistroPage {
 
     this.router.navigate(['/login']);
   }
+
+    // Método para navegar de vuelta al login
+    navegarALogin() {
+      this.router.navigate(['/login']);
+    }
 }
+
+
+

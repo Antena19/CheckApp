@@ -262,4 +262,8 @@ async openMenu() {
     this.router.navigate(['/perfil-usuario']);
   }
 
+  volver() {
+    this.navCtrl.back();
+  }
+
 }

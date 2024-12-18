@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventoService } from '../services/evento.service';
-import { AlertController, MenuController } from '@ionic/angular';
+import { AlertController, MenuController, NavController } from '@ionic/angular';
 import { AutenticacionService } from '../services/autenticacion.service'; // Servicio de autenticación
 
 @Component({
@@ -20,7 +20,8 @@ export class ListaAsistentesPage implements OnInit {
     private eventoService: EventoService,
     private alertController: AlertController,
     private menu: MenuController, // Controlador de menú
-    private authService: AutenticacionService // Servicio de autenticación
+    private authService: AutenticacionService, // Servicio de autenticación
+    private navCtrl: NavController,
   ) {}
 
   async ngOnInit() {
@@ -187,11 +188,6 @@ export class ListaAsistentesPage implements OnInit {
     this.router.navigate(['/registro-asistencia-evento', { id: this.id }]);
   }
 
-  // MÉTODO PARA VOLVER A LA GESTIÓN DE EVENTOS
-  volver() {
-    this.router.navigate(['/gestion-de-eventos']);
-  }
-
   // MÉTODO PARA GENERAR INFORMES
   generarInformes() {
     this.router.navigate(['/reportes', { id: this.id }]);
@@ -228,4 +224,9 @@ export class ListaAsistentesPage implements OnInit {
     console.log('Navegando a Mi Perfil...');
     this.router.navigate(['/mi-perfil']);
   }
+
+  volver() {
+    this.navCtrl.back();
+  }
+
 }

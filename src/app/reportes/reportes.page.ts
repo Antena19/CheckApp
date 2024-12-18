@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { AutenticacionService } from '../services/autenticacion.service'; // Importamos el servicio de autenticación
-import { MenuController } from '@ionic/angular'; // Importamos MenuController para manejar el menú lateral
+import { MenuController, NavController } from '@ionic/angular'; // Importamos MenuController para manejar el menú lateral
 
 @Component({
   selector: 'app-reportes',
@@ -15,7 +15,8 @@ export class ReportesPage implements OnInit {
     private router: Router,
     private storage: Storage, // Servicio Storage para manejar el almacenamiento
     private authService: AutenticacionService, // Inyectamos el servicio de autenticación
-    private menu: MenuController // Inyectamos el controlador de menú
+    private menu: MenuController, // Inyectamos el controlador de menú
+    private navCtrl: NavController,
   ) {}
 
   ngOnInit() {
@@ -69,5 +70,9 @@ export class ReportesPage implements OnInit {
       this.router.navigate(['/perfil-usuario']);
     }
 
+    volver() {
+      this.navCtrl.back();
+    }
+  
 
 }

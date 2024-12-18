@@ -119,6 +119,9 @@
         <ion-button expand="block" type="submit" [disabled]="!registroForm.valid || password !== repetirContrasena" class="custom-registro-button">
           Crear Cuenta
         </ion-button>
+        <ion-button expand="block" class="cancelar-button" (click)="navegarALogin()">
+          CANCELAR
+        </ion-button>
       </form>
     </ion-card-content>
   </ion-card>

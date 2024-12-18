@@ -42,19 +42,18 @@ async openMenu() {
     const isMenuEnabled = await this.menu.isEnabled('main-menu');
     console.log(`¿El menú está habilitado?: ${isMenuEnabled}`);
 
-    // Habilitar el menú si no está habilitado
-    if (!isMenuEnabled) {
-      await this.menu.enable(true, 'main-menu');
-      console.log('Menú habilitado manualmente.');
+    // Solo abrir el menú si ya está habilitado
+    if (isMenuEnabled) {
+      await this.menu.open('main-menu');
+      console.log('El menú se abrió correctamente.');
+    } else {
+      console.log('El menú no está habilitado y no se intentará abrir.');
     }
-
-    // Abrir el menú
-    await this.menu.open('main-menu');
-    console.log('El menú se abrió correctamente.');
   } catch (error) {
     console.error('Error al abrir el menú:', error);
   }
 }
+
 
 
 

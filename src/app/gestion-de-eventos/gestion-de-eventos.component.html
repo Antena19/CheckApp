@@ -1,6 +1,12 @@
 <!-- BARRA DE NAVEGACION -->
 <ion-header>
   <ion-toolbar color="custom-dark">
+        <!-- BOTON volver -->
+        <ion-buttons slot="start">
+          <ion-button (click)="volver()">
+            <ion-icon name="arrow-back" slot="icon-only" class="white-icon"></ion-icon>
+          </ion-button>
+        </ion-buttons>
     <ion-title>
       <div class="header-content">
         <ion-img src="assets/img/logo-check-app.png" class="header-logo"></ion-img>
