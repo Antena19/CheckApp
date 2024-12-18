@@ -20,6 +20,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // Cambiar el nombre del APK generado
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "CheckApp-${variant.versionName}.apk"
+                }
+            }
         }
     }
 }

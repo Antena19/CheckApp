@@ -1,7 +1,9 @@
 # CHECKAPP: Gestión de Eventos y Asistencias
+
 Una aplicación desarrollada con Ionic y Angular para gestionar eventos, registrar asistencias y ofrecer una experiencia fluida tanto para administradores como para participantes.
 
 ## Características Principales
+
 •	Gestión de Eventos: Crear, editar y eliminar eventos de manera intuitiva.
 •	Registro de Asistencia: Manual o mediante escaneo de códigos QR.
 •	Generación de Códigos QR: Cada evento genera un QR único para registro rápido.
@@ -9,6 +11,7 @@ Una aplicación desarrollada con Ionic y Angular para gestionar eventos, registr
 
 
 ### Requisitos Previos
+
 Asegúrate de tener instalados los siguientes elementos en tu sistema:
 •	Node.js (versión recomendada: LTS)
 •	Angular CLI (versión compatible con el proyecto)
@@ -16,6 +19,7 @@ Asegúrate de tener instalados los siguientes elementos en tu sistema:
 
 
 ### Instalación y Configuración
+
 1. Clonar el Repositorio
 Clona este repositorio en tu máquina local:
 
@@ -93,5 +97,7 @@ keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg
 El archivo se llama nombre_del_keystore.jks y esta en CheckApp\nombre_del_keystore.jks
 
 # Autoras
+
 ANGELINA MENDOZA Y PALOMA TAMAYO
+
 Si tienes preguntas o necesitas soporte, no dudes en contactarnos.
